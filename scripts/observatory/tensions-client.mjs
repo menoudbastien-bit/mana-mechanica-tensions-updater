@@ -22,12 +22,24 @@ export async function discoverMarkets(fetchFn=fetch){
  if(!markets.length||markets.some(m=>!validMarket(m.id))||new Set(markets.map(m=>m.id)).size!==markets.length)fail('discovery','invalid_markets');
  return markets.sort((a,b)=>a.id===DEFAULT_MARKET?-1:b.id===DEFAULT_MARKET?1:a.id.localeCompare(b.id));
 }
-export function validateSnapshot(data,market,{allowEmpty=false}={}){
+export function validateBasket(data){
+ if(!Array.isArray(data?.items)||!data.items.length)fail('basket','invalid_catalogue');
+ const ids=data.items.map(item=>item?.id);
+ if(ids.some(id=>!Number.isSafeInteger(id)||id<=0)||new Set(ids).size!==ids.length)fail('basket','invalid_item_identity');
+ return ids;
+}
+export async function discoverBasket(fetchFn=fetch){
+ return validateBasket(await jsonRequest(fetchFn,SITE_URL+'/observatory-catalog.json','basket'));
+}
+const requireBasket=ids=>{if(!Array.isArray(ids)||!ids.length||ids.some(id=>!Number.isSafeInteger(id)||id<=0)||new Set(ids).size!==ids.length)fail('configuration','missing_or_invalid_basket');};
+export function validateSnapshot(data,market,{allowEmpty=false,allowSubset=false,expectedIds}={}){
+ requireBasket(expectedIds);
  if(data?.market!==market)fail('verification','market_mismatch');
  if(allowEmpty&&data.calculatedAt===null&&Array.isArray(data.states)&&data.states.length===0)return data;
- if(!Number.isFinite(data.calculatedAt)||!Array.isArray(data.states)||data.states.length!==75)fail('verification','invalid_snapshot');
+ if(!Number.isFinite(data.calculatedAt)||!Array.isArray(data.states)||!data.states.length)fail('verification','invalid_snapshot');
  const ids=new Set(data.states.map(s=>s.id));
- if(ids.size!==75||data.states.some(s=>s.market!==market||!Number.isSafeInteger(s.id)||s.id<=0))fail('verification','item_identity');
+ if(ids.size!==data.states.length||data.states.some(s=>s.market!==market||!Number.isSafeInteger(s.id)||!expectedIds.includes(s.id)))fail('verification','item_identity');
+ if(!allowSubset&&ids.size!==expectedIds.length)fail('verification','basket_mismatch');
  if(!Array.isArray(data.top)||data.top.length>10||new Set(data.top.map(s=>s.id)).size!==data.top.length||data.top.some(s=>s.market!==market||!ids.has(s.id)))fail('verification','ranking_identity');
  for(const state of data.states){
   const at=state.observedAt;
@@ -61,10 +73,11 @@ export function summarize(data,extra={}){
  for(const s of data.states.filter(s=>s.availability!=='available'))unavailable[s.reason??'unknown']=(unavailable[s.reason??'unknown']??0)+1;
  return {market:data.market,verifiedReadback:true,calculatedAt:data.calculatedAt,items:data.states.length,usable:data.states.filter(s=>s.availability==='available').length,missingObservations:data.states.filter(s=>(s.observedAt===undefined?s.lastAt:s.observedAt)==null).length,sourceFailures:data.failures?.length??0,unavailable,observations:dates.length?[Math.min(...dates),Math.max(...dates)]:[],top:data.top.length,...extra};
 }
-export async function refreshMarket(market,{applicationToken,siteAccessToken,fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now}={}){
+export async function refreshMarket(market,{applicationToken,siteAccessToken,expectedIds,fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now}={}){
  if(!validMarket(market))fail('configuration','invalid_market');
  requireApplicationAccess(applicationToken);
- const read=async allowEmpty=>validateSnapshot(await jsonRequest(fetchFn,SITE_URL+'/api/tensions?market='+encodeURIComponent(market),'readback'),market,{allowEmpty});
+ requireBasket(expectedIds);
+ const read=async allowEmpty=>validateSnapshot(await jsonRequest(fetchFn,SITE_URL+'/api/tensions?market='+encodeURIComponent(market),'readback'),market,{allowEmpty,allowSubset:allowEmpty,expectedIds});
  const before=await read(true),startedAt=now();let expectedAt=null,lastError,posts=0;
  const verified=(saved,extra={})=>{verifyHistory(before,saved);return summarize(saved,{posts,unchanged:saved.calculatedAt===before.calculatedAt,...extra});};
  const recover=async()=>{
@@ -81,7 +94,7 @@ export async function refreshMarket(market,{applicationToken,siteAccessToken,fet
    const headers={Authorization:'Bearer '+applicationToken};
    if(siteAccessToken)headers['OAI-Sites-Authorization']='Bearer '+siteAccessToken;
    posts++;
-   const updated=validateSnapshot(await jsonRequest(fetchFn,SITE_URL+'/api/tensions/refresh?market='+encodeURIComponent(market),'refresh',{method:'POST',headers}),market);
+   const updated=validateSnapshot(await jsonRequest(fetchFn,SITE_URL+'/api/tensions/refresh?market='+encodeURIComponent(market),'refresh',{method:'POST',headers}),market,{expectedIds});
    expectedAt=updated.calculatedAt;
    const saved=await read(false);
    if(saved.calculatedAt!==expectedAt)fail('verification','calculated_at_mismatch');
@@ -97,15 +110,16 @@ export async function refreshMarket(market,{applicationToken,siteAccessToken,fet
 export async function runUpdates(options={}){
  requireApplicationAccess(options.applicationToken);
  const {fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),log=()=>{},only}=options;
+ const expectedIds=await discoverBasket(fetchFn);
  let markets=await discoverMarkets(fetchFn);if(only){markets=markets.filter(m=>m.id===only);if(!markets.length)fail('configuration','unknown_market');}
  const results=[];let attempted=0;
  for(let i=0;i<markets.length;i++){
   const market=markets[i].id;attempted++;
-  try{const r=await refreshMarket(market,{...options,fetchFn,sleep});results.push(r);log(r);}
+  try{const r=await refreshMarket(market,{...options,expectedIds,fetchFn,sleep});results.push(r);log(r);}
   catch(error){const e=error instanceof UpdateError?error:new UpdateError('update','unexpected');const r={market,verifiedReadback:false,stage:e.stage,code:e.code,status:e.status};results.push(r);log(r);if(e.auth)break;}
   if(i<markets.length-1)await sleep(20000);
  }
  const verified=results.filter(r=>r.verifiedReadback),failed=results.filter(r=>!r.verifiedReadback);
- const summary={complete:attempted===markets.length&&failed.length===0,discovered:markets.length,attempted,verified:verified.length,unchanged:verified.filter(r=>r.unchanged).length,failed:failed.length,notAttempted:markets.length-attempted,usableItems:verified.reduce((n,r)=>n+r.usable,0),marketsWithoutUsableData:verified.filter(r=>r.usable===0).length,missingObservations:verified.reduce((n,r)=>n+r.missingObservations,0),sourceFailures:verified.reduce((n,r)=>n+r.sourceFailures,0)};
+ const summary={complete:attempted===markets.length&&failed.length===0,basketItems:expectedIds.length,discovered:markets.length,attempted,verified:verified.length,unchanged:verified.filter(r=>r.unchanged).length,failed:failed.length,notAttempted:markets.length-attempted,usableItems:verified.reduce((n,r)=>n+r.usable,0),marketsWithoutUsableData:verified.filter(r=>r.usable===0).length,missingObservations:verified.reduce((n,r)=>n+r.missingObservations,0),sourceFailures:verified.reduce((n,r)=>n+r.sourceFailures,0)};
  log(summary);return {summary,results};
 }
