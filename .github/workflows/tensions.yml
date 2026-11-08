@@ -1,0 +1,31 @@
+# Copy to .github/workflows/tensions.yml in a dedicated, owner-controlled repo.
+# Copy scripts/observatory/{update-tensions,tensions-client}.mjs too.
+# NOT ACTIVE in the internal Sites source repository.
+name: Update Mana Mechanica tensions
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0,6,12,18 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: mana-mechanica-tensions
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify updater
+        run: node --test tests/tensions-updater.mjs
+      - name: Refresh and verify all markets
+        env:
+          MM_TENSIONS_APPLICATION_TOKEN: ${{ secrets.MM_TENSIONS_APPLICATION_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/observatory/update-tensions.mjs --stdin
