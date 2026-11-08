@@ -10,6 +10,13 @@ function network(steps){
 }
 const before=snapshot(market,t-3600000),after=snapshot();
 function options(n,waits=[]){return {applicationToken,fetchFn:n.fetchFn,now:()=>t+1000,sleep:async ms=>waits.push(ms)};}
+test('missing or invalid global access fails before discovery, refresh, or delays',async()=>{
+ for(const token of [undefined,null,'','not-a-token','A'.repeat(64)]){
+  const n=network([]),waits=[],logs=[];
+  await assert.rejects(runUpdates({...options(n,waits),applicationToken:token,log:r=>logs.push(r)}),e=>e.stage==='configuration'&&e.code==='missing_application_access');
+  assert.equal(n.calls.length,0);assert.deepEqual(waits,[]);assert.deepEqual(logs,[]);n.done();
+ }
+});
 test('discovers every Forever market once, primary market first',async()=>{
  const n=network([{body:{markets:[{game:'forever',id:other},{game:'classic',id:'classic.other'},{game:'forever',id:market}]}}]);
  assert.deepEqual((await discoverMarkets(n.fetchFn)).map(x=>x.id),[market,other]);n.done();

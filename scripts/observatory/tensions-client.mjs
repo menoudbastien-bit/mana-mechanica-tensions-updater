@@ -7,6 +7,7 @@ export class UpdateError extends Error {
 }
 const fail=(stage,code)=>{throw new UpdateError(stage,code);};
 const validMarket=id=>typeof id==='string'&&/^forever\.[a-z0-9_-]+\.[a-z0-9_-]+\.[a-z0-9_-]+$/.test(id);
+const requireApplicationAccess=token=>{if(typeof token!=='string'||!/^[a-f0-9]{64}$/.test(token))fail('configuration','missing_application_access');};
 export async function jsonRequest(fetchFn,url,stage,options={}){
  let response;
  try{response=await fetchFn(url,{redirect:'error',cache:'no-store',...options,signal:AbortSignal.timeout(options.method==='POST'?240000:30000)});}
@@ -62,7 +63,7 @@ export function summarize(data,extra={}){
 }
 export async function refreshMarket(market,{applicationToken,siteAccessToken,fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now}={}){
  if(!validMarket(market))fail('configuration','invalid_market');
- if(typeof applicationToken!=='string'||!/^[a-f0-9]{64}$/.test(applicationToken))fail('configuration','missing_application_access');
+ requireApplicationAccess(applicationToken);
  const read=async allowEmpty=>validateSnapshot(await jsonRequest(fetchFn,SITE_URL+'/api/tensions?market='+encodeURIComponent(market),'readback'),market,{allowEmpty});
  const before=await read(true),startedAt=now();let expectedAt=null,lastError,posts=0;
  const verified=(saved,extra={})=>{verifyHistory(before,saved);return summarize(saved,{posts,unchanged:saved.calculatedAt===before.calculatedAt,...extra});};
@@ -94,6 +95,7 @@ export async function refreshMarket(market,{applicationToken,siteAccessToken,fet
  throw lastError;
 }
 export async function runUpdates(options={}){
+ requireApplicationAccess(options.applicationToken);
  const {fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),log=()=>{},only}=options;
  let markets=await discoverMarkets(fetchFn);if(only){markets=markets.filter(m=>m.id===only);if(!markets.length)fail('configuration','unknown_market');}
  const results=[];let attempted=0;
