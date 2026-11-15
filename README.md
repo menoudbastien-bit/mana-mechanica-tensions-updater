@@ -21,3 +21,7 @@ Tests: node --test tests/tensions-updater.mjs
 3. Apply the rule and update the affected files and articles. Preserve each article’s publication status. Reread the affected French, English and Spanish versions and verify facts, dates, figures, charts and sources. Record what was checked and any issues or access blockers that remain.
 
 The GitHub workflow refreshes Site tensions using the published catalogue. The AHledger research spreadsheet has its own market scope and collection schedule. When the spreadsheet cadence changes, check for a dependency before changing the Site refresh schedule. Routine runs focus on data refresh.
+
+## Population census protocol
+
+See [Protocole de mise à jour des recensements](docs/population-census-protocol.md) for the hosted population collection, archive verification and mandatory ordinary browser-interface check when collection access is blocked. Manual observations remain separate from automated archives. This documentation does not add a GitHub population schedule or change the existing daily task, Site publication or tensions workflow.
