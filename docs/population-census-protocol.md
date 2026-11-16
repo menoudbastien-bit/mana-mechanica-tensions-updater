@@ -1,6 +1,6 @@
 # Protocole de mise à jour des recensements de population
 
-Version du 15 novembre 2026 — Mana Mechanica.
+Version du 16 novembre 2026 — Mana Mechanica.
 
 ## Objet et portée
 
@@ -50,7 +50,7 @@ Un 403 établit un refus d'accès pour la requête concernée, pas sa cause pré
 
 « Organique » signifie lire normalement l'interface publique du site dans un navigateur : ouvrir sa page, choisir les filtres visibles et lire les chiffres affichés comme le ferait un visiteur. Cela ne signifie pas masquer l'automatisation ni contourner les protections.
 
-Lorsqu'un blocage de collecte apparaît, après l'arrêt prescrit ci-dessus :
+En cas de blocage d'accès à Classic Armory, noter l'heure effective du refus. Dans la même exécution quotidienne, viser **32 minutes après ce refus** pour la lecture de l'interface. Garder la cadence existante et utiliser une attente seulement si l'environnement l'autorise. Si le délai ou le navigateur ne sont pas disponibles dans cette exécution, signaler que le suivi reste à effectuer. Noter l'heure du refus, l'heure cible et l'heure effective de lecture. Après l'arrêt prescrit ci-dessus :
 
 1. Vérifier la page publique pertinente de la source, si une visite ordinaire est autorisée. Pour Classic Armory, partir de [Forever Census](https://classicarmory.gg/forever/census). Pour les autres sources, utiliser la page documentée et vérifier qu'elle concerne bien WoW Forever.
 2. Sélectionner explicitement la date, la région, le ruleset, les classes, factions et bornes de niveau correspondant à la cible. Attendre que le contenu affiché corresponde effectivement aux filtres ; ne pas relever les anciens chiffres pendant le chargement.
@@ -64,6 +64,7 @@ L'accès à l'interface peut fonctionner alors que le collecteur est refusé. Ce
 
 ## 5. Traiter le relevé manuel sans altérer les archives
 
+- Insérer le relevé vérifié dans le brouillon de l’article par l’éditeur autorisé. Dédupliquer par source, date d’instantané et périmètre, puis relire le brouillon pour vérifier l’enregistrement. Si l’accès d’édition manque, conserver le texte prêt à insérer et signaler le blocage.
 - Conserver séparément la provenance `manual_ui` dans une note de recherche privée, avec les métadonnées ci-dessus. Ne pas ajouter ce relevé aux tables automatiques ni fabriquer un point de courbe.
 - Comparer seulement des indicateurs de même définition et de même périmètre. Expliquer les décalages de dates et de couverture.
 - Ne pas additionner les effectifs de sources susceptibles de recenser les mêmes personnages ; ne pas moyenner des médianes régionales.
