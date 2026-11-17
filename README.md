@@ -25,3 +25,7 @@ The GitHub workflow refreshes Site tensions using the published catalogue. The A
 ## Population census protocol
 
 See [Protocole de mise à jour des recensements](docs/population-census-protocol.md) for the hosted population collection, archive verification and mandatory ordinary browser-interface check when collection access is blocked. Manual observations remain separate from automated archives. This documentation does not add a GitHub population schedule or change the existing daily task, Site publication or tensions workflow.
+
+## Auction House Rhythms protocol
+
+See the [Auction House Rhythms protocol](docs/auction-rhythms-protocol.md) for the public article’s data sources, time zones, simulations and verification. Its history endpoint reads existing data independently of the scheduled tensions refresh.
