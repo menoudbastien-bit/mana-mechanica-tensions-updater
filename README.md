@@ -29,3 +29,7 @@ See [Protocole de mise à jour des recensements](docs/population-census-protocol
 ## Auction House Rhythms protocol
 
 See the [Auction House Rhythms protocol](docs/auction-rhythms-protocol.md) for the public article’s data sources, time zones, simulations and verification. Its history endpoint reads existing data independently of the scheduled tensions refresh.
+
+## Darkmoon Faire listings
+
+[Guide de suivi](docs/darkmoon-market-protocol.md) et [collecte horaire](.github/workflows/darkmoon-depth.yml) pour le marché Europe Normal Alliance.
