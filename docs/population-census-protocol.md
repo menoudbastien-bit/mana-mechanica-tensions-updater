@@ -64,7 +64,7 @@ L'accès à l'interface peut fonctionner alors que le collecteur est refusé. Ce
 
 ## 5. Traiter le relevé manuel sans altérer les archives
 
-- Insérer le relevé vérifié dans le brouillon de l’article par l’éditeur autorisé. Dédupliquer par source, date d’instantané et périmètre, puis relire le brouillon pour vérifier l’enregistrement. Si l’accès d’édition manque, conserver le texte prêt à insérer et signaler le blocage.
+- Si la publication est autorisée, utiliser le service dédié de Mana Mechanica et le script `scripts/publish-classic-armory-report.mjs` du projet Sites. Il ajoute un relevé structuré de Classic Armory à l’article public de population en FR, EN et ES. Vérifier les huit combinaisons région/mode, la date et le total avant l’envoi, puis relire l’article public après confirmation de la persistance. Le service déduplique par date d’instantané et refuse les divergences. Une tâche limitée au brouillon ou à la collecte suit ses propres consignes de publication.
 - Conserver séparément la provenance `manual_ui` dans une note de recherche privée, avec les métadonnées ci-dessus. Ne pas ajouter ce relevé aux tables automatiques ni fabriquer un point de courbe.
 - Comparer seulement des indicateurs de même définition et de même périmètre. Expliquer les décalages de dates et de couverture.
 - Ne pas additionner les effectifs de sources susceptibles de recenser les mêmes personnages ; ne pas moyenner des médianes régionales.
@@ -88,7 +88,7 @@ Si une vérification manque ou échoue, indiquer « persistance non vérifiée �
 
 Lorsqu'une mise à jour éditoriale est autorisée, relire l'article actuel et ses versions FR/EN/ES ; corriger uniquement les passages concernés, préserver son statut de publication et ses archives. Présenter un relevé d'interface comme un complément daté, séparé des séries automatiques. Vérifier que tableaux, graphiques, légendes, dates et sources restent cohérents. Ne pas annoncer de traduction ou de correction non réalisée.
 
-Une connexion administrateur manquante ou une interdiction de publication/redéploiement reste un blocage concret : préparer le passage corrigé et signaler qu'il n'est pas intégré. La création de ce protocole sur GitHub n'implique pas une modification déjà effectuée dans l'article, le script ou la tâche quotidienne.
+L’accès de service couvre uniquement des relevés chiffrés de Classic Armory pour cet article. Les changements éditoriaux généraux continuent de passer par le CMS du propriétaire. Si le service dédié ne répond pas ou si la publication n’est pas autorisée, conserver le relevé vérifié et indiquer son statut dans le bilan.
 
 ## 8. Bilan minimal de chaque exécution
 
