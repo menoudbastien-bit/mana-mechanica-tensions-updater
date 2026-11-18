@@ -40,7 +40,7 @@ Rank in copper per item for one simulated unit, with a 5% faction commission and
 
 Assess the timing tendency independently with median-price entry from 06:00 to 09:00 and median-price resale windows 12:00–15:00, 15:00–18:00, 17:00–18:00 and 18:00–21:00. Compare the same dates within each item. Require three dates with all windows and weight items equally by their median percentage return. Report the number of items with positive median returns as well as the overall median. The rankings and the timing study describe listed prices in the dated sample.
 
-Each ranked item links to its charts on the selected market and period. Show sourced examples of recipes, crafted products, quest turn-ins or crate ingredients in a disclosure under the item. Reuse the reviewed Observatory profiles and the Darkmoon Faire and merchant-favor catalogues. Review additional examples against the Forever game database and keep the source link. Mark unreviewed examples explicitly and link to the item's Forever profile.
+Each ranked item links to its charts on the selected market and period. Language changes preserve the selected item, market, period and section. Show sourced examples of recipes, crafted products, quest turn-ins or crate ingredients in a disclosure under the item. Reuse the reviewed Observatory profiles and the Darkmoon Faire and merchant-favor catalogues. Review additional examples against the Forever game database and keep the source link. Mark unreviewed examples explicitly and link to the item's Forever profile.
 
 ## Verification
 
