@@ -1,0 +1,55 @@
+name: Archive Darkmoon Faire listings
+
+on:
+  schedule:
+    - cron: '32 * * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: darkmoon-faire-listings
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Collect and verify the latest European Alliance scan
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+
+          const market = 'forever.normal.alliance.eu';
+          const endpoint = 'https://mana-mechanica.com/api/darkmoon-market?market=' + market;
+          async function read(url) {
+            const response = await fetch(url, {signal: AbortSignal.timeout(75000)});
+            assert(response.ok, 'HTTP ' + response.status);
+            return response.json();
+          }
+
+          const payload = await read(endpoint);
+          assert.equal(payload.market, market);
+          assert(Number.isSafeInteger(payload.at), 'No saved source scan');
+          const age = Date.now() - payload.at;
+          assert(age >= -300000 && age <= 7200000, 'Latest source scan is outside the freshness window');
+          const items = Object.entries(payload.items);
+          assert(items.length && items.length <= payload.total, 'No items saved or unexpected item count');
+          const priced = items.filter(([,item]) =>
+            Object.values(item.quotes).some(quote => quote.status === 'priced'));
+          const [id, expected] = priced[0] ?? items[0];
+          const history = await read(endpoint + '&item=' + id);
+          assert.equal(history.market, market);
+          assert.equal(history.item, Number(id));
+          const saved = history.rows.filter(row => row.at === payload.at);
+          assert.equal(saved.length, 1, 'The scan must appear once in the archive');
+          assert.deepEqual(saved[0].quotes, expected.quotes);
+          assert.equal(saved[0].stock, expected.stock);
+          console.log(new Date(payload.at).toISOString() + ' · ' + items.length + '/' + payload.total +
+            ' items saved · ' + priced.length + ' with a priced quantity');
+          if (payload.partial || payload.sourceUnavailable) {
+            console.log('::warning::Incomplete listing coverage. The site retains the source timestamp.');
+          }
+          NODE
