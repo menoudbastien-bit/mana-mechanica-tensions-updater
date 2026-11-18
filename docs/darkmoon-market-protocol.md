@@ -1,0 +1,21 @@
+# Suivi de la Foire de Sombrelune
+
+[Article public](https://mana-mechanica.com/?lang=fr&page=darkmoon-faire) · WoW Forever, Europe, Normal (JcE), Alliance.
+
+## Coût des remises
+
+- L’article commence par le tableau des objets échangeables du catalogue de la Foire. Le paramètre initial calcule la quantité d’une remise pour chaque objet. Les autres paliers sont 1, 2, 5, 10, 20, 40 et 100 unités. Le niveau et le lot de la quête restent visibles. Le nombre de bons correspond à une première remise admissible tant que les répétitions sont à vérifier. Le coût par bon divise la dépense de toute la quantité choisie par ces bons. Un lot trop petit rapporte zéro bon et le ratio reste vide. Le planificateur détaillé reste accessible dans le volet suivant.
+- [AuctionHouse TK.GG](https://auctionhouse.tk.gg/data/) fournit le relevé Blizzard du marché `eu-2-111`. Le serveur contrôle la région, le groupe Normal, la faction, l’hôtel des ventes, l’identifiant de l’objet et l’égalité entre l’heure du détail et celle du relevé d’ensemble. Le marché demeure fixe dans cette première version.
+- Le coût en cuivre cumule les unités aux niveaux de prix croissants. Un objet dont les annonces sont vendues en bloc est chiffré seulement si les niveaux nécessaires contiennent exclusivement des annonces d’une unité. Le détail limité aux premiers niveaux de prix peut suffire à un petit palier et laisser les autres sans mesure. Un stock inférieur au palier est signalé séparément. Les offres et leur disponibilité peuvent évoluer entre le relevé et l’achat.
+- Les libellés et graphiques sont disponibles en français, en anglais et en espagnol. Les liens des quêtes et les infobulles des objets pointent vers les fiches Forever avec leurs identifiants vérifiés.
+
+## Historique et cadence
+
+- `GET /api/darkmoon-market?market=forever.normal.alliance.eu` relit le dernier résultat de la base et peut lancer la collecte. Le verrou partagé limite la consultation du marché à une fois par heure et les détails sont lus un par un. La vérification du dernier relevé utilise l’heure de la source. L’archive déduplique par marché et heure UTC. Un relevé partiel porte son taux de couverture. En cas d’échec ou de retard, le dernier relevé conserve sa date et devient ancien au-delà de deux heures.
+- Le workflow GitHub Actions demande cette lecture à la minute 32 de chaque heure UTC. Il vérifie le marché, la fraîcheur et la présence unique du relevé dans l’historique. Il n’utilise aucun secret. Le calendrier GitHub peut être retardé. La collecte des tensions a son propre calendrier.
+- `GET /api/darkmoon-market?market=forever.normal.alliance.eu&item=<id>` relit jusqu’aux 2 160 derniers relevés détaillés de l’objet. Les graphiques synchronisent la quantité listée avec le prix du palier. Le mode prix unitaires réutilise les minimums, médianes et stocks de l’[article Rythmes](https://mana-mechanica.com/?lang=fr&page=forever-auction-house-rhythms), par marché et identifiant, avec les relevés datés en priorité et les agrégats horaires en repli. Les deux modes indiquent leurs sources et la première cotation détaillée disponible. Chaque lacune reste visible ou interrompt la courbe. Les anciens points unitaires ne permettent pas de reconstruire le coût d’un panier par quantité.
+- Afficher les dates et heures en `Europe/Paris`. La bande de la Foire utilise les [fenêtres Forever](https://undying.app/events) vérifiées et enregistrées dans le calendrier de l’article. Le curseur commun montre l’heure et les mesures du relevé. Vérifier l’heure d’ouverture, de fermeture et la durée des prochaines éditions avant d’ajouter de nouvelles fenêtres.
+
+## Vérification
+
+Comparer le coût d’une petite quantité et d’un palier traversant plusieurs niveaux de prix. Vérifier un stock insuffisant, un lot dont le détail est incomplet, une quantité inférieure au lot de quête et les états de fraîcheur. Relire le même horodatage dans l’archive et vérifier l’absence de doublons. Vérifier l’affichage sur mobile, les trois langues, les deux modes de graphique, leurs repères de la Foire et le volet du planificateur. Pour confirmer l’automatisation, vérifier les exécutions GitHub et l’avancement de l’heure source dans la base.
