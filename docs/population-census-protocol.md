@@ -1,6 +1,6 @@
 # Protocole de mise à jour des recensements de population
 
-Version du 16 novembre 2026 — Mana Mechanica.
+Version du 19 novembre 2026 — Mana Mechanica.
 
 ## Objet et portée
 
@@ -10,7 +10,7 @@ Ce dépôt GitHub conserve le protocole. Le collecteur et les archives résident
 
 La tâche quotidienne existante reste la seule planification de population, à 02:00 Europe/Zurich. Ne créer aucun second cron, workflow planifié ou rattrapage automatique. Le workflow GitHub des tensions de marché est indépendant et n'est pas modifié par ce protocole. Un protocole documenté n'est pas une nouvelle automatisation active.
 
-Préserver le caractère privé de l'article et des archives. Ne publier aucun article, ne redéployer aucun site, ne modifier ni permissions ni secrets dans le cadre d'une collecte. Ce dépôt étant public, n'y déposer ni archives privées, ni résultats détaillés privés, ni identifiants de connexion, ni captures d'administration.
+L’article de population est public. Le propriétaire autorise la publication automatique des nouvelles données vérifiées dans cet article, sans demande de validation à chaque exécution. Utiliser les services hébergés de mise à jour et de publication. Préserver les archives privées et les contenus éditoriaux existants. Les collectes quotidiennes ne nécessitent aucun redéploiement du site. Ce dépôt étant public, n'y déposer ni archives privées, ni résultats détaillés privés, ni identifiants de connexion, ni captures d'administration.
 
 ## 1. Vérifier et valider avant d'exécuter
 
@@ -64,7 +64,7 @@ L'accès à l'interface peut fonctionner alors que le collecteur est refusé. Ce
 
 ## 5. Traiter le relevé manuel sans altérer les archives
 
-- Si la publication est autorisée, utiliser le service dédié de Mana Mechanica et le script `scripts/publish-classic-armory-report.mjs` du projet Sites. Il ajoute un relevé structuré de Classic Armory à l’article public de population en FR, EN et ES. Vérifier les huit combinaisons région/mode, la date et le total avant l’envoi, puis relire l’article public après confirmation de la persistance. Le service déduplique par date d’instantané et refuse les divergences. Une tâche limitée au brouillon ou à la collecte suit ses propres consignes de publication.
+- La publication automatique est autorisée par le propriétaire depuis le 19 novembre 2026, sans nouvelle validation. Utiliser le service dédié de Mana Mechanica et le script `scripts/publish-classic-armory-report.mjs` du projet Sites. Il ajoute un relevé structuré de Classic Armory à l’article public de population en FR, EN et ES. Vérifier les huit combinaisons région/mode, la date et le total avant l’envoi, puis relire l’article public après confirmation de la persistance. Le service déduplique par date d’instantané et refuse les divergences. La tâche quotidienne publie désormais les relevés vérifiés avec ce service.
 - Conserver séparément la provenance `manual_ui` dans une note de recherche privée, avec les métadonnées ci-dessus. Ne pas ajouter ce relevé aux tables automatiques ni fabriquer un point de courbe.
 - Comparer seulement des indicateurs de même définition et de même périmètre. Expliquer les décalages de dates et de couverture.
 - Ne pas additionner les effectifs de sources susceptibles de recenser les mêmes personnages ; ne pas moyenner des médianes régionales.
@@ -88,7 +88,7 @@ Si une vérification manque ou échoue, indiquer « persistance non vérifiée �
 
 Lorsqu'une mise à jour éditoriale est autorisée, relire l'article actuel et ses versions FR/EN/ES ; corriger uniquement les passages concernés, préserver son statut de publication et ses archives. Présenter un relevé d'interface comme un complément daté, séparé des séries automatiques. Vérifier que tableaux, graphiques, légendes, dates et sources restent cohérents. Ne pas annoncer de traduction ou de correction non réalisée.
 
-L’accès de service couvre uniquement des relevés chiffrés de Classic Armory pour cet article. Les changements éditoriaux généraux continuent de passer par le CMS du propriétaire. Si le service dédié ne répond pas ou si la publication n’est pas autorisée, conserver le relevé vérifié et indiquer son statut dans le bilan.
+L’accès de service couvre uniquement des relevés chiffrés de Classic Armory pour cet article. Les changements éditoriaux généraux continuent de passer par le CMS du propriétaire. Si le service dédié ne répond pas ou si les données sont incomplètes, conserver le relevé vérifié et indiquer son statut dans le bilan.
 
 ## 8. Bilan minimal de chaque exécution
 
