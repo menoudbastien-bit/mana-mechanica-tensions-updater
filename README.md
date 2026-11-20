@@ -33,3 +33,7 @@ See the [Auction House Rhythms protocol](docs/auction-rhythms-protocol.md) for t
 ## Darkmoon Faire listings
 
 [Guide de suivi](docs/darkmoon-market-protocol.md) et [collecte horaire](.github/workflows/darkmoon-depth.yml) pour le marché Europe Normal Alliance.
+
+## Traductions du site public
+
+Le [protocole de traduction](docs/editorial-localization-protocol.md) couvre les publications FR, EN et ES, leurs outils interactifs, les sources et les contrôles de cohérence.
