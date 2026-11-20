@@ -1,6 +1,6 @@
 # Protocole de mise à jour des recensements de population
 
-Version du 19 novembre 2026 — Mana Mechanica.
+Version du 20 novembre 2026 — Mana Mechanica.
 
 ## Objet et portée
 
@@ -19,7 +19,7 @@ L’article de population est public. Le propriétaire autorise la publication a
 3. Ne pas fixer le nombre de cibles à une valeur historique : obtenir la liste autorisée par `GET /api/population/history`. Un sous-ensemble explicitement demandé filtre cette liste sans inventer de cible ; par exemple une opération WoWStats/Armory exclut aotc.
 4. Vérifier que le chemin d'exécution inspecte immédiatement chaque réponse, y compris son statut applicatif. Ne pas lancer aveuglément un ancien script qui ne s'arrêterait que sur le code HTTP.
 
-Point de compatibilité : la copie du script Sites examinée pour établir ce protocole arrête les erreurs HTTP de transport, mais ne stoppe pas explicitement toute la boucle sur `source_http_401` ou `source_http_403` renvoyé dans un JSON HTTP 200. Le présent document ne corrige pas ce code. Tant que la version courante n'a pas été vérifiée ou corrigée dans une intervention distincte, exécuter le parcours séquentiellement avec inspection et arrêt immédiats. Ne pas présenter cette exigence comme déjà implémentée dans le script.
+Le script `scripts/refresh-population.mjs` du projet Sites inspecte les statuts applicatifs et arrête les POST de collecte sur HTTP401/403 du Site ainsi que source_http_401/403 dans un JSON HTTP200. Il distingue les réponses inchangées et les échantillons vides des nouvelles collectes. Vérifier la version du script avant de l’exécuter.
 
 ## 2. Collecter par le mécanisme hébergé
 
@@ -40,7 +40,8 @@ Point de compatibilité : la copie du script Sites examinée pour établir ce pr
 | HTTP 401/403 du Site | Arrêter immédiatement tous les rafraîchissements. Ne pas tenter la relecture privée avec cet accès refusé. Signaler « accès Site bloqué ». |
 | `source_http_401` / `source_http_403`, même avec HTTP 200 | Arrêter immédiatement tous les rafraîchissements. Lire les archives seulement si le Site reste autorisé. Déclencher la vérification organique de la source ci-dessous. |
 | HTTP 429 / `source_rate_limited` | Respecter le délai indiqué et la suspension de la source prévue par le collecteur. Ne pas poursuivre ses cibles ni déplacer la collecte vers un navigateur pour contourner la limite. |
-| `empty_sample`, format invalide, nombres incohérents | Échec de donnée ; aucune conversion en zéro, aucun remplacement du dernier relevé valide. Vérifier le périmètre dans l'interface lorsque l'accès ordinaire est autorisé. |
+| `empty_sample` | Données indisponibles pour cette sélection. Conserver le code d’erreur pour la traçabilité, sans observation de population zéro ni remplacement du dernier relevé valide. |
+| Format invalide ou nombres incohérents | Échec de validation. Examiner les données source et conserver le dernier relevé valide. |
 | Timeout, réponse perdue ou illisible | Résultat indéterminé jusqu'à relecture ; ne pas relancer aveuglément un POST susceptible d'avoir été enregistré. |
 | Statut inconnu, cible déjà traitée ou collecte ignorée | Rapporter séparément ; ce n'est pas un nouveau succès de collecte. |
 
@@ -101,3 +102,11 @@ Rapporter en français, sans secret ni données privées dans les logs publics :
 - mise à jour éditoriale effectivement enregistrée, seulement préparée ou bloquée.
 
 Conserver le détail des résultats dans l'espace privé autorisé. Ne jamais annoncer qu'une lecture manuelle constitue une collecte automatique réussie.
+
+## Fraîcheur et cohérence des données actuelles · 20 novembre 2026
+
+Les comparaisons actuelles utilisent uniquement les observations ayant une date source vérifiable de moins de 48 heures (48 heures incluses). La date de consultation ne renouvelle pas l’instantané source. Pour les données WoWStats réunissant plusieurs pages, la date la plus ancienne contrôle l’éligibilité. Les données anciennes, futures ou sans date source vérifiable restent consultables dans Sources & relevés et dans les archives, et sont exclues des tableaux et graphiques actuels.
+
+La validation intersources préalable à la publication compare des marchés, indicateurs et périmètres compatibles sur des données récentes. Les écarts sont jugés selon l’historique comparable et la précision des échantillons. Si un comparatif récent manque ou si les écarts restent inexpliqués, indiquer que le contrôle est incomplet et conserver la dernière publication. L’autorisation du propriétaire dispense d’approbation manuelle lorsque les conditions sont remplies. Le service de publication exige les huit marchés validés pour un instantané complet.
+
+Le bilan distingue nouvelles observations archivées, collectes réussies, cibles déjà traitées (unchanged:true ou already_claimed), données indisponibles, autres erreurs et cibles non traitées. Un résultat déjà traité n’est jamais compté comme une nouvelle collecte. Les observations anciennes ne deviennent pas récentes à chaque archivage quotidien.
