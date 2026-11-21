@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {discoverMarkets,discoverBasket,validateBasket,refreshMarket,runUpdates,validateSnapshot,verifyHistory} from '../scripts/observatory/tensions-client.mjs';
+import {discoverMarkets,discoverBasket,validateBasket,refreshMarket,runUpdates,validateSnapshot,verifyHistory,summarize} from '../scripts/observatory/tensions-client.mjs';
 const market='forever.normal.alliance.eu',other='forever.pvp.horde.us',t=1800000000000,applicationToken='a'.repeat(64);
 const expectedIds=Array.from({length:75},(_,n)=>n+1),catalogue=(ids=expectedIds)=>({items:ids.map(id=>({id}))});
 function snapshot(id=market,at=t,ids=expectedIds){return {market:id,calculatedAt:at,states:ids.map(itemId=>({market:id,id:itemId,observedAt:at-60000,lastAt:at-60000,availability:'available',reason:null,episodes:[]})),top:[],failures:[]};}
@@ -109,4 +109,19 @@ test('an old incomplete basket cannot count as a verified unchanged refresh',asy
 });
 test('an undeclared removed item is rejected before a write can discard its history',async()=>{
  const n=network([{body:before}]);await assert.rejects(refreshMarket(market,options(n,[],expectedIds.slice(1))),e=>e.code==='item_identity');assert.equal(n.calls.length,1);n.done();
+});
+
+
+test('hourly snapshots separate fresh price coverage from sufficient tension history',()=>{
+ const saved=snapshot();for(const state of saved.states)state.latestObservation={at:state.observedAt,median:120,quantity:0};
+ saved.states[0].availability='unknown';saved.states[0].reason='insufficient_history';
+ const result=summarize(saved);assert.equal(result.pricedRecent,75);assert.equal(result.usable,74);
+ saved.states[1].observationAvailable=false;assert.equal(summarize(saved).pricedRecent,74);
+ saved.sourceErrors=[{status:403}];assert.equal(summarize(saved).providerAccessBlocked,true);
+});
+test('a saved provider access refusal stops before another market without changing access',async()=>{
+ const saved={...snapshot(market,t+1000),sourceErrors:[{status:403}],failures:[1]};
+ const net=network([{body:catalogue()},{body:{markets:[{id:market,game:'forever'},{id:other,game:'forever'}]}},{body:snapshot()},{method:'POST',body:saved},{body:saved}]);
+ const result=await runUpdates({applicationToken,fetchFn:net.fetchFn,sleep:async()=>assert.fail('No wait after access denial')});
+ assert.equal(result.summary.complete,false);assert.equal(result.summary.attempted,1);assert.equal(result.summary.notAttempted,1);assert.equal(result.summary.providerAccessBlocked,true);net.done();
 });
