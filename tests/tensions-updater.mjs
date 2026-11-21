@@ -125,3 +125,17 @@ test('a saved provider access refusal stops before another market without changi
  const result=await runUpdates({applicationToken,fetchFn:net.fetchFn,sleep:async()=>assert.fail('No wait after access denial')});
  assert.equal(result.summary.complete,false);assert.equal(result.summary.attempted,1);assert.equal(result.summary.notAttempted,1);assert.equal(result.summary.providerAccessBlocked,true);net.done();
 });
+test('a successful hourly slot needs only readback on the next scheduler check',async()=>{
+ const saved={...snapshot(),collection:{hourSlot:Math.floor((t+1000)/3600000)},historyRecovery:{checked:16,inserted:300,errors:[]}};
+ const net=network([{body:saved}]);
+ const result=await refreshMarket(market,options(net));
+ assert.equal(result.unchanged,true);assert.equal(result.posts,0);
+ assert.equal(result.historyChecked,0);assert.equal(result.historyInserted,0);net.done();
+});
+test('saved markets and successful sources have separate completion status',async()=>{
+ const saved={...snapshot(),historyRecovery:{checked:15,errors:[{id:1,status:503}]}};
+ const net=network([{body:catalogue()},{body:{markets:[{id:market,game:'forever'}]}},{body:before},{method:'POST',body:saved},{body:saved}]);
+ const result=await runUpdates(options(net));
+ assert.equal(result.summary.storageComplete,true);assert.equal(result.summary.complete,false);
+ assert.equal(result.summary.historyFailures,1);assert.equal(result.summary.historyChecked,15);net.done();
+});
