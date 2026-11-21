@@ -1,11 +1,15 @@
-# Copy to .github/workflows/tensions.yml in a dedicated, owner-controlled repo.
-# Copy scripts/observatory/{update-tensions,tensions-client}.mjs too.
-# NOT ACTIVE in the internal Sites source repository.
+# Hourly UTC collection. Runtime computes and verifies the current central basket.
 name: Update Mana Mechanica tensions
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tensions.yml'
+      - 'scripts/observatory/**'
+      - 'tests/tensions-updater.mjs'
   schedule:
-    - cron: '0 0,6,12,18 * * *'
+    - cron: '0 * * * *'
 permissions:
   contents: read
 concurrency:
