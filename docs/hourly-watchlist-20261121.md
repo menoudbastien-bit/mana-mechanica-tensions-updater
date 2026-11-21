@@ -39,3 +39,15 @@ L’API anonyme est limitée à 30 appels par minute. Les lots rendent viable le
 AHledger annonce une modification des droits de conservation à partir du 10 décembre 2026. Vérifier l’autorisation d’archivage avant cette échéance ; l’augmentation de cadence n’accorde aucun nouveau droit. Maintenir « Prices from AHledger » près des données. Sources : https://ahledger.com/developers.
 
 Tests : union des ID, lots de 100 et cinq requêtes pour 446, données manquantes/zéros, isolation des marchés, régression temporelle, déduplication/épisodes, catalogue et médias locaux, toutes les périodes graphiques, bloc courant du bulletin et cohérence FR/EN/ES. Vérifier après publication les sauvegardes réelles de chaque marché et les nouveaux recensements, sans déduire un succès du seul cron.
+
+
+## Vérification réelle après publication
+
+Le 21 novembre 2026, la publication publique 132 est déployée. Exécution GitHub #55 (commit `9e3a1ffb46c7d3ddd1c804eb8aa5f216c0fb4af3`) du 21 novembre à 01:51–02:03 UTC : https://github.com/menoudbastien-bit/mana-mechanica-tensions-updater/actions/runs/44852571432.
+
+- 32 marchés Forever tentés et 32 sauvegardes vérifiées ; 446 ID distincts dans chaque marché, soit 14 272 états. Aucune tentative inchangée, aucun échec HTTP/fournisseur, aucun marché ignoré.
+- Relecture publique indépendante : les 32 marchés et `calculatedAt` correspondent au journal du script ; aucun mélange de marché ni ID supplémentaire.
+- 5 606 couples marché–objet ont un prix récent ; 1 407 ont assez de données pour l'évaluation des tensions. Ces nombres mesurent des couvertures différentes. 4 782 observations sont absentes ; 22 marchés n'ont aucun objet admissible pour une tension. Les scans anciens et les quantités nulles réelles restent identifiables. Un calcul réussi ne crée pas une observation récente.
+- Population : publication et relecture de huit recensements Classic Armory du 20 novembre 2026 à 23:47 UTC, avec classes, 51 niveaux et deux factions. Pour chacun, les trois sommes concordent avec l'effectif. Les 92 anciennes observations serveur sont conservées ; total public 100 après cet ajout. Les métiers, guildes et connexions non mesurés restent absents.
+- 63 vérifications automatisées réussies. Contrôles publics FR/EN/ES, sept onglets Population, filtres du panier 406/446, nouveau cours et icône locale, quatre périodes des Rythmes, curseur et largeur utile 454 px ; changement EU/KR du bulletin sans substitution de marché. Les semaines clôturées restent inchangées.
+- Classeur : panier 446, intervalle 1 h, sélecteur nom+ID, calendrier historique préservé et premier nouveau passage 80 à 03:00 Europe/Zurich vérifiés. L'exécution du passage 80 n'est pas déduite de son seul état « Planifié ».
