@@ -1,6 +1,6 @@
 # Mana Mechanica tension updater
 
-Runs at 00:00, 06:00, 12:00 and 18:00 UTC through GitHub Actions. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.
+Runs hourly at minute 00 UTC through GitHub Actions. The central watchlist currently contains 446 item IDs; the hosted collector uses five AHledger tooltip batches per market, retaining each item's exact source scan time. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.
 
 Add reviewed items to content/observatory/basket.json in the Site repository and publish the Site. The generated catalogue, server and counters share that definition. Routine additions require no updater edit, secret change or schedule change. Never add fake items to production for tests.
 
@@ -37,3 +37,7 @@ See the [Auction House Rhythms protocol](docs/auction-rhythms-protocol.md) for t
 ## Traductions du site public
 
 Le [protocole de traduction](docs/editorial-localization-protocol.md) couvre les publications FR, EN et ES, leurs outils interactifs, les sources et les contrôles de cohérence.
+
+## Hourly watchlist · 21 November 2026
+
+The [hourly collection protocol](docs/hourly-watchlist-20261121.md) documents the 406-item progression catalogue, preservation of 40 other existing references, 300 additions to the Site, source-date deduplication, workbook history and silent collection instructions. The closed weekly editions keep their historical panels. Current prices and sufficient history for a tension are reported separately. Routine GitHub runs never call a language model or notify through ChatGPT.
