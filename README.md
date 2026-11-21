@@ -1,6 +1,6 @@
 # Mana Mechanica tension updater
 
-Runs hourly at minute 00 UTC through GitHub Actions. The central watchlist currently contains 446 item IDs; the hosted collector uses five AHledger tooltip batches per market, retaining each item's exact source scan time. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.
+Collects one UTC hour slot per market. GitHub Actions checks at minutes 07, 22, 37 and 52, reuses successful slots and retries incomplete ones. The central watchlist currently contains 446 item IDs; the hosted collector uses five AHledger tooltip batches per market, retaining each item's exact source scan time. Each hourly slot also recovers a rotating bounded part of the 7-day history. Scan observations and hourly aggregates remain separate, and corrected values keep their previous archived versions. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.
 
 Add reviewed items to content/observatory/basket.json in the Site repository and publish the Site. The generated catalogue, server and counters share that definition. Routine additions require no updater edit, secret change or schedule change. Never add fake items to production for tests.
 
