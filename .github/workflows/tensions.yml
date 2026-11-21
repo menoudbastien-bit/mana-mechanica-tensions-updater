@@ -1,4 +1,4 @@
-# Hourly UTC collection. Runtime computes and verifies the current central basket.
+# Hourly UTC collection slots. Quarter-hour checks retry incomplete slots; completed slots are reused.
 name: Update Mana Mechanica tensions
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
       - 'scripts/observatory/**'
       - 'tests/tensions-updater.mjs'
   schedule:
-    - cron: '0 * * * *'
+    - cron: '7,22,37,52 * * * *'
 permissions:
   contents: read
 concurrency:
