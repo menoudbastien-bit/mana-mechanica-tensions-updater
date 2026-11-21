@@ -28,7 +28,7 @@ La capacité du brut passe à 360000 lignes ; les formules du suivi utilisent la
 
 ## Articles et données
 
-Les trois versions de l’Observatoire décrivent la cadence et le nouveau panier. Les Rythmes réutilisent 446 ID et 70 890 points exacts archivés pour 402 objets Europe Normal Alliance, dont 1967 points supplémentaires vérifiés depuis le classeur. Les minima absents de cet extrait restent absents. Le comparatif lit au plus 100000 observations serveur et signale une archive tronquée. Les horizons et comparaisons manquant de couverture restent exploratoires.
+Les trois versions de l’Observatoire décrivent la cadence et le nouveau panier. Les Rythmes réutilisent 446 ID et 70 890 points exacts archivés pour 402 objets Europe Normal Alliance, dont 1967 points supplémentaires vérifiés depuis le classeur. Les minima absents de cet extrait restent absents. Le comparatif lit désormais toutes les pages de 4000 observations de la période choisie, sans l’ancien plafond de 100000 lignes ; une page en échec est signalée comme source partielle. Les historiques individuels dépassent aussi l’ancien plafond de 8000 lignes. Les horizons et comparaisons manquant de couverture restent exploratoires.
 
 Le bulletin ajoute une lecture courante de `/api/tensions` sous les filtres, avec recherche, dates source et calcul séparées, icônes et liens vers les deux autres outils. Ses éditions closes ne sont pas recalculées avec les offres actuelles.
 
