@@ -70,8 +70,10 @@ export function verifyHistory(before,after){
 }
 export function summarize(data,extra={}){
  const dates=data.states.map(s=>s.observedAt===undefined?s.lastAt:s.observedAt).filter(Number.isFinite),unavailable={};
+ const pricedRecent=data.states.filter(s=>{const p=s.latestObservation,at=s.observedAt??p?.at;return s.observationAvailable!==false&&p&&Number.isFinite(at)&&p.at===at&&Number.isFinite(p.median)&&p.median>0&&at<=data.calculatedAt+300000&&data.calculatedAt-at<=(data.config?.staleHours??6)*3600000;}).length;
+ const providerAccessBlocked=(data.sourceErrors||[]).some(e=>e.status===401||e.status===403);
  for(const s of data.states.filter(s=>s.availability!=='available'))unavailable[s.reason??'unknown']=(unavailable[s.reason??'unknown']??0)+1;
- return {market:data.market,verifiedReadback:true,calculatedAt:data.calculatedAt,items:data.states.length,usable:data.states.filter(s=>s.availability==='available').length,missingObservations:data.states.filter(s=>(s.observedAt===undefined?s.lastAt:s.observedAt)==null).length,sourceFailures:data.failures?.length??0,unavailable,observations:dates.length?[Math.min(...dates),Math.max(...dates)]:[],top:data.top.length,...extra};
+ return {market:data.market,verifiedReadback:true,calculatedAt:data.calculatedAt,items:data.states.length,pricedRecent,providerAccessBlocked,usable:data.states.filter(s=>s.availability==='available').length,missingObservations:data.states.filter(s=>(s.observedAt===undefined?s.lastAt:s.observedAt)==null).length,sourceFailures:data.failures?.length??0,unavailable,observations:dates.length?[Math.min(...dates),Math.max(...dates)]:[],top:data.top.length,...extra};
 }
 export async function refreshMarket(market,{applicationToken,siteAccessToken,expectedIds,fetchFn=fetch,sleep=ms=>new Promise(r=>setTimeout(r,ms)),now=Date.now}={}){
  if(!validMarket(market))fail('configuration','invalid_market');
@@ -115,11 +117,11 @@ export async function runUpdates(options={}){
  const results=[];let attempted=0;
  for(let i=0;i<markets.length;i++){
   const market=markets[i].id;attempted++;
-  try{const r=await refreshMarket(market,{...options,expectedIds,fetchFn,sleep});results.push(r);log(r);}
+  try{const r=await refreshMarket(market,{...options,expectedIds,fetchFn,sleep});results.push(r);log(r);if(r.providerAccessBlocked)break;}
   catch(error){const e=error instanceof UpdateError?error:new UpdateError('update','unexpected');const r={market,verifiedReadback:false,stage:e.stage,code:e.code,status:e.status};results.push(r);log(r);if(e.auth)break;}
   if(i<markets.length-1)await sleep(20000);
  }
  const verified=results.filter(r=>r.verifiedReadback),failed=results.filter(r=>!r.verifiedReadback);
- const summary={complete:attempted===markets.length&&failed.length===0,basketItems:expectedIds.length,discovered:markets.length,attempted,verified:verified.length,unchanged:verified.filter(r=>r.unchanged).length,failed:failed.length,notAttempted:markets.length-attempted,usableItems:verified.reduce((n,r)=>n+r.usable,0),marketsWithoutUsableData:verified.filter(r=>r.usable===0).length,missingObservations:verified.reduce((n,r)=>n+r.missingObservations,0),sourceFailures:verified.reduce((n,r)=>n+r.sourceFailures,0)};
+ const summary={complete:attempted===markets.length&&failed.length===0&&!verified.some(r=>r.providerAccessBlocked),basketItems:expectedIds.length,discovered:markets.length,attempted,verified:verified.length,unchanged:verified.filter(r=>r.unchanged).length,failed:failed.length,notAttempted:markets.length-attempted,pricedRecentItems:verified.reduce((n,r)=>n+(r.pricedRecent||0),0),providerAccessBlocked:verified.some(r=>r.providerAccessBlocked),usableItems:verified.reduce((n,r)=>n+r.usable,0),marketsWithoutUsableData:verified.filter(r=>r.usable===0).length,missingObservations:verified.reduce((n,r)=>n+r.missingObservations,0),sourceFailures:verified.reduce((n,r)=>n+r.sourceFailures,0)};
  log(summary);return {summary,results};
 }
