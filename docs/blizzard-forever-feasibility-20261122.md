@@ -1,3 +1,5 @@
+Mise à jour de méthode : la collecte courante passe à l’API Blizzard directe. Voir [le protocole Blizzard horaire](blizzard-hourly-protocol.md). Les sections antérieures restent datées et conservées comme historique de méthode ; elles ne doivent plus déclencher le collecteur AHledger. Blackwater reste séparé, KR et TW distincts, les marchés indisponibles sans substitution.
+
 # Accès direct Blizzard pour Mana Mechanica — vérification du 22 novembre 2026
 
 ## État vérifié

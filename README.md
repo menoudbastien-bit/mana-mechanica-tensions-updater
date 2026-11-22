@@ -1,3 +1,20 @@
+# Mana Mechanica — collecte Blizzard horaire
+
+La méthode courante utilise directement l’API Blizzard Forever pour le panier publié (446 ID au 22 novembre 2026) et les maisons physiques candidates EU/US/KR/TW, avec Blackwater séparé. Le registre conserve aussi les périmètres indisponibles : aucune région n’est substituée. Les correspondances de règles inférées restent signalées et les anciennes séries AHledger restent des archives explicitement distinctes.
+
+Le workflow conservé sous `.github/workflows/tensions.yml` lance le contrôleur toutes les cinq minutes. Ce sont des vérifications de calendrier : une maison n’est interrogée que près de la date source attendue suivante, environ chaque heure, avec revalidation conditionnelle et sans faux nouveau scan sur un snapshot répété. GitHub peut retarder les exécutions. Les secrets Blizzard restent dans Sites ; le runner réutilise le secret applicatif GitHub existant pour obtenir un jeton éphémère depuis le broker authentifié. Aucun secret dans ce dépôt.
+
+- Commande : `node scripts/blizzard/update-watchlist.mjs --stdin` ; entrée JSON masquée avec projectId/siteUrl et accès applicatif, jamais d’identifiant dans les arguments ou un fichier.
+- Tests : `node --test tests/blizzard-collector.mjs tests/blizzard-listing-metrics.mjs`.
+- Protocole : [collecte et conservation Blizzard](docs/blizzard-hourly-protocol.md).
+- Les grands JSON d’annonces restent en mémoire dans Node ; seuls prix calculés, quantités, métadonnées et erreurs du panier sont envoyés au stockage du site.
+- Les nouvelles données Blizzard suivent une fenêtre de 30 jours. Les anciennes observations et éditions AHledger ne sont pas réécrites. Le carnet de profondeur TK Sombrelune reste une source distincte et créditée.
+- Un échec technique du contrôleur échoue le job et conserve les valeurs précédentes avec leur date source ; il ne crée aucun prix de substitution.
+
+## Documentation de la collecte antérieure — archive
+
+Les paragraphes ci-dessous documentent le collecteur AHledger retiré du workflow courant. Ils ne sont plus des instructions de collecte active.
+
 # Mana Mechanica tension updater
 
 Collects one UTC hour slot per market. GitHub Actions checks at minutes 07, 22, 37 and 52, reuses successful slots and retries incomplete ones. The central watchlist currently contains 446 item IDs; the hosted collector uses five AHledger tooltip batches per market, retaining each item's exact source scan time. Each hourly slot also recovers a rotating bounded part of the 7-day history. Scan observations and hourly aggregates remain separate, and corrected values keep their previous archived versions. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.

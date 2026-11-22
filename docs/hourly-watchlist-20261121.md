@@ -1,3 +1,5 @@
+Mise à jour de méthode : la collecte courante passe à l’API Blizzard directe. Voir [le protocole Blizzard horaire](blizzard-hourly-protocol.md). Les sections antérieures restent datées et conservées comme historique de méthode ; elles ne doivent plus déclencher le collecteur AHledger. Blackwater reste séparé, KR et TW distincts, les marchés indisponibles sans substitution.
+
 # Watchlist et collecte horaire · 21 novembre 2026
 
 Point de restauration : publication 130, source `fc58c8589c582a0d6c6a4e69d3ee15a8ace6eff6`, et copie complète du classeur avant modification. Les publications et brouillons existants conservent leur statut.

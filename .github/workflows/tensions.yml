@@ -1,15 +1,17 @@
-# Hourly UTC collection slots. Quarter-hour checks retry incomplete slots; completed slots are reused.
-name: Update Mana Mechanica tensions
+# Poll scheduler every five minutes; each physical house follows its source's hourly phase.
+name: Collect Mana Mechanica Blizzard watchlist
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - '.github/workflows/tensions.yml'
-      - 'scripts/observatory/**'
-      - 'tests/tensions-updater.mjs'
+      - 'scripts/blizzard/**'
+      - 'lib/blizzard/**'
+      - 'tests/blizzard-collector.mjs'
+      - 'tests/blizzard-listing-metrics.mjs'
   schedule:
-    - cron: '7,22,37,52 * * * *'
+    - cron: '*/5 * * * *'
 permissions:
   contents: read
 concurrency:
@@ -18,18 +20,18 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify updater
-        run: node --test tests/tensions-updater.mjs
-      - name: Refresh and verify all markets
+      - name: Verify source identity and calculations
+        run: node --test tests/blizzard-collector.mjs tests/blizzard-listing-metrics.mjs
+      - name: Collect due Blizzard houses and verify stored readback
         env:
           MM_TENSIONS_APPLICATION_TOKEN: ${{ secrets.MM_TENSIONS_APPLICATION_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
-          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/observatory/update-tensions.mjs --stdin
+          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin

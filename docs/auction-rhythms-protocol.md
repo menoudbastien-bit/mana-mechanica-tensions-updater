@@ -1,3 +1,5 @@
+Current-method update: direct Blizzard collection replaces the automatic AHledger writer. See [the Blizzard hourly protocol](blizzard-hourly-protocol.md). Earlier sections describe dated legacy behavior and are retained for provenance. Blackwater is separate; KR and TW are distinct; unavailable scopes never use another region.
+
 # Auction House Rhythms
 
 The public article is [Rythmes de l’hôtel des ventes](https://mana-mechanica.com/?lang=fr&page=forever-auction-house-rhythms).
