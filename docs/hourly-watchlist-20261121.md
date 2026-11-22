@@ -79,3 +79,7 @@ Les requêtes historiques disposent aussi d’un seul nouvel essai sur erreur de
 ## Diagnostic Blizzard isolé · 22 novembre 2026
 
 OAuth et les cinq routes du diagnostic EU candidat ont répondu HTTP 200. Le panier courant reste AHL446-v6, 446 ID. Cela ne modifie ni la source AHledger ni la cadence horaire de production. La maison 111 reste non admise tant que sa correspondance Europe Normal Alliance n’est pas confirmée indépendamment. Les flux reçus annoncent un cache de 86400 secondes : distinguer la cadence d’exécution de la fraîcheur réelle des données. La conservation et la publication des données Blizzard restent à clarifier avant une migration. Aucun prix n’est importé dans le classeur ou l’archive de production par ce test. Voir le [protocole Blizzard vérifié](blizzard-forever-feasibility-20261122.md) et son [audit sans secrets](audits/blizzard-direct-api-probe-20261122.json).
+
+### Périmètre candidat : hôtels des ventes neutres
+
+Neutral / Blackwater rejoint le périmètre de validation Blizzard, séparément d’Alliance et Horde. L’index EU expose les maisons 116, 117, 118, 121 et 125 ; aucun de leurs prix n’a encore été testé. Confirmer les correspondances région/règle/maison et les doublons avant import, sans présumer cinq marchés indépendants ni inventer une clé AHledger. Le workflow horaire et les données de production restent inchangés. Voir [le protocole Blizzard](blizzard-forever-feasibility-20261122.md#extension-du-pilote-aux-hôtels-des-ventes-neutres).
