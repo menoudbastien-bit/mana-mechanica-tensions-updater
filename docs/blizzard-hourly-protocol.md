@@ -43,3 +43,14 @@ Les pages Observatoire, Rythmes, bloc courant du bulletin, Faveurs marchandes, a
 Tests : tests/blizzard-collector.mjs, blizzard-listing-metrics.mjs, blizzard-store.mjs, blizzard-access.mjs, blizzard-editorial.mjs et tests des lecteurs et interfaces concernés. Un passage ordinaire écrit les données sans reconstruire ou republier le site.
 
 Sources : https://auctionhouse.tk.gg/data/ ; https://blizzard.pinta.land/forever/auctions/ ; https://blizzard.pinta.land/forever/basics/ ; https://www.rfc-editor.org/rfc/rfc9111.html ; conditions API Blizzard. La cadence de chaque maison doit rester mesurée dans notre propre journal ; les observations de tiers ne sont pas une garantie de service.
+
+
+## Bascule vérifiée le 22 novembre 2026
+
+La première collecte directe a été écrite puis relue sur 36 maisons physiques candidates, dans quatre régions : EU 12, US 12, KR 6 et TW 6. Le panier reste AHL446-v6, 446 ID uniques par maison. À 17:44 UTC, 13 252 prix étaient disponibles sur 16 056 paires marché/objet ; 2 804 absences restent explicites. Les 12 maisons neutres Blackwater ont 3 244 prix sur 5 352 paires ; Normal EU neutre : 423/446, Normal EU Alliance : 442/446. Dix-huit portées restent indisponibles, dont la Chine ; aucun marché de remplacement n’est employé. Les étiquettes de règles de jeu gardent leur niveau de preuve externe ou déduit.
+
+Le workflow GitHub du commit 934fd354379cf4b4bb39c6a40b3c75fcf3301dc1 a réussi (run 45050953052, 21 tests, 36 maisons déjà fraîches relues comme non échues). Un contrôle conditionnel réel de Normal EU Alliance a ensuite obtenu deux HTTP 304 : 442 prix préservés, zéro nouveau snapshot et zéro scan nouveau. La collecte manuelle initiale avait confirmé l’écriture puis la lecture des 36 maisons. GitHub Actions peut retarder le lancement ; la proximité de la mise à jour fournisseur est une cible mesurée, pas un délai garanti.
+
+L’ancienne tâche horaire Google Sheets AHledger est suspendue ; le classeur et les anciennes tables restent des archives séparées. Le bulletin hebdomadaire privé conserve sa cadence et ses conditions de publication, avec consignes adaptées à Blizzard. Les articles concernés ont été adaptés en FR/EN/ES, sans publier de brouillons privés : 21 variantes publiées relues, plus neuf variantes restant privées/absentes du CMS. La révision de suivi de Merchant Favors a été relue dans les trois langues, sans ancien paragraphe contradictoire ni note dupliquée.
+
+Le relevé de validation détaillé est dans [blizzard-migration-validation-20261122.json](blizzard-migration-validation-20261122.json). Il contient uniquement des métadonnées de contrôle, pas les prix ou annonces brutes, ni des identifiants secrets.

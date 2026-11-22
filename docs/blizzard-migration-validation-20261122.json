@@ -1,0 +1,2270 @@
+{
+  "auditVersion": 1,
+  "scope": "Public production readback only; no provider calls, credentials, or raw auction listings.",
+  "startedAt": "2026-11-22T17:44:37.822Z",
+  "completedAt": "2026-11-22T17:44:54.150Z",
+  "site": "https://mana-mechanica.com",
+  "configurationRetrievedAt": "2026-11-22T17:44:46.964Z",
+  "basketVersion": "AHL446-v6",
+  "basketItems": 446,
+  "basketIdSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+  "configuredMarkets": 54,
+  "collectibleMarkets": 36,
+  "uniquePhysicalHouses": 36,
+  "unsupportedMarkets": 18,
+  "neutralMarkets": 12,
+  "verifiedMarkets": 36,
+  "pricedMarketItemPairs": 13252,
+  "neutralPricedMarketItemPairs": 3244,
+  "expectedMarketItemPairs": 16056,
+  "allObservedProvidersUnique": [
+    "Blizzard"
+  ],
+  "mappingLimitation": "Ruleset labels retain external attribution/evidence; this readback does not independently verify those labels in game.",
+  "markets": [
+    {
+      "market": "forever.normal.alliance.eu",
+      "physicalKey": "blizzard:eu:111",
+      "region": "eu",
+      "ruleset": "normal",
+      "faction": "alliance",
+      "houseId": 111,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:47.344Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 442,
+      "observedItems": 442,
+      "observedWithoutMedian": 0,
+      "absentItems": 4,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 5,
+      "exactProofCounts": {
+        "mean": 442,
+        "median": 442,
+        "quantity": 442,
+        "variants": 442
+      },
+      "warningCounts": {
+        "missingPrice": 1
+      },
+      "sourceTimes": [
+        "2026-11-22T17:23:36.000Z",
+        "2026-11-22T17:23:36.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:34:53.331Z",
+      "lastCheckedAt": "2026-11-22T17:34:53.331Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:36.000Z",
+          "retrievedAt": "2026-11-22T17:34:45.176Z",
+          "sha256": "a0a9a4c634473300a53f8140117b205269c8e8a006662ed889ed18bed2291136",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:36.000Z",
+          "retrievedAt": "2026-11-22T17:34:46.902Z",
+          "sha256": "e2867caafa228c97ad15684b138be5e4402e2625fdb72fca8ddd973c23bffdc0",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.horde.eu",
+      "physicalKey": "blizzard:eu:114",
+      "region": "eu",
+      "ruleset": "normal",
+      "faction": "horde",
+      "houseId": 114,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:51.325Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 440,
+      "observedItems": 440,
+      "observedWithoutMedian": 0,
+      "absentItems": 6,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 440,
+        "median": 440,
+        "quantity": 440,
+        "variants": 440
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:23:34.000Z",
+        "2026-11-22T17:23:34.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:35:57.534Z",
+      "lastCheckedAt": "2026-11-22T17:35:57.534Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:34.000Z",
+          "retrievedAt": "2026-11-22T17:35:50.879Z",
+          "sha256": "83430f858be07ac1fdd3b272197c5467e05468cdf9c5bcf2cbdcebe308f797fc",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:34.000Z",
+          "retrievedAt": "2026-11-22T17:35:52.669Z",
+          "sha256": "b7d0df8d8ddb9edad2d4b62ee4b3b52adeda9a6ba5a6e4b1eea8fa3c7d57c1a5",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.neutral.eu",
+      "physicalKey": "blizzard:eu:117",
+      "region": "eu",
+      "ruleset": "normal",
+      "faction": "neutral",
+      "houseId": 117,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:51.330Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 423,
+      "observedItems": 423,
+      "observedWithoutMedian": 0,
+      "absentItems": 23,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 423,
+        "median": 423,
+        "quantity": 423,
+        "variants": 423
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:53.000Z",
+        "2026-11-22T17:22:53.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:36:08.296Z",
+      "lastCheckedAt": "2026-11-22T17:36:08.296Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:53.000Z",
+          "retrievedAt": "2026-11-22T17:36:03.847Z",
+          "sha256": "b80d97eb4e3ad0dd7ae1da91eef3ea9afaa9b664ac4b6a6ab02aab1e151b9889",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:53.000Z",
+          "retrievedAt": "2026-11-22T17:36:04.308Z",
+          "sha256": "a961d69e5b98d3f6beba1b6733d48d34e99532b7775a5099e2b34a9d64e3d3b6",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.alliance.eu",
+      "physicalKey": "blizzard:eu:110",
+      "region": "eu",
+      "ruleset": "pvp",
+      "faction": "alliance",
+      "houseId": 110,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:47.919Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 441,
+      "observedItems": 441,
+      "observedWithoutMedian": 0,
+      "absentItems": 5,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 441,
+        "median": 441,
+        "quantity": 441,
+        "variants": 441
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:23:31.000Z",
+        "2026-11-22T17:23:31.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:36:22.820Z",
+      "lastCheckedAt": "2026-11-22T17:36:22.820Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:31.000Z",
+          "retrievedAt": "2026-11-22T17:36:14.777Z",
+          "sha256": "d43dbe4c05a8db89c8dac329f0de88521453805d8d78d74294bba3db3c34d11e",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:31.000Z",
+          "retrievedAt": "2026-11-22T17:36:15.859Z",
+          "sha256": "78605185c72d44479325fabd21f76022706e091db36e2405e447591526f008be",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.horde.eu",
+      "physicalKey": "blizzard:eu:113",
+      "region": "eu",
+      "ruleset": "pvp",
+      "faction": "horde",
+      "houseId": 113,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:48.222Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 437,
+      "observedItems": 437,
+      "observedWithoutMedian": 0,
+      "absentItems": 9,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 437,
+        "median": 437,
+        "quantity": 437,
+        "variants": 437
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:23:37.000Z",
+        "2026-11-22T17:23:37.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:36:35.915Z",
+      "lastCheckedAt": "2026-11-22T17:36:35.915Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:37.000Z",
+          "retrievedAt": "2026-11-22T17:36:30.462Z",
+          "sha256": "9d10de7cbdb14f97417ac6984d40585c0d6c14360746fd980b0a430b0aa94858",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:23:37.000Z",
+          "retrievedAt": "2026-11-22T17:36:31.704Z",
+          "sha256": "8fd1a4b6589148dde5a6d0af3ba25aacbe2e3f5db8f80eecf462b1b9509ac241",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.neutral.eu",
+      "physicalKey": "blizzard:eu:116",
+      "region": "eu",
+      "ruleset": "pvp",
+      "faction": "neutral",
+      "houseId": 116,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:49.421Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 423,
+      "observedItems": 423,
+      "observedWithoutMedian": 0,
+      "absentItems": 23,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 7,
+      "exactProofCounts": {
+        "mean": 423,
+        "median": 423,
+        "quantity": 423,
+        "variants": 423
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:52.000Z",
+        "2026-11-22T17:22:52.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:36:45.195Z",
+      "lastCheckedAt": "2026-11-22T17:36:45.195Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:52.000Z",
+          "retrievedAt": "2026-11-22T17:36:40.731Z",
+          "sha256": "7ecc11eb8e0a1a3fb0ecad433ff6370a161428afed600de482a85699370d58db",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:52.000Z",
+          "retrievedAt": "2026-11-22T17:36:41.193Z",
+          "sha256": "335a3e7ab19c70344cb52de116c41556d72896ca94ad6c5492dd12f3dd5f457c",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.alliance.eu",
+      "physicalKey": "blizzard:eu:119",
+      "region": "eu",
+      "ruleset": "rp",
+      "faction": "alliance",
+      "houseId": 119,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:49.643Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 428,
+      "observedItems": 428,
+      "observedWithoutMedian": 0,
+      "absentItems": 18,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 428,
+        "median": 428,
+        "quantity": 428,
+        "variants": 428
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:52.000Z",
+        "2026-11-22T17:22:52.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:36:54.890Z",
+      "lastCheckedAt": "2026-11-22T17:36:54.890Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:52.000Z",
+          "retrievedAt": "2026-11-22T17:36:50.415Z",
+          "sha256": "2628efe15e22cbbeab8d35542f6b78a322c11dc1fa96a84ba2e6fc7b43b61785",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:52.000Z",
+          "retrievedAt": "2026-11-22T17:36:50.893Z",
+          "sha256": "4fa9abfbbdb1a53f3272ee198d06bee1f73ef4a0e5f3d55ff40d2f61fa45ba09",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.horde.eu",
+      "physicalKey": "blizzard:eu:120",
+      "region": "eu",
+      "ruleset": "rp",
+      "faction": "horde",
+      "houseId": 120,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:49.926Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 411,
+      "observedItems": 411,
+      "observedWithoutMedian": 0,
+      "absentItems": 35,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 3,
+      "exactProofCounts": {
+        "mean": 411,
+        "median": 411,
+        "quantity": 411,
+        "variants": 411
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:48.000Z",
+        "2026-11-22T17:22:48.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:04.555Z",
+      "lastCheckedAt": "2026-11-22T17:37:04.555Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:48.000Z",
+          "retrievedAt": "2026-11-22T17:37:00.108Z",
+          "sha256": "56b962ab791a5e21f57647d3c79c28e0e24cdc4fdefb2506c25e20c730b7d001",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:48.000Z",
+          "retrievedAt": "2026-11-22T17:37:00.559Z",
+          "sha256": "c2b06df1b8da8ecb69a613f7345094bc928b14b7a87be0c2aec20bd31c322b99",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.neutral.eu",
+      "physicalKey": "blizzard:eu:121",
+      "region": "eu",
+      "ruleset": "rp",
+      "faction": "neutral",
+      "houseId": 121,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:50.106Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 194,
+      "observedItems": 194,
+      "observedWithoutMedian": 0,
+      "absentItems": 252,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 194,
+        "median": 194,
+        "quantity": 194,
+        "variants": 194
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:42.000Z",
+        "2026-11-22T17:22:42.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:15.512Z",
+      "lastCheckedAt": "2026-11-22T17:37:15.512Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:42.000Z",
+          "retrievedAt": "2026-11-22T17:37:11.437Z",
+          "sha256": "6f70d3c707822f612e19624305f02ac6451efda203eac248ab0542d0845e56b5",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:42.000Z",
+          "retrievedAt": "2026-11-22T17:37:11.601Z",
+          "sha256": "d7795017011942de448f893ae166c495d5e9ccab8d6bbc691d0b02afedb43f4d",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.alliance.eu",
+      "physicalKey": "blizzard:eu:123",
+      "region": "eu",
+      "ruleset": "rppvp",
+      "faction": "alliance",
+      "houseId": 123,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:50.728Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 429,
+      "observedItems": 429,
+      "observedWithoutMedian": 0,
+      "absentItems": 17,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 5,
+      "exactProofCounts": {
+        "mean": 429,
+        "median": 429,
+        "quantity": 429,
+        "variants": 429
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:50.000Z",
+        "2026-11-22T17:22:50.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:26.269Z",
+      "lastCheckedAt": "2026-11-22T17:37:26.269Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:50.000Z",
+          "retrievedAt": "2026-11-22T17:37:21.767Z",
+          "sha256": "fcedb130764439881e7281a5e1de60462d0620fed8de0c3d3f8c73b4ed9812d6",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:50.000Z",
+          "retrievedAt": "2026-11-22T17:37:22.197Z",
+          "sha256": "77799e6fb11e1e7456817afbf7f2645eb7cd6edcc1cb2191adeb4168b9ceb2f0",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.horde.eu",
+      "physicalKey": "blizzard:eu:124",
+      "region": "eu",
+      "ruleset": "rppvp",
+      "faction": "horde",
+      "houseId": 124,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:50.913Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 416,
+      "observedItems": 416,
+      "observedWithoutMedian": 0,
+      "absentItems": 30,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 3,
+      "exactProofCounts": {
+        "mean": 416,
+        "median": 416,
+        "quantity": 416,
+        "variants": 416
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:49.000Z",
+        "2026-11-22T17:22:49.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:35.940Z",
+      "lastCheckedAt": "2026-11-22T17:37:35.940Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:49.000Z",
+          "retrievedAt": "2026-11-22T17:37:31.286Z",
+          "sha256": "aadba32d82f0fa8212b26d061293bb94ffd9113370d9e09473f1878f726d9395",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:49.000Z",
+          "retrievedAt": "2026-11-22T17:37:31.613Z",
+          "sha256": "dc4b6f7bf658595953bc9356fd378ddc738b1031dbb3ed69bfeaca97358f3ec9",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.neutral.eu",
+      "physicalKey": "blizzard:eu:125",
+      "region": "eu",
+      "ruleset": "rppvp",
+      "faction": "neutral",
+      "houseId": 125,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:51.086Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 197,
+      "observedItems": 197,
+      "observedWithoutMedian": 0,
+      "absentItems": 249,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 197,
+        "median": 197,
+        "quantity": 197,
+        "variants": 197
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:22:42.000Z",
+        "2026-11-22T17:22:42.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:45.132Z",
+      "lastCheckedAt": "2026-11-22T17:37:45.132Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:42.000Z",
+          "retrievedAt": "2026-11-22T17:37:41.095Z",
+          "sha256": "e0ca06f89ddbc78cdb5be82be3b74008d95bd82da715abe9f03a70c3f47c10bf",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:22:42.000Z",
+          "retrievedAt": "2026-11-22T17:37:41.303Z",
+          "sha256": "805cb19394899ba4b1687a1ff2e79e54e3fb96e3f28517c1d5ef0bd74fd155fd",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.alliance.us",
+      "physicalKey": "blizzard:us:111",
+      "region": "us",
+      "ruleset": "normal",
+      "faction": "alliance",
+      "houseId": 111,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:51.342Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 442,
+      "observedItems": 442,
+      "observedWithoutMedian": 0,
+      "absentItems": 4,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 442,
+        "median": 442,
+        "quantity": 442,
+        "variants": 442
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:25:10.000Z",
+        "2026-11-22T17:25:10.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:37:55.640Z",
+      "lastCheckedAt": "2026-11-22T17:37:55.640Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:10.000Z",
+          "retrievedAt": "2026-11-22T17:37:50.325Z",
+          "sha256": "14d623077e73872c40e122164456ce3f3f4bfd9b5debbb00a17290158dc12688",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:10.000Z",
+          "retrievedAt": "2026-11-22T17:37:50.948Z",
+          "sha256": "0e6ce0538aa59d250d141609d7f1bb6abaa8a7cd915fe3d788d28a310a8ef943",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.horde.us",
+      "physicalKey": "blizzard:us:114",
+      "region": "us",
+      "ruleset": "normal",
+      "faction": "horde",
+      "houseId": 114,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:51.526Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 440,
+      "observedItems": 440,
+      "observedWithoutMedian": 0,
+      "absentItems": 6,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 3,
+      "exactProofCounts": {
+        "mean": 440,
+        "median": 440,
+        "quantity": 440,
+        "variants": 440
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:25:11.000Z",
+        "2026-11-22T17:25:11.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:05.948Z",
+      "lastCheckedAt": "2026-11-22T17:38:05.948Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:11.000Z",
+          "retrievedAt": "2026-11-22T17:38:01.016Z",
+          "sha256": "b372ea46d6d0601b52a2530f99858532d1074b78bdd4fadbc9b18626992ecf69",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:11.000Z",
+          "retrievedAt": "2026-11-22T17:38:01.726Z",
+          "sha256": "f51ad9281c20a5d2d9d88929c3f3c056f217c9cdaa617384cff9bc0cc14519bf",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.neutral.us",
+      "physicalKey": "blizzard:us:117",
+      "region": "us",
+      "ruleset": "normal",
+      "faction": "neutral",
+      "houseId": 117,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:51.622Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 397,
+      "observedItems": 397,
+      "observedWithoutMedian": 0,
+      "absentItems": 49,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 6,
+      "exactProofCounts": {
+        "mean": 397,
+        "median": 397,
+        "quantity": 397,
+        "variants": 397
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:57.000Z",
+        "2026-11-22T17:24:57.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:16.202Z",
+      "lastCheckedAt": "2026-11-22T17:38:16.202Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:57.000Z",
+          "retrievedAt": "2026-11-22T17:38:11.627Z",
+          "sha256": "79f841f0086e641aa1f9d7b7780eb8688fefd8c4fe05f72786aad2b4cd3d4699",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:57.000Z",
+          "retrievedAt": "2026-11-22T17:38:11.915Z",
+          "sha256": "b8cada4804dcd7da5d35bb52c052bb0a7d83f847ede57e7ac5aa0dbabc1d5962",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.alliance.us",
+      "physicalKey": "blizzard:us:110",
+      "region": "us",
+      "ruleset": "pvp",
+      "faction": "alliance",
+      "houseId": 110,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.163Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 442,
+      "observedItems": 442,
+      "observedWithoutMedian": 0,
+      "absentItems": 4,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 8,
+      "exactProofCounts": {
+        "mean": 442,
+        "median": 442,
+        "quantity": 442,
+        "variants": 442
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:25:10.000Z",
+        "2026-11-22T17:25:10.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:25.661Z",
+      "lastCheckedAt": "2026-11-22T17:38:25.661Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:10.000Z",
+          "retrievedAt": "2026-11-22T17:38:20.681Z",
+          "sha256": "e65f79353e46848717bd5161ff9b1f72cc2f0b7368d8b500a89e2a91787d7eeb",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:10.000Z",
+          "retrievedAt": "2026-11-22T17:38:21.194Z",
+          "sha256": "86527cd5252dc50373a10b2ad60cff9dc54dd7dcdaef6094defe6c1368c69512",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.horde.us",
+      "physicalKey": "blizzard:us:113",
+      "region": "us",
+      "ruleset": "pvp",
+      "faction": "horde",
+      "houseId": 113,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:51.701Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 439,
+      "observedItems": 439,
+      "observedWithoutMedian": 0,
+      "absentItems": 7,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 439,
+        "median": 439,
+        "quantity": 439,
+        "variants": 439
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:25:11.000Z",
+        "2026-11-22T17:25:11.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:35.359Z",
+      "lastCheckedAt": "2026-11-22T17:38:35.359Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:11.000Z",
+          "retrievedAt": "2026-11-22T17:38:30.900Z",
+          "sha256": "0892b585c57b7d6f122a200f41bd49611d8b8e56f19d70b4ad3d87cd6b796207",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:25:11.000Z",
+          "retrievedAt": "2026-11-22T17:38:31.482Z",
+          "sha256": "5cd63002f2ddfc14b1d3b69d3f1b17e8bf67f502d9dff9d79843220682a73f13",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.neutral.us",
+      "physicalKey": "blizzard:us:116",
+      "region": "us",
+      "ruleset": "pvp",
+      "faction": "neutral",
+      "houseId": 116,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:51.864Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 400,
+      "observedItems": 400,
+      "observedWithoutMedian": 0,
+      "absentItems": 46,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 3,
+      "exactProofCounts": {
+        "mean": 400,
+        "median": 400,
+        "quantity": 400,
+        "variants": 400
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:57.000Z",
+        "2026-11-22T17:24:57.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:44.557Z",
+      "lastCheckedAt": "2026-11-22T17:38:44.557Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:57.000Z",
+          "retrievedAt": "2026-11-22T17:38:40.542Z",
+          "sha256": "25b4c065e9663e11991dcc29f4b0e83724b3bfa795302fffd13d86dcb345693d",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:57.000Z",
+          "retrievedAt": "2026-11-22T17:38:40.754Z",
+          "sha256": "29eecbf1749f23d3b44c431a7c6f14e37b78c9bda6a6ce4c422759e11cfbbb2c",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.alliance.us",
+      "physicalKey": "blizzard:us:119",
+      "region": "us",
+      "ruleset": "rp",
+      "faction": "alliance",
+      "houseId": 119,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.754Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 432,
+      "observedItems": 432,
+      "observedWithoutMedian": 0,
+      "absentItems": 14,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 5,
+      "exactProofCounts": {
+        "mean": 432,
+        "median": 432,
+        "quantity": 432,
+        "variants": 432
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:59.000Z",
+        "2026-11-22T17:24:59.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:38:56.429Z",
+      "lastCheckedAt": "2026-11-22T17:38:56.429Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:38:51.224Z",
+          "sha256": "cba3c0adc67ba94d3ebf2bd2d1ce21e49d4cea18f681d92fd35a3d8cfd49c561",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:38:51.649Z",
+          "sha256": "85d48d16e2483b71eb1e91bfc4f1a39af8f411c013892797a6a6931e642cf94a",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.horde.us",
+      "physicalKey": "blizzard:us:120",
+      "region": "us",
+      "ruleset": "rp",
+      "faction": "horde",
+      "houseId": 120,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.149Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 415,
+      "observedItems": 415,
+      "observedWithoutMedian": 0,
+      "absentItems": 31,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 6,
+      "exactProofCounts": {
+        "mean": 415,
+        "median": 415,
+        "quantity": 415,
+        "variants": 415
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:58.000Z",
+        "2026-11-22T17:24:58.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:06.964Z",
+      "lastCheckedAt": "2026-11-22T17:39:06.964Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:58.000Z",
+          "retrievedAt": "2026-11-22T17:39:02.171Z",
+          "sha256": "12137964098a516c082ddf64d4c8fd5338fd3e8e146164b60db7d3de92e0c482",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:58.000Z",
+          "retrievedAt": "2026-11-22T17:39:02.601Z",
+          "sha256": "c0c5466510d9f8e84f1086e8cf3a2db294acf6384ba31ebf9c04ae8642259f3d",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rp.neutral.us",
+      "physicalKey": "blizzard:us:121",
+      "region": "us",
+      "ruleset": "rp",
+      "faction": "neutral",
+      "houseId": 121,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.306Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 181,
+      "observedItems": 181,
+      "observedWithoutMedian": 0,
+      "absentItems": 265,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 181,
+        "median": 181,
+        "quantity": 181,
+        "variants": 181
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:54.000Z",
+        "2026-11-22T17:24:54.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:16.325Z",
+      "lastCheckedAt": "2026-11-22T17:39:16.325Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:54.000Z",
+          "retrievedAt": "2026-11-22T17:39:12.425Z",
+          "sha256": "ad885489a2c1c25bc305b319af1450c1a06867655d2fc15a75bd2ed6902f6d3a",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:54.000Z",
+          "retrievedAt": "2026-11-22T17:39:12.528Z",
+          "sha256": "3fb6ffcf56899251cc8e8d1d89e476d9097327358b1df5228cc2e532b3ba6774",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.alliance.us",
+      "physicalKey": "blizzard:us:123",
+      "region": "us",
+      "ruleset": "rppvp",
+      "faction": "alliance",
+      "houseId": 123,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.850Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 431,
+      "observedItems": 431,
+      "observedWithoutMedian": 0,
+      "absentItems": 15,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 4,
+      "exactProofCounts": {
+        "mean": 431,
+        "median": 431,
+        "quantity": 431,
+        "variants": 431
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:59.000Z",
+        "2026-11-22T17:24:59.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:21.657Z",
+      "lastCheckedAt": "2026-11-22T17:39:21.657Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:39:21.264Z",
+          "sha256": "4e352af5ec989b2401c548c9d3599ddfb41b899c4cc936dd9742f1ad26026dcd",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:39:21.493Z",
+          "sha256": "d817c88ff6b0d19477014aaac8106512106a92056269fd5461d76001f2b3c138",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.horde.us",
+      "physicalKey": "blizzard:us:124",
+      "region": "us",
+      "ruleset": "rppvp",
+      "faction": "horde",
+      "houseId": 124,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.515Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 433,
+      "observedItems": 433,
+      "observedWithoutMedian": 0,
+      "absentItems": 13,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 433,
+        "median": 433,
+        "quantity": 433,
+        "variants": 433
+      },
+      "warningCounts": {
+        "missingPrice": 1
+      },
+      "sourceTimes": [
+        "2026-11-22T17:24:59.000Z",
+        "2026-11-22T17:24:59.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:23.227Z",
+      "lastCheckedAt": "2026-11-22T17:39:23.227Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:39:22.837Z",
+          "sha256": "3e6e6c291f63abe51a80ec5ffc957ad336bbc140f21860eb8b7bee14927b5b48",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:59.000Z",
+          "retrievedAt": "2026-11-22T17:39:23.037Z",
+          "sha256": "567c228813bc5b6c1e5ee4a6c52e40be0c6310cf9be8a06bf5fff8aa97ac170e",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.rppvp.neutral.us",
+      "physicalKey": "blizzard:us:125",
+      "region": "us",
+      "ruleset": "rppvp",
+      "faction": "neutral",
+      "houseId": 125,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:52.697Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 212,
+      "observedItems": 212,
+      "observedWithoutMedian": 0,
+      "absentItems": 234,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 3,
+      "exactProofCounts": {
+        "mean": 212,
+        "median": 212,
+        "quantity": 212,
+        "variants": 212
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:24:54.000Z",
+        "2026-11-22T17:24:54.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:24.572Z",
+      "lastCheckedAt": "2026-11-22T17:39:24.572Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:54.000Z",
+          "retrievedAt": "2026-11-22T17:39:24.348Z",
+          "sha256": "1a410ced04c91ba17e553d792a87603532dfe68ff740f10a42cc902359a2c1e5",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:24:54.000Z",
+          "retrievedAt": "2026-11-22T17:39:24.458Z",
+          "sha256": "01b053b368da74bc5bc3417dfb070fe29e0fe7a15b750527f533a4c23c37d92f",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.alliance.kr",
+      "physicalKey": "blizzard:kr:111",
+      "region": "kr",
+      "ruleset": "normal",
+      "faction": "alliance",
+      "houseId": 111,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:52.942Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 354,
+      "observedItems": 354,
+      "observedWithoutMedian": 0,
+      "absentItems": 92,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 354,
+        "median": 354,
+        "quantity": 354,
+        "variants": 354
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:50.000Z",
+        "2026-11-22T17:26:50.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:36.471Z",
+      "lastCheckedAt": "2026-11-22T17:39:36.471Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:50.000Z",
+          "retrievedAt": "2026-11-22T17:39:31.560Z",
+          "sha256": "1587b69a8d367906fb99a6d7cfd8a0842633ebd39ffee7add4e0c37858374361",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:50.000Z",
+          "retrievedAt": "2026-11-22T17:39:32.251Z",
+          "sha256": "f99b26573734baaf05547686f148b25c4c4d8b134a47ba243be8c727f12883f3",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.horde.kr",
+      "physicalKey": "blizzard:kr:114",
+      "region": "kr",
+      "ruleset": "normal",
+      "faction": "horde",
+      "houseId": 114,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:53.027Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 299,
+      "observedItems": 299,
+      "observedWithoutMedian": 0,
+      "absentItems": 147,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 299,
+        "median": 299,
+        "quantity": 299,
+        "variants": 299
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:49.000Z",
+        "2026-11-22T17:26:50.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:47.827Z",
+      "lastCheckedAt": "2026-11-22T17:39:47.827Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:49.000Z",
+          "retrievedAt": "2026-11-22T17:39:42.291Z",
+          "sha256": "b8d705d7d5db6f9e8489e2a445980a81926e618fa618753355b81b8056f7be04",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:50.000Z",
+          "retrievedAt": "2026-11-22T17:39:44.193Z",
+          "sha256": "31ce8497be12a00fecb4c6c72c0378d13a81d1dc5427d0b622123a328887980f",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.neutral.kr",
+      "physicalKey": "blizzard:kr:117",
+      "region": "kr",
+      "ruleset": "normal",
+      "faction": "neutral",
+      "houseId": 117,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:53.096Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 134,
+      "observedItems": 134,
+      "observedWithoutMedian": 0,
+      "absentItems": 312,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 134,
+        "median": 134,
+        "quantity": 134,
+        "variants": 134
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:49.000Z",
+        "2026-11-22T17:26:49.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:39:57.000Z",
+      "lastCheckedAt": "2026-11-22T17:39:57.000Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:49.000Z",
+          "retrievedAt": "2026-11-22T17:39:52.871Z",
+          "sha256": "0f582a970a8e93d16fca1a3da7d004f4663ce72eefbbae6952ffc5802a7c2667",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:49.000Z",
+          "retrievedAt": "2026-11-22T17:39:53.382Z",
+          "sha256": "607699c2f93ddafa9dcef9348d4174bdfee4da0dc1ad0ec68b1b91205afc242c",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.alliance.kr",
+      "physicalKey": "blizzard:kr:110",
+      "region": "kr",
+      "ruleset": "pvp",
+      "faction": "alliance",
+      "houseId": 110,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:53.147Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 427,
+      "observedItems": 427,
+      "observedWithoutMedian": 0,
+      "absentItems": 19,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 10,
+      "exactProofCounts": {
+        "mean": 427,
+        "median": 427,
+        "quantity": 427,
+        "variants": 427
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:51.000Z",
+        "2026-11-22T17:26:52.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:40:09.313Z",
+      "lastCheckedAt": "2026-11-22T17:40:09.313Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:52.000Z",
+          "retrievedAt": "2026-11-22T17:40:02.061Z",
+          "sha256": "fbe6607d27fe24901e6aef47f45ccf796682df5e77b4b77275c805d42ecbf4d8",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:51.000Z",
+          "retrievedAt": "2026-11-22T17:40:03.045Z",
+          "sha256": "163cdfbe5976673cbb2c5526b572bc4d3abca334300f66501b476f9f41ffe3e9",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.horde.kr",
+      "physicalKey": "blizzard:kr:113",
+      "region": "kr",
+      "ruleset": "pvp",
+      "faction": "horde",
+      "houseId": 113,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:53.710Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 421,
+      "observedItems": 421,
+      "observedWithoutMedian": 0,
+      "absentItems": 25,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 421,
+        "median": 421,
+        "quantity": 421,
+        "variants": 421
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:51.000Z",
+        "2026-11-22T17:26:51.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:40:20.251Z",
+      "lastCheckedAt": "2026-11-22T17:40:20.251Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:51.000Z",
+          "retrievedAt": "2026-11-22T17:40:14.700Z",
+          "sha256": "34447943f21e0f39212637095d60b90da60764a8ac175c1ee44619a6476b9de5",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:51.000Z",
+          "retrievedAt": "2026-11-22T17:40:15.589Z",
+          "sha256": "b6763927945614e2e7639d6101c00dc078d4b61b483b6005fd997610179b9f50",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.neutral.kr",
+      "physicalKey": "blizzard:kr:116",
+      "region": "kr",
+      "ruleset": "pvp",
+      "faction": "neutral",
+      "houseId": 116,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:53.314Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 306,
+      "observedItems": 306,
+      "observedWithoutMedian": 0,
+      "absentItems": 140,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 5,
+      "exactProofCounts": {
+        "mean": 306,
+        "median": 306,
+        "quantity": 306,
+        "variants": 306
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:50.000Z",
+        "2026-11-22T17:26:50.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:40:31.721Z",
+      "lastCheckedAt": "2026-11-22T17:40:31.721Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:50.000Z",
+          "retrievedAt": "2026-11-22T17:40:26.745Z",
+          "sha256": "faf70e7c315c457e863439c2ee5ea30cb24ab2c939f1f9c3ff8d9d27e95b6950",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:50.000Z",
+          "retrievedAt": "2026-11-22T17:40:27.765Z",
+          "sha256": "483e406e2ec8affeb858631152f028853b68d119d0e16b59f7738a4488f9d324",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.alliance.tw",
+      "physicalKey": "blizzard:tw:111",
+      "region": "tw",
+      "ruleset": "normal",
+      "faction": "alliance",
+      "houseId": 111,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:53.430Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 396,
+      "observedItems": 396,
+      "observedWithoutMedian": 0,
+      "absentItems": 50,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 396,
+        "median": 396,
+        "quantity": 396,
+        "variants": 396
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:29.000Z",
+        "2026-11-22T17:26:29.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:40:43.978Z",
+      "lastCheckedAt": "2026-11-22T17:40:43.978Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:29.000Z",
+          "retrievedAt": "2026-11-22T17:40:37.877Z",
+          "sha256": "0d57018e2067706ea97c32fd19310a99e45f0cb2c560af005e2e3809aca20f60",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:29.000Z",
+          "retrievedAt": "2026-11-22T17:40:39.947Z",
+          "sha256": "a5c9ee7b2bef1cc17480dd10b2023612f74cfdd6063f3ebdf0bd85ae2ab01ade",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.horde.tw",
+      "physicalKey": "blizzard:tw:114",
+      "region": "tw",
+      "ruleset": "normal",
+      "faction": "horde",
+      "houseId": 114,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:53.637Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 374,
+      "observedItems": 374,
+      "observedWithoutMedian": 0,
+      "absentItems": 72,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 374,
+        "median": 374,
+        "quantity": 374,
+        "variants": 374
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:28.000Z",
+        "2026-11-22T17:26:28.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:40:56.823Z",
+      "lastCheckedAt": "2026-11-22T17:40:56.823Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:28.000Z",
+          "retrievedAt": "2026-11-22T17:40:51.035Z",
+          "sha256": "55f023429b7d58d8b8ab9badd29c2a3a06a98ac0aafafd12b2eb1aceeeeafac4",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:28.000Z",
+          "retrievedAt": "2026-11-22T17:40:51.980Z",
+          "sha256": "a809425eec71ae1ab397b222f7b687f9449b1c009d1f8ac2d2fc30d61afc33b0",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.normal.neutral.tw",
+      "physicalKey": "blizzard:tw:117",
+      "region": "tw",
+      "ruleset": "normal",
+      "faction": "neutral",
+      "houseId": 117,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "external_observation",
+      "retrievedAt": "2026-11-22T17:44:53.597Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 173,
+      "observedItems": 173,
+      "observedWithoutMedian": 0,
+      "absentItems": 273,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 173,
+        "median": 173,
+        "quantity": 173,
+        "variants": 173
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:27.000Z",
+        "2026-11-22T17:26:28.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:41:07.852Z",
+      "lastCheckedAt": "2026-11-22T17:41:07.852Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:27.000Z",
+          "retrievedAt": "2026-11-22T17:41:02.966Z",
+          "sha256": "c3ebe0216069be4b8f78cc1e28414b5438f23c6b6472df34bd193cdf9ca92f1d",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:28.000Z",
+          "retrievedAt": "2026-11-22T17:41:03.677Z",
+          "sha256": "ba9fed16b3f65e3187b821c3d0db76b29140b2f2a782bb5d7b959f85f0b12e1d",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.alliance.tw",
+      "physicalKey": "blizzard:tw:110",
+      "region": "tw",
+      "ruleset": "pvp",
+      "faction": "alliance",
+      "houseId": 110,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:53.830Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 407,
+      "observedItems": 407,
+      "observedWithoutMedian": 0,
+      "absentItems": 39,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 6,
+      "exactProofCounts": {
+        "mean": 407,
+        "median": 407,
+        "quantity": 407,
+        "variants": 407
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:29.000Z",
+        "2026-11-22T17:26:29.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:41:21.216Z",
+      "lastCheckedAt": "2026-11-22T17:41:21.216Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:29.000Z",
+          "retrievedAt": "2026-11-22T17:41:13.987Z",
+          "sha256": "960ff889cb7092876a7514d65f4df91ee83e33a9755997bff040bd4cbd9f27f7",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:29.000Z",
+          "retrievedAt": "2026-11-22T17:41:14.774Z",
+          "sha256": "3d2a0d346574554b3e70cbdf0cd051f22c5099b2dd598cb5b0b964c883b441bf",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.horde.tw",
+      "physicalKey": "blizzard:tw:113",
+      "region": "tw",
+      "ruleset": "pvp",
+      "faction": "horde",
+      "houseId": 113,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:53.856Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 412,
+      "observedItems": 412,
+      "observedWithoutMedian": 0,
+      "absentItems": 34,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 2,
+      "exactProofCounts": {
+        "mean": 412,
+        "median": 412,
+        "quantity": 412,
+        "variants": 412
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:32.000Z",
+        "2026-11-22T17:26:33.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:41:33.067Z",
+      "lastCheckedAt": "2026-11-22T17:41:33.067Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:32.000Z",
+          "retrievedAt": "2026-11-22T17:41:27.386Z",
+          "sha256": "cad63f590775e4f267e0a80fae9417540149ec5e46520df60d9f3ce68fa6de04",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:33.000Z",
+          "retrievedAt": "2026-11-22T17:41:28.198Z",
+          "sha256": "c61fb57af32a39b063f28758fcb7a25e20cf4a9cbe336ff0ab00dabfe4366b80",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    },
+    {
+      "market": "forever.pvp.neutral.tw",
+      "physicalKey": "blizzard:tw:116",
+      "region": "tw",
+      "ruleset": "pvp",
+      "faction": "neutral",
+      "houseId": 116,
+      "mappingStatus": "externally_attributed",
+      "evidenceStatus": "inferred",
+      "retrievedAt": "2026-11-22T17:44:54.149Z",
+      "provider": "Blizzard",
+      "expectedItems": 446,
+      "rows": 446,
+      "uniqueIds": 446,
+      "idsSha256": "aad51e621a010177d7a671f6808da1d1fa07fe1501f0085229e202a30676c2fa",
+      "pricedItems": 204,
+      "observedItems": 204,
+      "observedWithoutMedian": 0,
+      "absentItems": 242,
+      "zeroQuantityItems": 0,
+      "unknownQuantityItems": 0,
+      "decimalMedianItems": 1,
+      "exactProofCounts": {
+        "mean": 204,
+        "median": 204,
+        "quantity": 204,
+        "variants": 204
+      },
+      "warningCounts": {},
+      "sourceTimes": [
+        "2026-11-22T17:26:27.000Z",
+        "2026-11-22T17:26:28.000Z"
+      ],
+      "calculatedAt": "2026-11-22T17:41:43.754Z",
+      "lastCheckedAt": "2026-11-22T17:41:43.754Z",
+      "lastError": null,
+      "feeds": [
+        {
+          "kind": "auction",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:27.000Z",
+          "retrievedAt": "2026-11-22T17:41:39.460Z",
+          "sha256": "0026695d533603b2622437aae80f1e3468e00a137fa4c2b349252b1eaff9a116",
+          "cacheControl": "public, max-age=86400"
+        },
+        {
+          "kind": "commodity",
+          "status": 200,
+          "sourceAt": "2026-11-22T17:26:28.000Z",
+          "retrievedAt": "2026-11-22T17:41:40.016Z",
+          "sha256": "0d2a11fc98c4d01441ecf8e74187453ba8d6db288f9cb3788a3f4d2746d0af89",
+          "cacheControl": "public, max-age=86400"
+        }
+      ],
+      "valid": true,
+      "errors": []
+    }
+  ],
+  "unsupported": [
+    {
+      "market": "forever.rp.alliance.kr",
+      "region": "kr",
+      "ruleset": "rp",
+      "faction": "alliance",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.rp.horde.kr",
+      "region": "kr",
+      "ruleset": "rp",
+      "faction": "horde",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.rp.neutral.kr",
+      "region": "kr",
+      "ruleset": "rp",
+      "faction": "neutral",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.alliance.kr",
+      "region": "kr",
+      "ruleset": "rppvp",
+      "faction": "alliance",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.horde.kr",
+      "region": "kr",
+      "ruleset": "rppvp",
+      "faction": "horde",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.neutral.kr",
+      "region": "kr",
+      "ruleset": "rppvp",
+      "faction": "neutral",
+      "reason": "ruleset_not_exposed",
+      "imported": false
+    },
+    {
+      "market": "forever.normal.alliance.cn",
+      "region": "cn",
+      "ruleset": "normal",
+      "faction": "alliance",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.normal.horde.cn",
+      "region": "cn",
+      "ruleset": "normal",
+      "faction": "horde",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.normal.neutral.cn",
+      "region": "cn",
+      "ruleset": "normal",
+      "faction": "neutral",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.pvp.alliance.cn",
+      "region": "cn",
+      "ruleset": "pvp",
+      "faction": "alliance",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.pvp.horde.cn",
+      "region": "cn",
+      "ruleset": "pvp",
+      "faction": "horde",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.pvp.neutral.cn",
+      "region": "cn",
+      "ruleset": "pvp",
+      "faction": "neutral",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rp.alliance.cn",
+      "region": "cn",
+      "ruleset": "rp",
+      "faction": "alliance",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rp.horde.cn",
+      "region": "cn",
+      "ruleset": "rp",
+      "faction": "horde",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rp.neutral.cn",
+      "region": "cn",
+      "ruleset": "rp",
+      "faction": "neutral",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.alliance.cn",
+      "region": "cn",
+      "ruleset": "rppvp",
+      "faction": "alliance",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.horde.cn",
+      "region": "cn",
+      "ruleset": "rppvp",
+      "faction": "horde",
+      "reason": "regional_client_required",
+      "imported": false
+    },
+    {
+      "market": "forever.rppvp.neutral.cn",
+      "region": "cn",
+      "ruleset": "rppvp",
+      "faction": "neutral",
+      "reason": "regional_client_required",
+      "imported": false
+    }
+  ],
+  "summaryByRegion": {
+    "eu": {
+      "markets": 12,
+      "pricedItems": 4681,
+      "absentItems": 671
+    },
+    "us": {
+      "markets": 12,
+      "pricedItems": 4664,
+      "absentItems": 688
+    },
+    "kr": {
+      "markets": 6,
+      "pricedItems": 1941,
+      "absentItems": 735
+    },
+    "tw": {
+      "markets": 6,
+      "pricedItems": 1966,
+      "absentItems": 710
+    }
+  },
+  "complete": true,
+  "deployment": {
+    "siteVersion": 141,
+    "sourceCommitPrefix": "8a3eebf",
+    "verificationSource": "Deployment readback confirmed by the deploying agent."
+  },
+  "runtimeChecks": {
+    "githubActions": {
+      "runId": 45050953052,
+      "url": "https://github.com/menoudbastien-bit/mana-mechanica-tensions-updater/actions/runs/45050953052",
+      "conclusion": "success",
+      "testsPassed": 21,
+      "dueMarkets": 0,
+      "skippedMarkets": 36,
+      "verificationSource": "Workflow result confirmed by the deploying agent."
+    },
+    "formerSpreadsheetAutomationPaused": true,
+    "weeklyBulletinMethodPromptUpdated": true,
+    "operationalChecksSource": "Automation states confirmed by the deploying agent; no automation was modified by this audit."
+  }
+}
