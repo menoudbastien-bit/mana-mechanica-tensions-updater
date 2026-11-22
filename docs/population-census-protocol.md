@@ -1,129 +1,73 @@
-# Protocole de mise à jour des recensements de population
+# Protocole de recensement des populations — API Blizzard
 
-Version du 20 novembre 2026 — Mana Mechanica.
+Version du 22 novembre 2026 — Mana Mechanica — article public `forever-population-cross-analysis`.
 
-## Objet et portée
+## Source retenue et état réel
 
-Actualiser les observations de population de WoW Forever et documenter leur qualité pour l'article `forever-population-cross-analysis`. Mesurer des personnages recensés, pas des joueurs uniques ou simultanés.
+Blizzard Battle.net est la source directe retenue. L’accès aux profils de personnages connus et aux listes de membres de guildes permet de construire un échantillon ; il ne fournit pas de recensement exhaustif ni de nombre de joueurs connectés. **Échantillon direct : en attente de qualification (`pending_validation`). Aucun nouveau comptage direct n’est revendiqué.** Le fonctionnement de la collecte Blizzard des hôtels des ventes ne valide pas la couverture des personnages.
 
-Ce dépôt GitHub conserve le protocole. Le collecteur et les archives résident dans le projet Sites Mana Mechanica ; les références d'implémentation y sont `scripts/refresh-population.mjs` et `docs/population-daily.md`. Ces fichiers ne se trouvent pas dans ce dépôt GitHub.
+WoWStats, Classic Armory et aotc sont retirés des futures collectes et publications à la demande du propriétaire. Leurs données proviennent de profils Blizzard mais les échantillons ne sont pas nécessairement identiques. Ne plus utiliser ces intermédiaires comme confirmations indépendantes ; ne plus exécuter leur lecture organique de secours. Conserver les archives, chiffres, dates, URL et attributions existantes. Ne jamais les rebaptiser « Blizzard direct ».
 
-La tâche quotidienne existante reste la seule planification de population, à 02:00 Europe/Zurich. Ne créer aucun second cron, workflow planifié ou rattrapage automatique. Le workflow GitHub des tensions de marché est indépendant et n'est pas modifié par ce protocole. Un protocole documenté n'est pas une nouvelle automatisation active.
+Ce protocole remplace les anciennes procédures de collecte tierce et de publication Classic Armory. Leur historique demeure dans Git. Le code du site réside dans le projet Sites appgprj_6adf82cdbe1081919f3e44ce1525cd98, pas dans ce dépôt de protocole.
 
-L’article de population est public. Le propriétaire autorise la publication automatique des nouvelles données vérifiées dans cet article, sans demande de validation à chaque exécution. Utiliser les services hébergés de mise à jour et de publication. Préserver les archives privées et les contenus éditoriaux existants. Les collectes quotidiennes ne nécessitent aucun redéploiement du site. Ce dépôt étant public, n'y déposer ni archives privées, ni résultats détaillés privés, ni identifiants de connexion, ni captures d'administration.
+## Une seule tâche de population
 
-## 1. Vérifier et valider avant d'exécuter
+La tâche quotidienne existante à 02:00 Europe/Zurich reste la seule planification de population. Aucun nouveau cron, workflow, rattrapage ni tâche à 02:03. Les workflows de prix et leur cadence restent indépendants.
 
-1. Relire les instructions de la tâche, la documentation et le script actuels du projet Sites. Vérifier les changements depuis la dernière exécution.
-2. Identifier les sources autorisées, la version du jeu, la région, le ruleset, les bornes de niveau, les factions et les classes. Conserver chaque combinaison séparément.
-3. Ne pas fixer le nombre de cibles à une valeur historique : obtenir la liste autorisée par `GET /api/population/history`. Un sous-ensemble explicitement demandé filtre cette liste sans inventer de cible ; par exemple une opération WoWStats/Armory exclut aotc.
-4. Vérifier que le chemin d'exécution inspecte immédiatement chaque réponse, y compris son statut applicatif. Ne pas lancer aveuglément un ancien script qui ne s'arrêterait que sur le code HTTP.
+Lire `GET /api/population/history` : `sourcePolicy` décrit la transition et `targets` est la liste autorisée. Après retrait des sources tierces, cette liste est vide tant qu’aucun collecteur direct n’est validé. Dans cet état, contrôler la lisibilité et la conservation des archives ; rapporter « aucune collecte, échantillon direct à valider ». Ne pas compter ce contrôle comme une collecte réussie.
 
-Le script `scripts/refresh-population.mjs` du projet Sites inspecte les statuts applicatifs et arrête les POST de collecte sur HTTP401/403 du Site ainsi que source_http_401/403 dans un JSON HTTP200. Il distingue les réponses inchangées et les échantillons vides des nouvelles collectes. Vérifier la version du script avant de l’exécuter.
+Les anciennes cibles et le service d’écriture Classic Armory répondent `source_retired` (HTTP410) avant une collecte ou écriture. Les lecteurs d’archives restent disponibles.
 
-## 2. Collecter par le mécanisme hébergé
+## Qualification de l’accès direct
 
-- Obtenir l'accès de service courant par `get_site` pour le projet désigné dans la configuration autorisée.
-- Dériver en mémoire SHA256 UTF-8 de `mana-mechanica:population:v1:` + `project_id` + `:` + `siwc_bypass_bearer_token`.
-- Envoyer uniquement à `https://mana-mechanica.com` : `Authorization: Bearer <valeur dérivée>` et `OAI-Sites-Authorization: Bearer <token Sites>`. Ne jamais transmettre ces en-têtes aux sites sources ni suivre une redirection qui les transmettrait ailleurs.
-- Ne jamais afficher, archiver, committer ou passer ces secrets en arguments. Le script de référence reçoit le JSON stdin `{projectId,ownerToken}` par un canal protégé, sans journalisation. Ne pas copier le token propriétaire dans les secrets de ce dépôt pour installer une seconde collecte.
-- Lire l'historique initial pour disposer d'un état de comparaison privé.
-- Pour chaque cible retenue, appeler une fois `POST /api/population/refresh?target=<cible encodée>`, puis lire et classer la réponse avant tout autre POST.
-- Réutiliser les validations, la déduplication et les temporisations du collecteur hébergé. Ne jamais modifier manuellement les tables ou les fichiers d'archives.
+1. Réutiliser l’application Blizzard déjà autorisée. Vérifier l’accès aux profils et guild rosters Forever sur les hôtes régionaux et namespaces `profile-forever-{region}`. Les routes rapportées sont `/profile/wow/character/{first}-{surname}` et `/data/wow/guild/{guildSlug}/roster`. Ce sont des observations de développeurs à vérifier avec notre application, pas une garantie de stabilité officielle.
+2. Constituer et documenter un registre de personnages et guildes connus, avec l’origine de chaque entrée. L’API rapportée ne propose pas d’index exhaustif de personnages ; ne pas inventer de couverture ni sonder des listes de noms devinés. Les personnages hors des guildes suivies restent une limite de sélection.
+3. Vérifier la région et le ruleset réellement fournis ; conserver KR et TW séparés. Garder le périmètre de l’article : personnages de niveau 10 à 60. Les listes de guildes peuvent inclure des niveaux plus bas ; ne pas les mélanger au dénominateur 10–60.
+4. Dédupliquer par région et identifiant stable de personnage Blizzard entre guildes, profils et tous les autres chemins. Le ruleset est un attribut à vérifier, pas un motif pour compter deux fois un personnage transféré. Garder une seule observation courante par personnage.
+5. Pour chaque indicateur, conserver le nombre de profils éligibles, le nombre de réponses exploitables et les champs manquants. Contrôler identifiants, types, niveaux, sommes des classes/niveaux/factions et arrondis. Un profil inaccessible n’est ni un personnage absent du jeu ni une observation zéro.
+6. Distinguer date de modification du profil et date de consultation. Un nouveau téléchargement ne rajeunit pas le profil. Une modification ou déconnexion ne démontre pas une connexion le jour du recensement. Ne pas remplacer une date inconnue par l’heure du script.
+7. Avant activation, vérifier les conditions Blizzard applicables à la conservation des profils bruts et aux agrégats, puis valider le stockage et la relecture. Les règles de conservation des prix ne s’appliquent pas automatiquement aux profils. Seules des observations réellement persistées peuvent être annoncées.
+8. Activer ensuite un collecteur et un ingest hébergés bornés, avec leurs cibles autorisées, en réutilisant la tâche quotidienne. Aucun collecteur direct de population n’est activé par la simple rédaction de ce protocole.
 
-## 3. Classer les résultats et arrêter correctement
+## Accès, erreurs et confidentialité
 
-| Résultat | Traitement |
+Les secrets restent côté serveur et en mémoire. Ne jamais les afficher, archiver, committer, passer en arguments ou inclure dans des captures publiques. Ne jamais envoyer le jeton Sites à Blizzard ni le jeton Blizzard aux anciens recensements.
+
+Le mécanisme de service Sites reste documenté dans `scripts/refresh-population.mjs` et `docs/population-daily.md`. Il reçoit `{projectId,ownerToken}` par stdin protégé et dérive SHA256 UTF-8 de `mana-mechanica:population:v1:` + projectId + `:` + ownerToken. Les en-têtes Authorization et OAI-Sites-Authorization vont exclusivement à https://mana-mechanica.com, sans redirection de secrets. Lire get_site pour l’accès courant sans afficher sa valeur.
+
+| Réponse | Traitement |
 | --- | --- |
-| HTTP autorisé, JSON `status:success` | Succès provisoire ; ne le déclarer persisté qu'après relecture des archives. |
-| HTTP 200, JSON `status:error` | Échec ; conserver le code et une cause expurgée des secrets. |
-| HTTP 401/403 du Site | Arrêter immédiatement tous les rafraîchissements. Ne pas tenter la relecture privée avec cet accès refusé. Signaler « accès Site bloqué ». |
-| `source_http_401` / `source_http_403`, même avec HTTP 200 | Arrêter immédiatement tous les rafraîchissements. Lire les archives seulement si le Site reste autorisé. Déclencher la vérification organique de la source ci-dessous. |
-| HTTP 429 / `source_rate_limited` | Respecter le délai indiqué et la suspension de la source prévue par le collecteur. Ne pas poursuivre ses cibles ni déplacer la collecte vers un navigateur pour contourner la limite. |
-| `empty_sample` | Données indisponibles pour cette sélection. Conserver le code d’erreur pour la traçabilité, sans observation de population zéro ni remplacement du dernier relevé valide. |
-| Format invalide ou nombres incohérents | Échec de validation. Examiner les données source et conserver le dernier relevé valide. |
-| Timeout, réponse perdue ou illisible | Résultat indéterminé jusqu'à relecture ; ne pas relancer aveuglément un POST susceptible d'avoir été enregistré. |
-| Statut inconnu, cible déjà traitée ou collecte ignorée | Rapporter séparément ; ce n'est pas un nouveau succès de collecte. |
+| status:success et relecture concordante | Succès persisté seulement après vérification. |
+| HTTP200 avec status:error | Échec. |
+| unchanged:true / already_claimed | Déjà traité ; aucune nouvelle collecte. |
+| Site HTTP401/403 ou source401/403 | Arrêt immédiat ; signaler sans contournement ni changement de permissions. |
+| HTTP429 | Respecter Retry-After et suspendre la source ; aucun recours de contournement au navigateur. |
+| HTTP404 de profil | Profil indisponible ; vérifier prudemment nom, région, niveau et confidentialité, sans conclure à la disparition du personnage. |
+| HTTP410 source_retired | Source abandonnée ; aucune relance. |
+| Format, somme ou date incohérents | Rejet ; conserver le relevé précédent et sa date. |
+| Réponse perdue | Relire avant toute relance susceptible de doubler une écriture. |
 
-Un 403 établit un refus d'accès pour la requête concernée, pas sa cause précise. Ne pas affirmer « anti-bot », « site en panne » ou « données absentes » sans preuve explicite.
+Un réglage Battle.net de partage avec les sites communautaires peut rendre un profil indisponible tout en laissant apparaître le personnage dans l’armurerie ou une guilde. Ne pas modifier les préférences d’un joueur ni chercher une route pour contourner son choix.
 
-## 4. Vérification « organique » obligatoire en cas de problème
+## Publication et interprétation
 
-« Organique » signifie lire normalement l'interface publique du site dans un navigateur : ouvrir sa page, choisir les filtres visibles et lire les chiffres affichés comme le ferait un visiteur. Cela ne signifie pas masquer l'automatisation ni contourner les protections.
+La publication automatique des nouvelles observations directes vérifiées est autorisée, sans demande répétée au propriétaire. Le chemin direct de population devra être validé avant toute publication numérique. La page décrit actuellement la source et ses limites en FR, EN et ES ; elle marque les tiers comme archives et les exclut des comparaisons actuelles.
 
-Si Classic Armory renvoie un 403, y compris `source_http_403` dans une réponse HTTP 200, noter l’heure du refus. Dans la même exécution quotidienne, lire l’interface à **02 h 03 (Europe/Zurich)** si le refus a été constaté avant cette heure. À partir de 02 h 03, ouvrir l’interface **immédiatement après le constat du 403**. Noter l’heure du refus, l’heure prévue et l’heure effective de lecture. Si le contrôle est impossible, indiquer la raison et l’étape atteinte. Après l’arrêt de la collecte, suivre les étapes ci-dessous.
+Chaque publication indique ce qui a changé : teneur/couverture de l’échantillon, date et fraîcheur, ou correction d’exactitude établie avec justification. Une différence de chiffres ne prouve pas une amélioration d’exactitude. Présenter « personnages observés via l’API Blizzard », pas « population totale » ni « joueurs uniques/connectés ».
 
-1. Vérifier la page publique pertinente de la source, si une visite ordinaire est autorisée. Pour Classic Armory, partir de [Forever Census](https://classicarmory.gg/forever/census). Pour les autres sources, utiliser la page documentée et vérifier qu'elle concerne bien WoW Forever.
-2. Sélectionner explicitement la date, la région, le ruleset, les classes, factions et bornes de niveau correspondant à la cible. Attendre que le contenu affiché corresponde effectivement aux filtres ; ne pas relever les anciens chiffres pendant le chargement.
-3. Noter la date/heure de consultation et son fuseau, la date/heure de photographie fournie par la source (ou « non indiquée »), l'URL publique, les filtres, l'unité, les dénominateurs et les limites annoncées.
-4. Relever uniquement les données visibles et vérifiables : effectif, factions, classes, niveaux, activité ou guildes selon les indicateurs disponibles. Conserver la précision affichée. Un pourcentage arrondi ne permet pas de reconstruire un effectif exact.
-5. Contrôler les seuils : une carte « niveau 30 ou plus » ne doit pas être interprétée comme « niveau 40 ou plus ». Une région indisponible n'a pas une population nulle.
-6. Consigner l'un des résultats : interface accessible avec données pertinentes ; interface accessible mais donnée absente/non comparable ; interface bloquée ; vérification non effectuée faute de navigateur autorisé.
-7. Si l'interface présente elle-même un refus d'accès, une protection anti-bot ou un CAPTCHA, arrêter la vérification automatique et signaler le besoin d'intervention. Ne pas changer d'IP/proxy, falsifier le client, sonder des API alternatives, contourner le cache, modifier des permissions ou utiliser les secrets du Site sur la source.
+Les moyennes entre sources exigent au moins deux observations originales, fraîches (48 heures au plus), de même indicateur et périmètre. Copies, transports différents et réutilisations de profils Blizzard ne deviennent pas des confirmations indépendantes. Sinon afficher la valeur disponible, sa source et sa date. Les statistiques internes d’un échantillon restent explicitement distinctes d’une moyenne entre sites. Aucune somme de recensements qui se chevauchent.
 
-L'accès à l'interface peut fonctionner alors que le collecteur est refusé. Ce constat ne rétablit pas l'accès serveur et ne transforme pas son échec en succès. Si le contexte d'exécution ne permet pas une lecture de l'interface, inscrire « vérification organique à effectuer » dans le bilan ; ne jamais prétendre l'avoir faite.
+Préserver les archives et leurs anciennes conclusions datées. Ne pas fabriquer de série rétrospective ni fusionner les anciens échantillons avec le futur corpus direct. Après une écriture autorisée, relire la sauvegarde et l’article FR/EN/ES ; vérifier dates, chiffres, région, ruleset et attribution.
 
-## 5. Traiter le relevé manuel sans altérer les archives
+## Bilan d’exécution
 
-- La publication automatique est autorisée par le propriétaire depuis le 19 novembre 2026, sans nouvelle validation. Utiliser le service dédié de Mana Mechanica et le script `scripts/publish-classic-armory-report.mjs` du projet Sites. Il ajoute un relevé structuré de Classic Armory à l’article public de population en FR, EN et ES. Vérifier les huit combinaisons région/mode, la date et le total avant l’envoi, puis relire l’article public après confirmation de la persistance. Le service déduplique par date d’instantané et refuse les divergences. La tâche quotidienne publie désormais les relevés vérifiés avec ce service.
-- Conserver séparément la provenance `manual_ui` dans une note de recherche privée, avec les métadonnées ci-dessus. Ne pas ajouter ce relevé aux tables automatiques ni fabriquer un point de courbe.
-- Comparer seulement des indicateurs de même définition et de même périmètre. Expliquer les décalages de dates et de couverture.
-- Ne pas additionner les effectifs de sources susceptibles de recenser les mêmes personnages ; ne pas moyenner des médianes régionales.
-- Distinguer personnages, comptes, activité sur sept jours et connexions simultanées. Une hausse du nombre recensé peut résulter d'un élargissement de l'échantillon.
-- Les classes et niveaux peuvent suggérer des besoins économiques ; ils ne prouvent ni les métiers, ni la demande, ni les ventes, ni la rentabilité.
-- Une collecte échouée ne change ni les chiffres ni les dates des observations précédentes.
+Rapporter brièvement : état du collecteur direct, cibles autorisées et tentées, nouvelles observations persistées, inchangés, indisponibilités, erreurs et cibles non traitées, préservation des archives et publication effectivement réalisée. Une liste de cibles vide en phase de qualification n’est pas une collecte réussie.
 
-## 6. Contrôler la persistance
+## Références et portée des preuves
 
-Si l'accès au Site reste autorisé, relire `GET /api/population/history` après la boucle ou son arrêt.
+- [Portail développeurs Blizzard](https://develop.battle.net/) : fournisseur de l’API.
+- [Tests Forever de leur auteur](https://mhuijskens.com/WoWForever/Api/) : observations datées du 5 novembre 2026, à revalider.
+- [Discussion technique Forever](https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-what-works-so-far-plus-a-ts-client/60334) : retour de développeur, pas documentation garantie par Blizzard.
+- [Diagnostic de confidentialité résolu le 21 novembre](https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-character-profile-returns-http-404/60709).
 
-Pour chaque succès annoncé, retrouver la tentative correspondante et l'observation attendue avec la même source, région et ruleset. Tenir compte d'une déduplication documentée : le nombre total d'observations ne doit pas forcément augmenter à chaque appel.
-
-Comparer l'état initial et final : les anciennes observations restent présentes et inchangées ; les cibles échouées conservent leur dernier relevé valide et sa date. Vérifier les effectifs, champs obligatoires, cohérence des totaux et dates sans inventer de données manquantes. Une simple hausse du compteur global n'est pas une preuve suffisante.
-
-Si une vérification manque ou échoue, indiquer « persistance non vérifiée » ou « anomalie d'archive », selon les faits. Ne pas annoncer une réussite complète et ne pas tenter de réparation manuelle.
-
-## 7. Répercussion éditoriale et règles nouvelles
-
-À chaque nouvelle règle : vérifier sa compatibilité, valider son périmètre, puis appliquer la modification aux protocoles concernés. Examiner ses conséquences sur l'article de population et les analyses économiques qui le citent.
-
-Lorsqu'une mise à jour éditoriale est autorisée, relire l'article actuel et ses versions FR/EN/ES ; corriger uniquement les passages concernés, préserver son statut de publication et ses archives. Présenter un relevé d'interface comme un complément daté, séparé des séries automatiques. Vérifier que tableaux, graphiques, légendes, dates et sources restent cohérents. Ne pas annoncer de traduction ou de correction non réalisée.
-
-L’accès de service couvre uniquement des relevés chiffrés de Classic Armory pour cet article. Les changements éditoriaux généraux continuent de passer par le CMS du propriétaire. Si le service dédié ne répond pas ou si les données sont incomplètes, conserver le relevé vérifié et indiquer son statut dans le bilan.
-
-## 8. Bilan minimal de chaque exécution
-
-Rapporter en français, sans secret ni données privées dans les logs publics :
-
-- cibles sélectionnées ; succès persistés ; échecs ; cibles non traitées/ignorées ;
-- causes établies par source, et incertitudes restantes ;
-- résultat de la vérification organique, avec date et périmètre ;
-- contrôle des archives : vérifié, partiel, non effectué ou anomalie ;
-- mise à jour éditoriale effectivement enregistrée, seulement préparée ou bloquée.
-
-Conserver le détail des résultats dans l'espace privé autorisé. Ne jamais annoncer qu'une lecture manuelle constitue une collecte automatique réussie.
-
-## Fraîcheur et cohérence des données actuelles · 20 novembre 2026
-
-Les comparaisons actuelles utilisent uniquement les observations ayant une date source vérifiable de moins de 48 heures (48 heures incluses). La date de consultation ne renouvelle pas l’instantané source. Pour les données WoWStats réunissant plusieurs pages, la date la plus ancienne contrôle l’éligibilité. Les données anciennes, futures ou sans date source vérifiable restent consultables dans Sources & relevés et dans les archives, et sont exclues des tableaux et graphiques actuels.
-
-Les comparaisons intersources portent sur des marchés, indicateurs et périmètres compatibles et récents. Les écarts restent documentés selon l’historique comparable et la précision des échantillons. Un comparatif absent ou un désaccord ne bloque plus le relevé source complet et vérifié : publier ses valeurs avec leurs limites, sans annoncer une concordance ni une exactitude accrue. Une incohérence interne non résolue, un relevé incomplet ou une date non vérifiée empêche toujours son envoi. Le service exige les huit marchés validés pour un instantané complet. Aucune validation du propriétaire n’est requise.
-
-Le bilan distingue nouvelles observations archivées, collectes réussies, cibles déjà traitées (unchanged:true ou already_claimed), données indisponibles, autres erreurs et cibles non traitées. Un résultat déjà traité n’est jamais compté comme une nouvelle collecte. Les observations anciennes ne deviennent pas récentes à chaque archivage quotidien.
-
-## Valeurs disponibles et transparence des mises à jour · 20 novembre 2026
-
-Règle éditoriale du 20 novembre 2026. Publie automatiquement les valeurs originales vérifiées avec leur provenance et date source. Indique dans l’article ce qui a changé : teneur ou couverture de l’échantillon, date et fraîcheur, ou correction d’exactitude établie avec sa justification. Ne présente jamais une consultation récente, un changement d’effectif ou une nouvelle date comme une amélioration démontrée d’exactitude. Les synthèses exigent au moins deux sources originales distinctes, fraîches (48 heures au plus) et compatibles pour chaque indicateur ; exclue copies, agrégats et observations anciennes ou non datées. Sinon affiche les valeurs disponibles séparément avec source et date, sans calcul de moyenne. Conserve les statistiques fournies par la source, par exemple le niveau moyen, comme indicateurs de cette source. Signale les comparatifs absents et les écarts inexpliqués sans prétendre à un consensus. Une absence de comparatif récent ou un désaccord entre sources n’interdit plus la publication d’un relevé Classic Armory complet et vérifié, présenté comme valeur propre à cette source et assorti de ces limites. Un relevé incomplet, une incohérence interne ou une date non vérifiée empêche toujours son envoi. Le service exige les huit marchés ; garde les régions et rulesets séparés, les archives intactes et les contrôles de persistance. Cette règle remplace le blocage antérieur de tout le relevé faute de concordance intersources.
-
-La page affiche, pour chaque relevé Classic Armory, le nombre de marchés dont les valeurs diffèrent du relevé précédent présenté, ou précise qu’elles sont identiques. Elle réévalue la fraîcheur à la consultation et distingue cette fraîcheur de la représentativité de l’échantillon. Les moyennes historiques exigent la fraîcheur à la date du point ; une source unique affiche sa valeur observée. Aucun historique n’est effacé ni reconstitué.
-
-
-## Tous les onglets ·21 novembre2026
-
-Le relevé vérifié du20 novembre2026 à23:47 UTC couvre les huit marchés EU/US. Les effectifs exacts des neuf classes, des51 niveaux10–60 et des deux factions ont été lus dans l’interface ; les trois sommes concordent par marché. Le total source est2 579 428 personnages, dont1 207 680 EU et1 371 748 US. Les métiers ne sont pas exposés et ne sont pas inventés.
-
-Le service de publication existant accepte un champ optionnel `details` par ligne : `classes`, `levels`, `factionCounts:{Alliance,Horde}`, `verifiedAt`. Le contrôle impose les ID de classes/niveaux, les sommes exactes, la cohérence des arrondis et une date de consultation postérieure au scan. Il peut compléter des détails absents d’un instantané identique, avec écriture conditionnelle ; toute divergence des valeurs antérieures reste refusée. Le corps est borné à32KiB. Aucun nouveau secret ni droit de publication n’est créé.
-
-Le GET public `/api/population/history` expose ensuite ces distributions sous la source unique `armory`, méthode `visual-report`, avec dates source et de consultation distinctes. La même source ne compte pas deux fois. Le moteur commun des versions FR,EN,ES choisit un record entier selon la date source, et une distribution complète prime sur un résumé de même date. La réception ultérieure d’une archive ancienne ne fait plus reculer les onglets. Le contrôle de48h est identique dans les trois langues ; sinon afficher les valeurs disponibles sans moyenne entre sources. Les366 derniers rapports peuvent compléter l’historique ; tous restent stockés.
-
-Les autres sources conservent leurs dates réelles. Le16 novembre affiché par WoWStats reste ancien au21 novembre ; les dates non vérifiables d’aotc ne deviennent pas fraîches par une simple consultation. Une source indisponible ne devient pas une population nulle. La cadence quotidienne de Population est conservée.
+Revue documentaire le 22 novembre 2026 ; aucune validation de recensement direct n’est présumée à partir de ces lectures.
