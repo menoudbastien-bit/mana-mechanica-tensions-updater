@@ -62,3 +62,7 @@ Historical requests retry one transient transport or 5xx failure when Retry-Afte
 ## Isolated Blizzard diagnostic · 22 November 2026
 
 Application OAuth and five EU candidate diagnostic routes returned HTTP 200 for the current AHL446-v6 basket of 446 IDs. Production still uses AHledger and its existing hourly cadence. House 111 remains unadmitted until independently confirmed as Europe Normal Alliance. The received auction feeds advertise a 86400-second cache; execution cadence and actual source freshness are separate. Retention and publication conditions must be resolved before migration. This test imports no price into the spreadsheet or production archive. See the [verified Blizzard protocol](blizzard-forever-feasibility-20261122.md) and [sanitized audit](audits/blizzard-direct-api-probe-20261122.json).
+
+### Candidate scope: neutral auction houses
+
+Neutral / Blackwater houses are included in Blizzard pilot validation separately from Alliance and Horde. The observed EU index lists house IDs 116, 117, 118, 121 and 125; their prices have not been tested. Validate region/ruleset/house mappings and duplicate feeds before import; five IDs do not establish five independent markets. Do not invent an AHledger market key. Production data and the hourly workflow remain unchanged. See the [Blizzard protocol](blizzard-forever-feasibility-20261122.md#extension-du-pilote-aux-hôtels-des-ventes-neutres).
