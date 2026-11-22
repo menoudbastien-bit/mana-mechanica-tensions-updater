@@ -71,3 +71,8 @@ Rapporter brièvement : état du collecteur direct, cibles autorisées et tenté
 - [Diagnostic de confidentialité résolu le 21 novembre](https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-character-profile-returns-http-404/60709).
 
 Revue documentaire le 22 novembre 2026 ; aucune validation de recensement direct n’est présumée à partir de ces lectures.
+
+
+## Consultation et export de toutes les archives · 22 novembre 2026
+
+L'exclusion de sources tierces de la synthèse actuelle ne doit pas cacher leurs données historiques. Les sept onglets Population FR/EN/ES gardent un explorateur région/mode/source/jour ; il présente les enregistrements initiaux, embarqués, serveur et les rapports synthétiques. L'export conserve `{baseline,history}` complet, sans réduction aux derniers enregistrements.120 observations serveur étaient présentes au diagnostic ;48 consultations réutilisent le même scan WoWStats, elles ne deviennent pas des échantillons indépendants. Les rapports sans distributions restent des résumés : aucun histogramme n'est reconstruit. Garder séparées date source, consultation et collecte. Voir [le protocole de conservation](history-preservation-20261122.md).
