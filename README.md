@@ -1,60 +1,36 @@
-# Mana Mechanica — collecte Blizzard horaire
+# Mana Mechanica — collectes et protocoles
 
-La méthode courante utilise directement l’API Blizzard Forever pour le panier publié (446 ID au 22 novembre 2026) et les maisons physiques candidates EU/US/KR/TW, avec Blackwater séparé. Le registre conserve aussi les périmètres indisponibles : aucune région n’est substituée. Les correspondances de règles inférées restent signalées et les anciennes séries AHledger restent des archives explicitement distinctes.
+## Prix : API Blizzard directe
 
-Le workflow conservé sous `.github/workflows/tensions.yml` lance le contrôleur toutes les cinq minutes. Ce sont des vérifications de calendrier : une maison n’est interrogée que près de la date source attendue suivante, environ chaque heure, avec revalidation conditionnelle et sans faux nouveau scan sur un snapshot répété. GitHub peut retarder les exécutions. Les secrets Blizzard restent dans Sites ; le runner réutilise le secret applicatif GitHub existant pour obtenir un jeton éphémère depuis le broker authentifié. Aucun secret dans ce dépôt.
+Le workflow [.github/workflows/tensions.yml](.github/workflows/tensions.yml) utilise le panier publié (446 ID au 22 novembre 2026), les maisons physiques EU/US/KR/TW et Blackwater séparément. Le contrôleur vérifie les échéances toutes les cinq minutes ; chaque maison n’est interrogée qu’autour de son actualisation source horaire. GitHub peut retarder un passage. Les périmètres indisponibles restent explicites.
 
-- Commande : `node scripts/blizzard/update-watchlist.mjs --stdin` ; entrée JSON masquée avec projectId/siteUrl et accès applicatif, jamais d’identifiant dans les arguments ou un fichier.
-- Tests : `node --test tests/blizzard-collector.mjs tests/blizzard-listing-metrics.mjs`.
-- Protocole : [collecte et conservation Blizzard](docs/blizzard-hourly-protocol.md).
-- Les grands JSON d’annonces restent en mémoire dans Node ; seuls prix calculés, quantités, métadonnées et erreurs du panier sont envoyés au stockage du site.
-- Les nouvelles données Blizzard suivent une fenêtre de 30 jours. Les anciennes observations et éditions AHledger ne sont pas réécrites. Le carnet de profondeur TK Sombrelune reste une source distincte et créditée.
-- Un échec technique du contrôleur échoue le job et conserve les valeurs précédentes avec leur date source ; il ne crée aucun prix de substitution.
+- Exécution : `node scripts/blizzard/update-watchlist.mjs --stdin`, accès par stdin protégé.
+- Vérifications : `node --test tests/blizzard-collector.mjs tests/blizzard-listing-metrics.mjs`.
+- [Protocole Blizzard horaire](docs/blizzard-hourly-protocol.md).
 
-## Documentation de la collecte antérieure — archive
+Les secrets Blizzard restent dans Sites. Le runner utilise le secret applicatif GitHub existant pour obtenir un jeton éphémère par le broker authentifié. Aucun secret dans les fichiers, arguments ou sorties. Les grands JSON sont traités en mémoire ; seuls les résultats bornés du panier sont archivés.
 
-Les paragraphes ci-dessous documentent le collecteur AHledger retiré du workflow courant. Ils ne sont plus des instructions de collecte active.
+## Carnet Sombrelune
 
-# Mana Mechanica tension updater
+Le workflow [.github/workflows/darkmoon-depth.yml](.github/workflows/darkmoon-depth.yml) vérifie et conserve le carnet Europe Normal Alliance, distinct des simples résumés de prix. [Protocole](docs/darkmoon-market-protocol.md).
 
-Collects one UTC hour slot per market. GitHub Actions checks at minutes 07, 22, 37 and 52, reuses successful slots and retries incomplete ones. The central watchlist currently contains 446 item IDs; the hosted collector uses five AHledger tooltip batches per market, retaining each item's exact source scan time. Each hourly slot also recovers a rotating bounded part of the 7-day history. Scan observations and hourly aggregates remain separate, and corrected values keep their previous archived versions. At each run it reads the current published basket from https://mana-mechanica.com/observatory-catalog.json. It triggers the hosted calculation and verifies every expected item ID for every Forever market. There is no fixed 75-item limit.
+## Population
 
-Add reviewed items to content/observatory/basket.json in the Site repository and publish the Site. The generated catalogue, server and counters share that definition. Routine additions require no updater edit, secret change or schedule change. Never add fake items to production for tests.
+[Protocole Population](docs/population-census-protocol.md) : Blizzard direct en cours de qualification ; WoWStats, Classic Armory et aotc conservés pour leurs archives et apports utiles non couverts. Une seule tâche quotidienne existante, aucun workflow GitHub Population et aucune seconde tâche de secours.
 
-The pre-update snapshot may lack newly added items; the verified post-update snapshot must contain the exact published ID set. Existing episodes, first detections and distinct confirmations are checked for preservation. Missing data stays missing. Removing or replacing existing IDs is deliberately rejected pending a separate history-retention migration.
+## Archives et articles
 
-Only updater code is public here. The narrow refresh credential stays in the existing encrypted Actions secret and is read through stdin. No Site owner credential, prices or editorial hypotheses are supplied by this runner.
+- [Conservation et accès aux historiques](docs/history-preservation-20261122.md) : les observations AHledger, Population et éditions closes restent disponibles avec leurs sources et dates.
+- [Rythmes de l’hôtel des ventes](docs/auction-rhythms-protocol.md).
+- [Versions FR, EN et ES](docs/editorial-localization-protocol.md).
+- [Migration et catalogue historique](docs/hourly-watchlist-20261121.md), conservés comme documentation datée.
 
-Markets run sequentially with 20 seconds between them. Read back before at most one retry after a lost response; authentication errors stop the run. The summary distinguishes saved results, current basket size, usable observations and source failures. A concurrent Site publication can cause an identity mismatch; inspect saved results and let a later run read the new catalogue. Do not weaken identity checks.
+Les nouvelles données Blizzard suivent leur fenêtre de conservation propre ; elle n’est pas appliquée rétroactivement aux archives AHledger. Les sources ne sont pas mélangées pour calculer une variation ou une confirmation.
 
-GitHub cron is best effort and public scheduled workflows can be disabled after 60 days without repository activity. Review actual Actions runs. No language-model usage allowance is used by these jobs.
+## Exécutions et maintenance
 
-Tests: node --test tests/tensions-updater.mjs
+Les deux workflows ci-dessus sont les seuls workflows actifs. Les anciens scripts AHledger appelant `/api/tensions/refresh` ont été retirés ; ils restent récupérables dans l’historique Git. Aucun lecteur d’archives ni relevé n’a été supprimé.
 
-## Change protocol
+Un échec réel reste un échec et conserve les valeurs précédentes avec leur date. [Diagnostic des notifications d’échec](docs/automation-cleanup-20261122.md). Les réglages de messagerie et de notification ne sont pas modifiés.
 
-1. Check each new monitoring rule against the current configuration, source data, Site articles and related GitHub protocols. Identify the affected workflows, scripts, tests and documentation.
-2. Validate the scope, including the schedule, time zone, market, catalogue, freshness rules and outputs where relevant.
-3. Apply the rule and update the affected files and articles. Preserve each article’s publication status. Reread the affected French, English and Spanish versions and verify facts, dates, figures, charts and sources. Record what was checked and any issues or access blockers that remain.
-
-The GitHub workflow refreshes Site tensions using the published catalogue. The AHledger research spreadsheet has its own market scope and collection schedule. When the spreadsheet cadence changes, check for a dependency before changing the Site refresh schedule. Routine runs focus on data refresh.
-
-## Population census protocol
-
-See [Protocole de mise à jour des recensements](docs/population-census-protocol.md) for the hosted population collection, archive verification and mandatory ordinary browser-interface check when collection access is blocked. Manual observations remain separate from automated archives. This documentation does not add a GitHub population schedule or change the existing daily task, Site publication or tensions workflow.
-
-## Auction House Rhythms protocol
-
-See the [Auction House Rhythms protocol](docs/auction-rhythms-protocol.md) for the public article’s data sources, time zones, simulations and verification. Its history endpoint reads existing data independently of the scheduled tensions refresh.
-
-## Darkmoon Faire listings
-
-[Guide de suivi](docs/darkmoon-market-protocol.md) et [collecte horaire](.github/workflows/darkmoon-depth.yml) pour le marché Europe Normal Alliance.
-
-## Traductions du site public
-
-Le [protocole de traduction](docs/editorial-localization-protocol.md) couvre les publications FR, EN et ES, leurs outils interactifs, les sources et les contrôles de cohérence.
-
-## Hourly watchlist · 21 November 2026
-
-The [hourly collection protocol](docs/hourly-watchlist-20261121.md) documents the 406-item progression catalogue, preservation of 40 other existing references, 300 additions to the Site, source-date deduplication, workbook history and silent collection instructions. The closed weekly editions keep their historical panels. Current prices and sufficient history for a tension are reported separately. Routine GitHub runs never call a language model or notify through ChatGPT.
+Pour une nouvelle règle, vérifier son périmètre, les sources, articles et protocoles concernés, appliquer uniquement les changements utiles et contrôler la persistance après publication. Préserver les statuts de publication et les archives.
