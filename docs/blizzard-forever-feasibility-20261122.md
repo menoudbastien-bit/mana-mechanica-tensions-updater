@@ -8,7 +8,7 @@ La configuration de production Mana Mechanica ne contient actuellement aucun ide
 
 `https://eu.api.blizzard.com/data/wow/ruleset/index?namespace=dynamic-forever-eu&locale=en_GB`
 
-a répondu HTTP 404, corps vide. Cette réponse ne prouve ni l'absence de l'API, ni son fonctionnement avec un jeton valide. Aucun prix Blizzard n'a été importé. Aucun compte, client OAuth, abonnement ou accord n'a été créé ou accepté.
+a répondu HTTP 404, corps vide. Cette réponse ne prouve ni l'absence de l'API, ni son fonctionnement avec un jeton valide. Lors de cette première vérification, aucun prix Blizzard n'avait été importé et aucun compte, client OAuth, abonnement ou accord n'avait été créé ou accepté.
 
 ## Authentification requise
 
@@ -61,3 +61,9 @@ Cette investigation ne modifie ni le workflow de production, ni la tâche horair
 - Notes datées du 5 novembre : https://mhuijskens.com/WoWForever/Api/
 - Mapping externe et limites : https://auctionhouse.tk.gg/data/
 - Méthode de confirmation des maisons : https://wowfah.com/about
+
+## Client créé et vérifié — 22 novembre 2026
+
+Le portail développeur Battle.net affiche maintenant le client enregistré « Mana Mechanica », avec la page « Manage Client » et un secret masqué derrière « Show Secret ». La création est confirmée dans l'interface du compte propriétaire. L'adresse de service est https://mana-mechanica.com ; l'usage déclaré est le traitement côté serveur des annonces Forever avec isolation région/ruleset/faction, sans connexion aux comptes des joueurs ni données personnelles de personnages.
+
+L'identifiant complet et le secret ne sont pas publiés dans ce protocole. Le secret n'a pas été révélé ni copié pendant cette vérification. La configuration des identifiants côté serveur et le premier test OAuth authentifié restent à effectuer. Aucune collecte Blizzard, substitution de source, modification du workflow horaire ou import de prix n'a été réalisé à cette étape. Les validations de marchés et de conservation décrites ci-dessus restent nécessaires.
