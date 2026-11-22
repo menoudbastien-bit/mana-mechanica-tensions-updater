@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {markets, marketById, REGION_CONFIG} from '../../lib/blizzard/markets.mjs';
-import {summarizeListings} from '../../lib/blizzard/listing-metrics.mjs';
+import {ListingMetricsError,summarizeListings} from '../../lib/blizzard/listing-metrics.mjs';
 
 export const PROJECT_ID='appgprj_6adf82cdbe1081919f3e44ce1525cd98';
 export const SITE_URL='https://mana-mechanica.com';
@@ -89,10 +89,16 @@ async function downloadFeed(market,kind,{fetchFn,token,cache,ids,now,sleep}){
  let body;try{body=JSON.parse(text);}catch{throw new CollectionError('provider_invalid_json',response.status,kind);}
  const sha256=createHash('sha256').update(text).digest('hex');text=null;
  const rows=validateFeedDocument(body,market,kind,url);
- const metrics=summarizeListings(rows,{kind,itemIds:ids});body=null;
+ let metrics;
+ try{metrics=summarizeListings(rows,{kind,itemIds:ids});}
+ catch(error){
+  const code=error instanceof ListingMetricsError?error.code:'listing_metrics_error';
+  throw new CollectionError(code,response.status,kind);
+ }
+ body=null;
  return {meta:{kind,status:200,at,retrievedAt:receivedAt,url,sha256,etag:response.headers.get('etag'),cacheControl:response.headers.get('cache-control'),date:response.headers.get('date'),age:response.headers.get('age'),expires:response.headers.get('expires'),sourceTimeHeader:response.headers.get('last-modified')},metrics};
 }
-export async function runBlizzardCollection({applicationToken,siteAccessToken,fetchFn=fetch,now=Date.now,sleep=ms=>new Promise(r=>setTimeout(r,ms)),log=()=>{},only,force=false}={}){
+export async function runBlizzardCollection({applicationToken,siteAccessToken,fetchFn=fetch,now=Date.now,sleep=ms=>new Promise(r=>setTimeout(r,ms)),log=()=>{},only,retryMarkets,force=false}={}){
  if(typeof applicationToken!=='string'||!/^[a-f0-9]{64}$/.test(applicationToken))throw new CollectionError('invalid_application_access');
  const headers={Authorization:'Bearer '+applicationToken,...siteAccessToken?{'OAI-Sites-Authorization':'Bearer '+siteAccessToken}:{}};
  const context={fetchFn,headers};
@@ -101,11 +107,12 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
  const configured=Array.isArray(config.markets)?config.markets:markets;
  let selected=configured.filter(row=>row.available&&marketById(row.id)?.physicalKey===row.physicalKey);
  if(only){selected=selected.filter(x=>x.id===only);if(!selected.length)throw new CollectionError('unknown_or_unavailable_market');}
+ if(retryMarkets)selected=selected.filter(row=>retryMarkets.has(row.id));
  if(new Set(selected.map(x=>x.physicalKey)).size!==selected.length)throw new CollectionError('duplicate_physical_house');
  const status=new Map((config.collectionStatus??[]).map(x=>[x.market,x]));
  const due=selected.filter(row=>force||now()>=dueAt(status.get(row.id),now()));
  const results=[];
- if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results};}
+ if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results,pendingMarkets:[]};}
  let access=await siteJson('/api/blizzard/access',{...context,method:'POST',body:{purpose:'hourly_watchlist'}});
  if(typeof access.accessToken!=='string'||!access.accessToken)throw new CollectionError('missing_provider_access');
  let token=access.accessToken;access=null;
@@ -141,5 +148,7 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
  }finally{token=null;}
  const verified=results.filter(x=>x.verifiedReadback),failed=results.filter(x=>!x.verifiedReadback);
  const summary={provider:'Blizzard',complete:results.length===due.length&&!failed.length,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:due.length,verifiedMarkets:verified.length,failedMarkets:failed.length,notAttempted:due.length-results.length,skippedMarkets:selected.length-due.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:verified.filter(x=>x.newSnapshot).length,pricedItems:verified.reduce((s,x)=>s+x.pricedItems,0)};
- log(summary);return {summary,results};
+ const verifiedIds=new Set(verified.map(row=>row.market));
+ const pendingMarkets=due.filter(row=>!verifiedIds.has(row.id)).map(row=>row.id);
+ log(summary);return {summary,results,pendingMarkets};
 }

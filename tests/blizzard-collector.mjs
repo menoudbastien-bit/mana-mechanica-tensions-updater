@@ -29,7 +29,7 @@ test('an item present in both source feeds is withheld rather than double counte
  const feeds=['auction','commodity'].map(kind=>({meta:{kind,at},metrics:{basket:[row]}}));
  const item=composeItems([7],feeds)[0];assert.equal(item.quantity,null);assert.deepEqual(item.warnings,['cross_feed_overlap']);
 });
-function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[]}={}){
+function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[],auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100}]}={}){
  let saved=null,external=0,failures=0,accessCalls=0;const requests=[];
  const fetchFn=async(url,options={})=>{
   requests.push([String(url),options]);const u=new URL(url);
@@ -42,7 +42,7 @@ function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionS
   }
   external++;if(status!==200)return reply(null,status);
   const kind=u.pathname.endsWith('/commodities')?'commodity':'auction';
-  return reply(document(kind,kind==='auction'?[{id:1,item:{id:7},quantity:1,buyout:100}]:[{id:2,item:{id:8},quantity:3,unit_price:201}]),200,{'battlenet-namespace':scope,'battlenet-schema':'auctions','last-modified':new Date(at).toUTCString(),'cache-control':'public, max-age=86400'});
+  return reply(document(kind,kind==='auction'?auctionRows:[{id:2,item:{id:8},quantity:3,unit_price:201}]),200,{'battlenet-namespace':scope,'battlenet-schema':'auctions','last-modified':new Date(at).toUTCString(),'cache-control':'public, max-age=86400'});
  };
  return {fetchFn,requests,get saved(){return saved;},get external(){return external;},get failures(){return failures;},get accessCalls(){return accessCalls;}};
 }
@@ -77,4 +77,15 @@ test('a changed basket invalidates conditional cache validators and recomputes a
  const cache={basketVersion:'old-basket',feeds:['auction','commodity'].map(kind=>({kind,at,sha256:'a'.repeat(64),url:apiUrl(market,kind)})),items:[]};
  const f=transport({cache}),r=await runBlizzardCollection(opts(f));assert.equal(r.summary.complete,true);assert.equal(f.saved.items.length,2);
  for(const [,options] of f.requests.filter(([url])=>url.includes('api.blizzard.com'))){assert.equal(options.headers['If-Modified-Since'],undefined);assert.equal(options.headers['If-None-Match'],undefined);}
+});
+
+test('conflicting listing identities identify the failed feed and prevent partial price writes',async()=>{
+ const auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100},{id:1,item:{id:7},quantity:1,buyout:200}];
+ const fixture=transport({auctionRows});
+ const {summary,results}=await runBlizzardCollection(opts(fixture));
+ assert.equal(summary.complete,false);
+ assert.equal(results[0].code,'conflicting_listing_identity');
+ assert.equal(results[0].feed,'auction');
+ assert.equal(fixture.saved,null);
+ assert.equal(fixture.failures,1);
 });
