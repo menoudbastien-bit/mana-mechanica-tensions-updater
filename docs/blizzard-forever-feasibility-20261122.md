@@ -1,69 +1,72 @@
-# Accès direct Blizzard pour Mana Mechanica — investigation du 22 novembre 2026
+# Accès direct Blizzard pour Mana Mechanica — vérification du 22 novembre 2026
 
-## Conclusion et vérification effective
+## État vérifié
 
-La piste est techniquement crédible, d'après les développeurs qui ont testé les routes Forever et les producteurs de sites qui les utilisent. Elle n'est pas encore validée pour notre application par une réponse Blizzard authentifiée.
+L’application Mana Mechanica est créée. Ses deux identifiants sont configurés comme secrets serveur masqués : BLIZZARD_CLIENT_ID et BLIZZARD_CLIENT_SECRET. La version existante 138 du site a été redéployée avec la révision d’environnement 6 ; aucun code de collecte ni catalogue publié n’a été remplacé.
 
-La configuration de production Mana Mechanica ne contient actuellement aucun identifiant client Blizzard. Le 22 novembre 2026 à 09:54:32 UTC, un GET sans authentification sur :
+Le test OAuth client_credentials du 22 novembre 2026 a reçu HTTP 200. Le jeton a été utilisé uniquement en mémoire pour un diagnostic en lecture seule. Ni identifiants, ni secret, ni jeton ne sont publiés dans le dépôt ou dans les fichiers client.
 
-`https://eu.api.blizzard.com/data/wow/ruleset/index?namespace=dynamic-forever-eu&locale=en_GB`
-
-a répondu HTTP 404, corps vide. Cette réponse ne prouve ni l'absence de l'API, ni son fonctionnement avec un jeton valide. Lors de cette première vérification, aucun prix Blizzard n'avait été importé et aucun compte, client OAuth, abonnement ou accord n'avait été créé ou accepté.
-
-## Authentification requise
-
-Déclarer l'application Mana Mechanica sur https://develop.battle.net/access/clients, avec son URL réelle et son usage. Le flux OAuth client_credentials échange identifiant et secret contre un jeton d'application. Les secrets doivent rester côté serveur, hors dépôt, JavaScript public, logs et conversation.
-
-Les noms de secrets proposés sont BLIZZARD_CLIENT_ID et BLIZZARD_CLIENT_SECRET. Leur configuration est nécessaire au test authentifié. Leur absence ne constitue pas une panne du collecteur AHledger.
-
-## Routes candidates et identité des marchés
-
-Les retours de développeurs décrivent le namespace dynamic-forever-eu et les routes :
+Le diagnostic a découvert le panier public courant : **446 ID, AHL446-v6**. Entre 16:18:24 et 16:18:27 UTC, les cinq routes suivantes ont répondu HTTP 200, avec le namespace de réponse dynamic-forever-eu :
 
 - /data/wow/ruleset/index
-- /data/wow/ruleset/{id}
-- /data/wow/ruleset/{id}/auctions/
-- /data/wow/ruleset/{id}/auctions/{houseId}
-- /data/wow/ruleset/{id}/auctions/{houseId}/commodities
+- /data/wow/ruleset/2
+- /data/wow/ruleset/2/auctions/
+- /data/wow/ruleset/2/auctions/111
+- /data/wow/ruleset/2/auctions/111/commodities
 
-La première documentation du 5 novembre utilise encore /auctions/index. Découvrir le lien actuel dans la réponse plutôt que figer cette différence comme un contrat officiel stable.
+L’objet ruleset porte id=2 et le nom Normal. L’index contient plusieurs maisons nommées Alliance Auction House ; le nom et le chemin ne suffisent donc pas à attribuer définitivement la maison 111 au marché AHledger forever.normal.alliance.eu. Le diagnostic conserve **mappingStatus=candidate_unverified** et **admittedToObservatory=false**.
 
-Les mêmes maisons peuvent apparaître sous plusieurs rulesets. Le chemin ruleset/2 ne suffit donc pas à prouver un marché Normal. TK.gg propose 111 pour Alliance Normal, 114 pour Horde Normal et 117 pour le neutre ; les groupes RP et RP-PvP restent inférés. Ces correspondances externes doivent être validées avant admission.
+Les deux flux d’annonces ont été reçus avec la même date source Last-Modified : **22 novembre 2026 à 15:23:32 UTC**. Leur date de récupération est distincte. Les en-têtes annoncent **Cache-Control: public, max-age=86400** pour les annonces et leur index, contre 30 secondes pour les rulesets. Ce constat doit être résolu avant de promettre des données réellement nouvelles chaque heure : une exécution horaire ne prouve pas une actualisation horaire de la source. Ne pas contourner le cache pour obtenir une apparence de fraîcheur.
 
-EU, US, KR et TW doivent rester distincts. CN nécessite un accès régional à vérifier. Aucune correspondance automatique des 32 marchés AHledger n'est admise.
+La sortie détaillée du premier diagnostic a été tronquée ; les compteurs de couverture par objet ne sont donc pas conservés ni affirmés. Aucun nouvel appel du même snapshot n’a été lancé pour les reproduire pendant sa fraîcheur annoncée. Le script émet désormais un audit compact, avec des compteurs de couverture et sans annonces individuelles. Voir [l’audit du test](audits/blizzard-direct-api-probe-20261122.json).
 
-## Protocole proposé pour le premier test
+## Exécution et contrôles
 
-1. Obtenir le jeton sans l'imprimer, puis récupérer index régional, rulesets et liens des maisons. Contrôler host, namespace et type de document.
-2. Commencer uniquement par EU Normal Alliance. Valider son identité avec des enchères réellement identifiées sur ce marché ; une ressemblance de quelques prix est insuffisante.
-3. Lire les deux catégories d'annonces. Conserver unités, prix du lot ou prix unitaire selon leur définition, variantes, heure source Last-Modified et heure de récupération. Exclure les annonces sans buyout des statistiques de prix.
-4. Calculer sur l'ensemble complet les minimums, médianes pondérées, moyennes pondérées et quantités du panier courant de 446 ID. Les calculs restent des prix affichés, pas des ventes.
-5. Comparer plusieurs snapshots avec les sources existantes à dates comparables. Contrôler doublons, zéros réels, absences, lots, quantités et variantes.
-6. Garder le test dans une archive source distincte. Aucun remplacement d'anciennes observations, aucune fusion interrégionale. Respecter Cache-Control, Last-Modified/ETag et Retry-After ; ne pas compter une réponse inchangée comme nouveau scan.
+Le diagnostic est isolé sous scripts/diagnostics/ et n’est relié à aucun cron, endpoint public ou workflow de production. Son ajout ne déclenche pas le workflow des scripts/observatory/. Les identifiants sont lus sur l’entrée standard masquée, jamais dans les arguments de commande, un fichier, le dépôt ou les journaux. Il n’existe pas de commande documentée invitant à coller un secret dans l’historique du terminal.
 
-Aucune route d'historique rétrospectif n'a été établie : prévoir une série à partir des snapshots effectivement reçus, sans inventer les créneaux manqués.
+Tests hors réseau :
 
-## Conservation et publication
+```sh
+node --test scripts/diagnostics/blizzard-listing-metrics.test.mjs
+node --check scripts/diagnostics/blizzard-market-probe.mjs
+```
 
-Les conditions API Blizzard contiennent une limite de conservation de 30 jours formulée pour toutes les données. La FAQ officielle explique surtout la protection des données des joueurs, mais aucune exception explicite pour nos historiques anonymes ou agrégats de prix n'a été trouvée. La question spécifique du 21 novembre est sans réponse officielle lors de cette enquête.
+Résultat : **10 tests de métriques réussis**, plus vérification du rejet d’une entrée d’identifiants malformée sans en réafficher le contenu ni appeler le réseau. Le diagnostic réseau réel a précédé les durcissements de validation et de sortie ; ceux-ci n’ont pas justifié de relire des réponses encore fraîches.
 
-Cela ne constitue ni une autorisation d'archivage illimité ni une décision juridique définitive sur ce cas. Clarifier la conservation des snapshots et des statistiques dérivées avant de concevoir une archive permanente. Examiner également l'usage déclaré, l'attribution, la redistribution et une éventuelle monétisation.
+Le script suit les liens reçus sur eu.api.blizzard.com uniquement, refuse les redirections, impose le namespace Forever EU, les schémas ruleset/auctions, les identités attendues et des dates source lisibles au plus cinq minutes dans le futur. Un refus HTTP ou une limitation arrête le diagnostic ; Retry-After est enregistré sans boucle automatique de reprise. Date, Age, Expires et échéance indicative de fraîcheur sont enregistrés pour les prochains diagnostics. L’exploitant doit consulter cette échéance avant une réexécution ; ce script ponctuel n’implémente pas un cache persistant de collecteur.
 
-Cette investigation ne modifie ni le workflow de production, ni la tâche horaire du classeur, ni les articles publiés. La source actuelle reste AHledger ; aucune page ne doit annoncer une migration accomplie.
+Les métriques utilisent les quantités réellement fournies :
+- commodities : unit_price est déjà un prix unitaire ;
+- enchères ordinaires : buyout avec quantity=1 est chiffrable ; quantity>1 conserve le stock mais exclut le prix tant que sa sémantique unitaire Forever n’est pas confirmée ;
+- les annonces sans buyout, quantités nulles, absentes ou invalides restent distinctes ;
+- un objet absent du flux n’est pas transformé en stock nul ;
+- les doublons d’ID d’annonce identiques sont dédupliqués ; les contradictions interrompent le calcul ;
+- minimum, médiane pondérée et moyenne pondérée portent sur les unités chiffrables ; les sommes et fractions exactes utilisent BigInt sérialisé en chaînes ;
+- les variantes d’un item.id sont comptées et leur regroupement est explicite. Deux flux de dates différentes ne forment pas un snapshot commun.
 
-## Sources examinées
+Ces quantités sont des annonces disponibles, pas des ventes. Le calcul d’un prix ne valide ni l’identité du marché ni son admission dans l’Observatoire.
 
-- Exemple officiel OAuth Blizzard : https://github.com/Blizzard/node-signature-generator
+## Conditions avant intégration
+
+1. Confirmer la maison 111 avec des identifiants d’enchères indépendamment observés en jeu sur Europe Normal Alliance. Quelques prix proches ou le nom Alliance ne suffisent pas.
+2. Vérifier la fréquence réelle des snapshots et les règles de cache. Étendre ensuite la cartographie région/ruleset/faction séparément, sans déduire les 32 marchés AHledger de cette seule maison. EU, US, KR et TW restent distincts ; CN demande un accès régional spécifique.
+3. Clarifier conservation, publication, attribution et éventuelle monétisation avant une archive permanente. Les conditions API Blizzard contiennent une limite de 30 jours formulée pour les données ; aucune exception explicite vérifiée pour nos historiques anonymes ou agrégats n’est établie.
+4. Préparer un pilote distinct, avec cache, idempotence, contrôles de fraîcheur et limites mémoire adaptés au serveur. Le diagnostic Node qui lit les flux complets n’est pas un collecteur Cloudflare Worker prêt à déployer.
+5. Relire les pages FR/EN/ES concernées lors de tout changement effectif de source. La relecture de public/observatory-article.js, public/method.js, public/observatory.js et public/tensions.js confirme que leur présentation AHledger reste cohérente avec l’état actuel : aucune migration n’est annoncée.
+
+Aucune route d’historique rétrospectif Blizzard n’a été établie. Ne pas reconstituer des heures manquées avec un prix actuel. Aucun import dans RAW_AHledger, le classeur ou l’archive de production n’a été effectué par ce diagnostic ; la collecte horaire AHledger et les articles publiés restent en place.
+
+## Historique des vérifications
+
+À 09:54:32 UTC le 22 novembre, un GET non authentifié du ruleset index avait répondu HTTP 404 avec un corps vide. Cela ne prouvait ni l’absence de l’API, ni son fonctionnement authentifié. La création du client a ensuite été confirmée dans le portail propriétaire. À 16:12 UTC, OAuth et les index région/ruleset authentifiés ont répondu HTTP 200 ; le région index renvoie la région 93. Le test d’annonces de 16:18 UTC décrit ci-dessus établit maintenant l’accès technique.
+
+## Sources
+
+- Exemple officiel OAuth : https://github.com/Blizzard/node-signature-generator
 - Conditions API : https://www.blizzard.com/en-us/legal/a2989b50-5f16-43b1-abec-2ae17cc09dd6/blizzard-developer-api-terms-of-use
 - FAQ officielle : https://us.forums.blizzard.com/en/blizzard/t/data-protection-notice-and-faq/609
-- Question historique AH sans réponse officielle : https://us.forums.blizzard.com/en/blizzard/t/does-the-30-day-retention-rule-apply-to-auction-house-price/60763
-- Retours techniques de l'auteur du client, pas une annonce Blizzard : https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-what-works-so-far-plus-a-ts-client/60334
+- Question sur la conservation AH, sans réponse officielle lors de l’enquête : https://us.forums.blizzard.com/en/blizzard/t/does-the-30-day-retention-rule-apply-to-auction-house-price/60763
+- Retour technique de développeur, non annonce Blizzard : https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-what-works-so-far-plus-a-ts-client/60334
 - Notes datées du 5 novembre : https://mhuijskens.com/WoWForever/Api/
-- Mapping externe et limites : https://auctionhouse.tk.gg/data/
-- Méthode de confirmation des maisons : https://wowfah.com/about
-
-## Client créé et vérifié — 22 novembre 2026
-
-Le portail développeur Battle.net affiche maintenant le client enregistré « Mana Mechanica », avec la page « Manage Client » et un secret masqué derrière « Show Secret ». La création est confirmée dans l'interface du compte propriétaire. L'adresse de service est https://mana-mechanica.com ; l'usage déclaré est le traitement côté serveur des annonces Forever avec isolation région/ruleset/faction, sans connexion aux comptes des joueurs ni données personnelles de personnages.
-
-L'identifiant complet et le secret ne sont pas publiés dans ce protocole. Le secret n'a pas été révélé ni copié pendant cette vérification. La configuration des identifiants côté serveur et le premier test OAuth authentifié restent à effectuer. Aucune collecte Blizzard, substitution de source, modification du workflow horaire ou import de prix n'a été réalisé à cette étape. Les validations de marchés et de conservation décrites ci-dessus restent nécessaires.
+- Mapping externe : https://auctionhouse.tk.gg/data/
+- Méthode de confirmation en jeu : https://wowfah.com/about
