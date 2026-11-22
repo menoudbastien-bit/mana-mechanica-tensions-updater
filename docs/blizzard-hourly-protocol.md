@@ -54,3 +54,8 @@ Le workflow GitHub du commit 934fd354379cf4b4bb39c6a40b3c75fcf3301dc1 a réussi 
 L’ancienne tâche horaire Google Sheets AHledger est suspendue ; le classeur et les anciennes tables restent des archives séparées. Le bulletin hebdomadaire privé conserve sa cadence et ses conditions de publication, avec consignes adaptées à Blizzard. Les articles concernés ont été adaptés en FR/EN/ES, sans publier de brouillons privés : 21 variantes publiées relues, plus neuf variantes restant privées/absentes du CMS. La révision de suivi de Merchant Favors a été relue dans les trois langues, sans ancien paragraphe contradictoire ni note dupliquée.
 
 Le relevé de validation détaillé est dans [blizzard-migration-validation-20261122.json](blizzard-migration-validation-20261122.json). Il contient uniquement des métadonnées de contrôle, pas les prix ou annonces brutes, ni des identifiants secrets.
+
+
+## Visibilité des archives · 22 novembre 2026
+
+Le changement de collecteur ne retire pas l'accès aux données AHledger déjà archivées. Les Rythmes, l'historique par objet de l'Observatoire et Sombrelune présentent à nouveau les séries conservées, avec source/date/type, courbes séparées et export complet. Les anciens épisodes de tension restent consultables sous la vue Blizzard. Les calculs et confirmations ne franchissent jamais une frontière de fournisseur. Aucun writer, secret, délai ni droit n'est modifié par ce correctif. Vérification exhaustive : 444 fichiers historiques inchangés, dont 70890 points EU pour402 objets. Voir [le protocole de conservation et de vérification](history-preservation-20261122.md).
