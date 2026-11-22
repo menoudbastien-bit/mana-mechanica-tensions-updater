@@ -64,3 +64,8 @@ Le changement de collecteur ne retire pas l'accès aux données AHledger déjà 
 ## Lecture commune des articles · 22 novembre 2026
 
 Les lecteurs publics utilisent désormais source=combined et ne proposent plus de sélecteur AHledger/Blizzard. Les anciennes URL n’isolent plus une source dans l’interface. Les historiques et exports conservent les deux provenances ; variations, tensions et paires achat–revente restent calculées avec un fournisseur unique. Les stocks ne sont pas additionnés et les prix simultanés ne sont pas moyennés. Voir docs/combined-market-reading-20261122.md. La collecte horaire, les secrets, la vérification opérationnelle par fournisseur et les archives ne changent pas.
+
+
+## Article public sur les paliers · 22 novembre 2026
+
+`forever-market-progression` utilise les 406 références déjà présentes dans le panier de 446 ID. Son lecteur public relit les collectes horaires Blizzard et préserve le classeur et les 32 archives de marchés. Les comparaisons ne traversent pas la rupture de fournisseur ; les recensements de niveaux restent distincts des prix de l’AH. Aucun nouveau writer, secret ou calendrier. Voir [le protocole de cet article](progression-market-publication-20261122.md).
