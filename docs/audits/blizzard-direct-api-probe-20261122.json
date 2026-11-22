@@ -149,7 +149,20 @@
   "nextGates": [
     "Validate the candidate house mapping with independent in-game listing identifiers.",
     "Resolve applicable retention and publication rules.",
-    "Honor the observed Cache-Control max-age=86400 before another fetch of these snapshots.",
+    "Respect HTTP cache semantics, permitted conditional revalidation, provider limits and Retry-After; cache lifetime is not a snapshot generation interval.",
     "Check hourly source refresh feasibility separately from the hourly execution cadence."
-  ]
+  ],
+  "interpretationCorrection": {
+    "reviewedOn": "2026-11-22",
+    "supersededNextGate": "Honor the observed Cache-Control max-age=86400 before another fetch of these snapshots.",
+    "meaning": "max-age=86400 controls cached-response freshness; it proves neither daily snapshot generation nor an absolute 24-hour prohibition on revalidation.",
+    "reportedCadence": "Approximately hourly Forever snapshots, reported by Auction House TK and the GoldScout author; not independently measured by this single diagnostic or guaranteed officially.",
+    "sources": [
+      "https://auctionhouse.tk.gg/data/",
+      "https://us.forums.blizzard.com/en/wow/t/i-made-a-free-addon-that-tells-you-what-your-character-should-farm-for-gold/2409046",
+      "https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.1"
+    ],
+    "originalRequestsAndObservationsPreserved": true,
+    "additionalBlizzardRequestsMade": false
+  }
 }
