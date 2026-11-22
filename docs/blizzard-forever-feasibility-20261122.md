@@ -14,7 +14,7 @@ a répondu HTTP 404, corps vide. Cette réponse ne prouve ni l'absence de l'API,
 
 Déclarer l'application Mana Mechanica sur https://develop.battle.net/access/clients, avec son URL réelle et son usage. Le flux OAuth client_credentials échange identifiant et secret contre un jeton d'application. Les secrets doivent rester côté serveur, hors dépôt, JavaScript public, logs et conversation.
 
-Les noms de secrets proposés sont BLIZZARD_CLIENT_ID et BLIZZARD_CLIENT_SECRET. Leur absence est le prérequis actuel au test authentifié, pas une panne du collecteur AHledger.
+Les noms de secrets proposés sont BLIZZARD_CLIENT_ID et BLIZZARD_CLIENT_SECRET. Leur configuration est nécessaire au test authentifié. Leur absence ne constitue pas une panne du collecteur AHledger.
 
 ## Routes candidates et identité des marchés
 
