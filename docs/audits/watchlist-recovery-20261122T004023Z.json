@@ -1,0 +1,944 @@
+{
+  "scope": "446 current watchlist IDs across 32 AHledger Forever markets; markets never substituted",
+  "interpretation": {
+    "historyVerifiedPairs": "Successful per-item API history checks, including valid empty series; not a count of fresh prices.",
+    "archivedChanges": "Archive insertions/versions and last-received metadata changes reported by maintenance pages; not distinct source scans.",
+    "freshness": "PricedRecent uses exact per-item source timestamps and a six-hour threshold at each market calculation. Hourly aggregate recovery remains separate.",
+    "sourcePreservation": "Earlier raw spreadsheet observations and closed weekly editions remain unchanged. Recovered history has distinct source and retrieval dates.",
+    "deployment": "Mana Mechanica public version 138",
+    "githubSuccessRun": "https://github.com/menoudbastien-bit/mana-mechanica-tensions-updater/actions/runs/44958579259",
+    "licence": "AHledger announces revised retention terms effective 2026-12-10. No subscription purchased; appropriate archival agreement remains to be arranged."
+  },
+  "startedAt": "2026-11-22T00:35:07.311Z",
+  "firstPassStartedAt": "2026-11-21T22:47:33.092Z",
+  "basketItems": 446,
+  "expectedMarkets": 32,
+  "retries": [
+    {
+      "market": "forever.normal.alliance.cn",
+      "offset": 280,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 336,
+      "providerAccessBlocked": false
+    },
+    {
+      "market": "forever.normal.horde.kr",
+      "offset": 80,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 0,
+      "providerAccessBlocked": false
+    },
+    {
+      "market": "forever.pvp.alliance.eu",
+      "offset": 0,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 56,
+      "providerAccessBlocked": false
+    },
+    {
+      "market": "forever.rp.horde.us",
+      "offset": 80,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 91,
+      "providerAccessBlocked": false
+    },
+    {
+      "market": "forever.rp.horde.us",
+      "offset": 120,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 414,
+      "providerAccessBlocked": false
+    },
+    {
+      "market": "forever.rppvp.horde.eu",
+      "offset": 240,
+      "checked": 40,
+      "historyFailures": 0,
+      "sourceFailures": 0,
+      "archivedChanges": 600,
+      "providerAccessBlocked": false
+    }
+  ],
+  "markets": [
+    {
+      "market": "forever.normal.alliance.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306484150,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 32,
+      "historyNewerThanScan": 434,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795226680000,
+        1795226680000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795301318172,
+      "lastHistoryCheck": 1795306521469
+    },
+    {
+      "market": "forever.normal.alliance.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307711472,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 5,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 336,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794601995000,
+        1795187598000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795301539148,
+      "lastHistoryCheck": 1795307722191
+    },
+    {
+      "market": "forever.normal.alliance.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306600295,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 157,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 27,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794695627000,
+        1794700123000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795301776761,
+      "lastHistoryCheck": 1795306641368
+    },
+    {
+      "market": "forever.normal.alliance.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306706621,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795098787000,
+        1795234324000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795301919849,
+      "lastHistoryCheck": 1795306743249
+    },
+    {
+      "market": "forever.normal.horde.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306768383,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 8,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794243560000,
+        1795198606000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795302164245,
+      "lastHistoryCheck": 1795306801772
+    },
+    {
+      "market": "forever.normal.horde.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306824341,
+      "items": 446,
+      "pricedRecent": 438,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "insufficient_history": 438,
+        "stale_or_missing": 8
+      },
+      "observations": [
+        1794953154000,
+        1795288009000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795302324836,
+      "lastHistoryCheck": 1795306862581
+    },
+    {
+      "market": "forever.normal.horde.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307747738,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795302584384,
+      "lastHistoryCheck": 1795307782356
+    },
+    {
+      "market": "forever.normal.horde.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306942564,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794987973000,
+        1795277780000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795302833278,
+      "lastHistoryCheck": 1795306978450
+    },
+    {
+      "market": "forever.pvp.alliance.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307054542,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795190452000,
+        1795194028000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795303078312,
+      "lastHistoryCheck": 1795307087273
+    },
+    {
+      "market": "forever.pvp.alliance.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307808403,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 56,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795222617000,
+        1795275328000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795303338820,
+      "lastHistoryCheck": 1795307822375
+    },
+    {
+      "market": "forever.pvp.alliance.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795308003367,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 14,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 45,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794646588000,
+        1794991331000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795303533343,
+      "lastHistoryCheck": 1795308014379
+    },
+    {
+      "market": "forever.pvp.alliance.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307332676,
+      "items": 446,
+      "pricedRecent": 439,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 504,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "insufficient_history": 439,
+        "stale_or_missing": 7
+      },
+      "observations": [
+        1795203514000,
+        1795305844000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795303677630,
+      "lastHistoryCheck": 1795307368768
+    },
+    {
+      "market": "forever.pvp.horde.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307392389,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795096529000,
+        1795239076000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795303875629,
+      "lastHistoryCheck": 1795307425225
+    },
+    {
+      "market": "forever.pvp.horde.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307447987,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1795188511000,
+        1795228907000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304035225,
+      "lastHistoryCheck": 1795307484058
+    },
+    {
+      "market": "forever.pvp.horde.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307507225,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304261459,
+      "lastHistoryCheck": 1795307538877
+    },
+    {
+      "market": "forever.pvp.horde.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307560689,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 4,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 381,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794862225000,
+        1795278206000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304411995,
+      "lastHistoryCheck": 1795307597114
+    },
+    {
+      "market": "forever.rp.alliance.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307619747,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304629258,
+      "lastHistoryCheck": 1795307651604
+    },
+    {
+      "market": "forever.rp.alliance.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307673464,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 11,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794787331000,
+        1795220465000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304772338,
+      "lastHistoryCheck": 1795307706575
+    },
+    {
+      "market": "forever.rp.alliance.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307728437,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795304929613,
+      "lastHistoryCheck": 1795307764369
+    },
+    {
+      "market": "forever.rp.alliance.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307798269,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 6,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794757496000,
+        1795185062000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795305075623,
+      "lastHistoryCheck": 1795307831002
+    },
+    {
+      "market": "forever.rp.horde.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307852895,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795305247999,
+      "lastHistoryCheck": 1795307884662
+    },
+    {
+      "market": "forever.rp.horde.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307906942,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 28,
+      "sourceFailures": 0,
+      "historyChecked": 16,
+      "historyFailures": 0,
+      "historyInserted": 22,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794601004000,
+        1795218401000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795305393433,
+      "lastHistoryCheck": 1795307939647
+    },
+    {
+      "market": "forever.rp.horde.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795305663199,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795305545817,
+      "lastHistoryCheck": 1795305665287
+    },
+    {
+      "market": "forever.rp.horde.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307863083,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 17,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 414,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794248210000,
+        1795181561000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795305691766,
+      "lastHistoryCheck": 1795307873569
+    },
+    {
+      "market": "forever.rppvp.alliance.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306197450,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795306072868,
+      "lastHistoryCheck": 1795306198885
+    },
+    {
+      "market": "forever.rppvp.alliance.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306397811,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 9,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 394,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794052222000,
+        1795236314000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795306224748,
+      "lastHistoryCheck": 1795306400800
+    },
+    {
+      "market": "forever.rppvp.alliance.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306544733,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795306425952,
+      "lastHistoryCheck": 1795306546850
+    },
+    {
+      "market": "forever.rppvp.alliance.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795306918617,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 6,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 682,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794879332000,
+        1795236710000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795306573126,
+      "lastHistoryCheck": 1795306921992
+    },
+    {
+      "market": "forever.rppvp.horde.cn",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307064964,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795306947207,
+      "lastHistoryCheck": 1795307066359
+    },
+    {
+      "market": "forever.rppvp.horde.eu",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307897599,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 14,
+      "sourceFailures": 0,
+      "historyChecked": 40,
+      "historyFailures": 0,
+      "historyInserted": 600,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794433196000,
+        1795202345000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795307094692,
+      "lastHistoryCheck": 1795307909546
+    },
+    {
+      "market": "forever.rppvp.horde.kr",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307523300,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 446,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 0,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795307404328,
+      "lastHistoryCheck": 1795307524964
+    },
+    {
+      "market": "forever.rppvp.horde.us",
+      "verifiedReadback": true,
+      "calculatedAt": 1795307685484,
+      "items": 446,
+      "pricedRecent": 0,
+      "providerAccessBlocked": false,
+      "usable": 0,
+      "missingObservations": 7,
+      "sourceFailures": 0,
+      "historyChecked": 6,
+      "historyFailures": 0,
+      "historyInserted": 308,
+      "historyNewerThanScan": 0,
+      "unavailable": {
+        "stale_or_missing": 446
+      },
+      "observations": [
+        1794257248000,
+        1795214767000
+      ],
+      "top": 0,
+      "historyVerifiedIds": 446,
+      "historyMissingIds": [],
+      "firstHistoryCheck": 1795307550472,
+      "lastHistoryCheck": 1795307687954
+    }
+  ],
+  "complete": true,
+  "completedAt": "2026-11-22T00:40:23.124Z",
+  "historyVerifiedPairs": 14272,
+  "historyComplete": true,
+  "currentSourceFailures": 0,
+  "currentHistoryFailures": 0,
+  "archivedChanges": 700740,
+  "postAuditRepair": {
+    "market": "forever.pvp.alliance.kr",
+    "verifiedReadback": true,
+    "calculatedAt": 1795308003367,
+    "items": 446,
+    "pricedRecent": 0,
+    "providerAccessBlocked": false,
+    "usable": 0,
+    "missingObservations": 14,
+    "sourceFailures": 0,
+    "historyChecked": 40,
+    "historyFailures": 0,
+    "historyInserted": 45,
+    "historyNewerThanScan": 0,
+    "unavailable": {
+      "stale_or_missing": 446
+    },
+    "observations": [
+      1794646588000,
+      1794991331000
+    ],
+    "top": 0,
+    "posts": 1,
+    "unchanged": false,
+    "recovered": false,
+    "recordedAt": "2026-11-22T00:40:16.389Z"
+  }
+}
