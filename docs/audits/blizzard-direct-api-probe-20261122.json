@@ -1,0 +1,155 @@
+{
+  "auditVersion": 1,
+  "executedAt": "2026-11-22T16:18:00.362Z",
+  "completedAt": "2026-11-22T16:18:27.778Z",
+  "type": "one_off_read_only_diagnostic",
+  "provider": "Blizzard Battle.net API",
+  "namespace": "dynamic-forever-eu",
+  "region": "eu",
+  "basketItems": 446,
+  "basketVersion": "AHL446-v6",
+  "candidateHouseId": 111,
+  "ruleset": {
+    "id": 2,
+    "name": "Normal"
+  },
+  "mappingStatus": "candidate_unverified",
+  "admittedToObservatory": false,
+  "authentication": {
+    "status": 200
+  },
+  "requests": [
+    {
+      "url": "https://eu.api.blizzard.com/data/wow/ruleset/index?namespace=dynamic-forever-eu&locale=en_GB",
+      "status": 200,
+      "retrievedAt": "2026-11-22T16:18:24.538Z",
+      "headers": {
+        "cache-control": "public, max-age=30",
+        "last-modified": "Sun, 22 Nov 2026 16:18:12 GMT",
+        "etag": null,
+        "battlenet-namespace": "dynamic-forever-eu",
+        "battlenet-schema": "ruleset",
+        "retry-after": null
+      },
+      "keys": [
+        "_links",
+        "rulesets"
+      ],
+      "sourceTimeValid": true
+    },
+    {
+      "url": "https://eu.api.blizzard.com/data/wow/ruleset/2?namespace=dynamic-forever-eu&locale=en_GB",
+      "status": 200,
+      "retrievedAt": "2026-11-22T16:18:24.708Z",
+      "headers": {
+        "cache-control": "public, max-age=30",
+        "last-modified": "Sun, 22 Nov 2026 16:18:12 GMT",
+        "etag": null,
+        "battlenet-namespace": "dynamic-forever-eu",
+        "battlenet-schema": "ruleset",
+        "retry-after": null
+      },
+      "keys": [
+        "_links",
+        "id",
+        "name",
+        "auctions",
+        "status"
+      ],
+      "sourceTimeValid": true
+    },
+    {
+      "url": "https://eu.api.blizzard.com/data/wow/ruleset/2/auctions/?namespace=dynamic-forever-eu&locale=en_GB",
+      "status": 200,
+      "retrievedAt": "2026-11-22T16:18:24.930Z",
+      "headers": {
+        "cache-control": "public, max-age=86400",
+        "last-modified": "Sun, 22 Nov 2026 15:22:42 GMT",
+        "etag": null,
+        "battlenet-namespace": "dynamic-forever-eu",
+        "battlenet-schema": "auctions",
+        "retry-after": null
+      },
+      "keys": [
+        "_links",
+        "auctions"
+      ],
+      "sourceTimeValid": true
+    },
+    {
+      "url": "https://eu.api.blizzard.com/data/wow/ruleset/2/auctions/111?namespace=dynamic-forever-eu&locale=en_GB",
+      "status": 200,
+      "retrievedAt": "2026-11-22T16:18:25.141Z",
+      "headers": {
+        "cache-control": "public, max-age=86400",
+        "last-modified": "Sun, 22 Nov 2026 15:23:32 GMT",
+        "etag": null,
+        "battlenet-namespace": "dynamic-forever-eu",
+        "battlenet-schema": "auctions",
+        "retry-after": null
+      },
+      "keys": [
+        "_links",
+        "auctions",
+        "id",
+        "name",
+        "commodities",
+        "ruleset"
+      ],
+      "sourceTimeValid": true
+    },
+    {
+      "url": "https://eu.api.blizzard.com/data/wow/ruleset/2/auctions/111/commodities?namespace=dynamic-forever-eu&locale=en_GB",
+      "status": 200,
+      "retrievedAt": "2026-11-22T16:18:26.920Z",
+      "headers": {
+        "cache-control": "public, max-age=86400",
+        "last-modified": "Sun, 22 Nov 2026 15:23:32 GMT",
+        "etag": null,
+        "battlenet-namespace": "dynamic-forever-eu",
+        "battlenet-schema": "auctions",
+        "retry-after": null
+      },
+      "keys": [
+        "_links",
+        "auctions"
+      ],
+      "sourceTimeValid": true
+    }
+  ],
+  "observations": {
+    "allFiveRequestsHTTP200": true,
+    "bothFeedsReturnedArrays": true,
+    "sameSourceTime": true,
+    "sourceTimestampUTC": "2026-11-22T15:23:32Z",
+    "individualPriceCoverage": null,
+    "coverageLimitation": "Detailed diagnostic stdout was truncated; per-item coverage counts are not retained or asserted. Do not re-fetch a fresh cached response just to reproduce these counts."
+  },
+  "deployment": {
+    "versionNumber": 138,
+    "environmentRevision": 6,
+    "status": "succeeded",
+    "credentialsStoredAsMaskedServerSecrets": true
+  },
+  "verification": {
+    "metricsTestsPassed": 10,
+    "metricsTestsFailed": 0,
+    "productionDataWritten": false,
+    "productionSourceChanged": false,
+    "hourlyScheduleChanged": false,
+    "articlesReviewed": [
+      "public/observatory-article.js",
+      "public/method.js",
+      "public/observatory.js",
+      "public/tensions.js"
+    ],
+    "credentialInputSanitizationPassed": true,
+    "wrapperSyntaxPassed": true
+  },
+  "nextGates": [
+    "Validate the candidate house mapping with independent in-game listing identifiers.",
+    "Resolve applicable retention and publication rules.",
+    "Honor the observed Cache-Control max-age=86400 before another fetch of these snapshots.",
+    "Check hourly source refresh feasibility separately from the hourly execution cadence."
+  ]
+}
