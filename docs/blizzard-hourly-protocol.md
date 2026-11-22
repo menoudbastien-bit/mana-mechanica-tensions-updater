@@ -30,7 +30,7 @@ Minimum, médiane pondérée par les unités et moyenne pondérée sont calculé
 
 Le writer /api/blizzard/ingest reçoit exactement un enregistrement par ID du panier, avec valeurs manquantes explicites. Il valide tout le lot avant écriture, conserve empreintes, métadonnées de flux, état de collecte et versions. Les nouvelles tables blizzard_* sont isolées des anciennes tension_* AHledger. Les lignes de prix, snapshots et journaux Blizzard expirent selon une fenêtre de 30 jours ; les anciennes archives AHledger ne sont ni supprimées ni transformées. Les erreurs techniques sont enregistrées sans écraser la dernière observation réussie.
 
-Les lecteurs publics utilisent /api/observatory et les archives locales. source=ahledger sélectionne explicitement l’historique AHledger en lecture seule. Les calculs de variation et graphiques ne traversent pas une rupture de fournisseur. Aucun relevé antérieur manqué n’est inventé. Les snapshots sont des annonces et quantités proposées, pas des ventes prouvées. Les estimations de ventes AHledger ne sont pas réutilisées comme ventes Blizzard.
+Les lecteurs publics utilisent /api/observatory et les archives locales. source=combined réunit automatiquement les archives AHledger et les snapshots Blizzard dans les articles, sans sélecteur public. Les routes explicites source=ahledger et source=blizzard restent disponibles pour les contrôles techniques. Les calculs de variation et graphiques ne traversent pas une rupture de fournisseur. Aucun relevé antérieur manqué n’est inventé. Les snapshots sont des annonces et quantités proposées, pas des ventes prouvées. Les estimations de ventes AHledger ne sont pas réutilisées comme ventes Blizzard.
 
 Le calcul spécialisé Sombrelune de profondeur de carnet TK reste une couche tierce distincte et créditée ; un minimum ou une médiane Blizzard ne remplace pas le coût réel d’achat de plusieurs unités. Les articles distinguent ce cas, les anciens historiques et les nouvelles observations.
 
@@ -59,3 +59,8 @@ Le relevé de validation détaillé est dans [blizzard-migration-validation-2026
 ## Visibilité des archives · 22 novembre 2026
 
 Le changement de collecteur ne retire pas l'accès aux données AHledger déjà archivées. Les Rythmes, l'historique par objet de l'Observatoire et Sombrelune présentent à nouveau les séries conservées, avec source/date/type, courbes séparées et export complet. Les anciens épisodes de tension restent consultables sous la vue Blizzard. Les calculs et confirmations ne franchissent jamais une frontière de fournisseur. Aucun writer, secret, délai ni droit n'est modifié par ce correctif. Vérification exhaustive : 444 fichiers historiques inchangés, dont 70890 points EU pour402 objets. Voir [le protocole de conservation et de vérification](history-preservation-20261122.md).
+
+
+## Lecture commune des articles · 22 novembre 2026
+
+Les lecteurs publics utilisent désormais source=combined et ne proposent plus de sélecteur AHledger/Blizzard. Les anciennes URL n’isolent plus une source dans l’interface. Les historiques et exports conservent les deux provenances ; variations, tensions et paires achat–revente restent calculées avec un fournisseur unique. Les stocks ne sont pas additionnés et les prix simultanés ne sont pas moyennés. Voir docs/combined-market-reading-20261122.md. La collecte horaire, les secrets, la vérification opérationnelle par fournisseur et les archives ne changent pas.
