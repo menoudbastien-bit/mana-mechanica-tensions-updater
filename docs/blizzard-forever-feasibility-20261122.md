@@ -56,6 +56,22 @@ Ces quantités sont des annonces disponibles, pas des ventes. Le calcul d’un p
 
 Aucune route d’historique rétrospectif Blizzard n’a été établie. Ne pas reconstituer des heures manquées avec un prix actuel. Aucun import dans RAW_AHledger, le classeur ou l’archive de production n’a été effectué par ce diagnostic ; la collecte horaire AHledger et les articles publiés restent en place.
 
+## Extension du pilote aux hôtels des ventes neutres
+
+Le 22 novembre 2026, l’utilisateur demande si les hôtels des ventes neutres peuvent également être importés. Ils sont ajoutés au périmètre de validation du pilote, séparément d’Alliance et Horde.
+
+L’index européen réellement reçu à 16:18 UTC contient cinq entrées nommées Blackwater Auction House : **116, 117, 118, 121 et 125**. Les notes de première main du développeur les décrivent comme les maisons gobelines neutres : https://mhuijskens.com/WoWForever/Api/ (section Auction houses). Leur présence dans l’index est confirmée ; **leurs annonces et prix n’ont pas été interrogés par notre diagnostic**.
+
+Avant import :
+- conserver région, namespace et ID de maison ; distinguer la règle demandée dans l’URL de la règle effectivement validée ;
+- conserver la catégorie Neutral / Blackwater sans rattacher les valeurs à Alliance ou Horde et sans inventer une clé de marché AHledger ;
+- confirmer les correspondances région/règle/maison ; cinq ID ne prouvent ni cinq lieux distincts ni cinq marchés indépendants ;
+- rechercher les doublons de flux exposés sous plusieurs règles avant toute comparaison ou agrégation ;
+- lire les annonces et commodities avec leurs dates source respectives, puis appliquer les mêmes contrôles de prix unitaires, quantités, cache et conservation ;
+- ne pas transformer une erreur, un champ absent ou une réponse incomplète en prix ou quantité nuls.
+
+Le panier courant peut être utilisé pour ce pilote, sans présumer que ses 446 objets auront un prix neutre disponible. Les archives et sélecteurs du site ne pourront intégrer Neutral qu’après ces validations. Cet élargissement documentaire n’active aucun nouveau cron et n’importe aucune donnée dans le classeur ou la production.
+
 ## Historique des vérifications
 
 À 09:54:32 UTC le 22 novembre, un GET non authentifié du ruleset index avait répondu HTTP 404 avec un corps vide. Cela ne prouvait ni l’absence de l’API, ni son fonctionnement authentifié. La création du client a ensuite été confirmée dans le portail propriétaire. À 16:12 UTC, OAuth et les index région/ruleset authentifiés ont répondu HTTP 200 ; le région index renvoie la région 93. Le test d’annonces de 16:18 UTC décrit ci-dessus établit maintenant l’accès technique.
