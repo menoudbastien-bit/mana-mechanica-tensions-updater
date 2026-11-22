@@ -17,7 +17,8 @@ async function getDocument(value){
  const url=approvedUrl(value),r=await fetch(url,{redirect:'error',headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(45000)});
  const meta={url:url.href,status:r.status,retrievedAt:new Date().toISOString(),headers:Object.fromEntries(['date','age','expires','cache-control','last-modified','etag','battlenet-namespace','battlenet-schema','retry-after'].map(k=>[k,r.headers.get(k)]))};
  const maxAge=meta.headers['cache-control']?.match(/(?:^|,)\s*max-age=(\d+)/i)?.[1],age=Number(meta.headers.age??0);
- if(maxAge!==undefined&&Number.isFinite(age))meta.doNotRefetchBefore=new Date(Date.parse(meta.retrievedAt)+Math.max(0,Number(maxAge)-age)*1000).toISOString();
+ // Informational cache-reuse estimate, never a minimum request interval.
+ if(maxAge!==undefined&&Number.isFinite(age))meta.cacheReuseUntilEstimate=new Date(Date.parse(meta.retrievedAt)+Math.max(0,Number(maxAge)-age)*1000).toISOString();
  report.requests.push(meta);
  if(!r.ok)throw Error('Blizzard response HTTP '+r.status);
  if(meta.headers['battlenet-namespace']!==NS)throw Error('Response namespace did not validate');
