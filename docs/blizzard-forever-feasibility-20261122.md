@@ -16,9 +16,24 @@ Le diagnostic a découvert le panier public courant : **446 ID, AHL446-v6**. Ent
 
 L’objet ruleset porte id=2 et le nom Normal. L’index contient plusieurs maisons nommées Alliance Auction House ; le nom et le chemin ne suffisent donc pas à attribuer définitivement la maison 111 au marché AHledger forever.normal.alliance.eu. Le diagnostic conserve **mappingStatus=candidate_unverified** et **admittedToObservatory=false**.
 
-Les deux flux d’annonces ont été reçus avec la même date source Last-Modified : **22 novembre 2026 à 15:23:32 UTC**. Leur date de récupération est distincte. Les en-têtes annoncent **Cache-Control: public, max-age=86400** pour les annonces et leur index, contre 30 secondes pour les rulesets. Ce constat doit être résolu avant de promettre des données réellement nouvelles chaque heure : une exécution horaire ne prouve pas une actualisation horaire de la source. Ne pas contourner le cache pour obtenir une apparence de fraîcheur.
+Les deux flux d’annonces ont été reçus avec la même date source Last-Modified : **22 novembre 2026 à 15:23:32 UTC**, puis récupérés vers 16:18:25 UTC. Ces 55 minutes d’ancienneté ne mesurent pas une périodicité. Les en-têtes annoncent **Cache-Control: public, max-age=86400** pour les annonces et leur index, contre 30 secondes pour les rulesets. **max-age décrit la durée de réutilisation d’une réponse en cache, pas la cadence de génération des snapshots ni une interdiction de revalidation avant 24 heures.** La consigne antérieure imposant une attente absolue de 24 heures était trop restrictive et est remplacée par les contrôles ci-dessous.
 
 La sortie détaillée du premier diagnostic a été tronquée ; les compteurs de couverture par objet ne sont donc pas conservés ni affirmés. Aucun nouvel appel du même snapshot n’a été lancé pour les reproduire pendant sa fraîcheur annoncée. Le script émet désormais un audit compact, avec des compteurs de couverture et sans annonces individuelles. Voir [l’audit du test](audits/blizzard-direct-api-probe-20261122.json).
+
+## Cadence des snapshots et interprétation du cache
+
+Les opérateurs d’Auction House TK et de GoldScout décrivent des snapshots Blizzard Forever **environ une fois par heure**. Auction House TK situe habituellement leur disponibilité vers :17 pour US et :18–:19 pour EU. Ce sont des observations d’exploitants, pas une garantie officielle Blizzard ni une mesure effectuée par Mana Mechanica sur toutes les maisons. Le diagnostic unique ne confirme aucune cadence pour KR, TW ou chaque maison neutre.
+
+Sources primaires consultées le 22 novembre :
+- https://auctionhouse.tk.gg/data/ — sections Where the data comes from et Using it fairly ;
+- https://us.forums.blizzard.com/en/wow/t/i-made-a-free-addon-that-tells-you-what-your-character-should-farm-for-gold/2409046 — présentation par l’auteur de GoldScout ;
+- https://www.rfc-editor.org/rfc/rfc9111.html#section-5.2.2.1 — signification HTTP de max-age.
+
+Le futur pilote peut viser un contrôle horaire avec revalidation conditionnelle contrôlée, dans les limites autorisées : If-None-Match lorsqu’un ETag est fourni, sinon If-Modified-Since avec Last-Modified. Réutiliser les réponses en cache par défaut, respecter Cache-Control et Retry-After et ne pas multiplier les variantes d’URL pour contourner le cache. Une revalidation peut encore recevoir une réponse intermédiaire inchangée ; elle ne garantit pas la dernière génération à l’origine.
+
+Un HTTP 304, ou un HTTP 200 avec le même snapshot, ne crée jamais une nouvelle observation indépendante. Pour mesurer la cadence, comparer des réponses successives de la même région/maison/type : date source, Date/Age, heure de récupération et empreinte de contenu. Conserver séparément heure du contrôle, heure de la source et heure d’intégration au site. Un contenu différent sous une même date source est une version corrigée, pas un scan distinct présumé.
+
+La collecte de production reste horaire via AHledger. Le diagnostic ponctuel Blizzard ne l’a pas remplacée et aucun nouveau planificateur n’est activé par cette précision. Les pages publiques continuent de distinguer cadence de collecte et fraîcheur effective ; aucune page n’annonce une cadence Blizzard mesurée par Mana Mechanica.
 
 ## Exécution et contrôles
 
@@ -33,7 +48,7 @@ node --check scripts/diagnostics/blizzard-market-probe.mjs
 
 Résultat : **10 tests de métriques réussis**, plus vérification du rejet d’une entrée d’identifiants malformée sans en réafficher le contenu ni appeler le réseau. Le diagnostic réseau réel a précédé les durcissements de validation et de sortie ; ceux-ci n’ont pas justifié de relire des réponses encore fraîches.
 
-Le script suit les liens reçus sur eu.api.blizzard.com uniquement, refuse les redirections, impose le namespace Forever EU, les schémas ruleset/auctions, les identités attendues et des dates source lisibles au plus cinq minutes dans le futur. Un refus HTTP ou une limitation arrête le diagnostic ; Retry-After est enregistré sans boucle automatique de reprise. Date, Age, Expires et échéance indicative de fraîcheur sont enregistrés pour les prochains diagnostics. L’exploitant doit consulter cette échéance avant une réexécution ; ce script ponctuel n’implémente pas un cache persistant de collecteur.
+Le script suit les liens reçus sur eu.api.blizzard.com uniquement, refuse les redirections, impose le namespace Forever EU, les schémas ruleset/auctions, les identités attendues et des dates source lisibles au plus cinq minutes dans le futur. Un refus HTTP ou une limitation arrête le diagnostic ; Retry-After est enregistré sans boucle automatique de reprise. Date, Age, Expires et échéance indicative de fraîcheur sont enregistrés pour les prochains diagnostics. Cette échéance est une estimation de réutilisation du cache, pas un délai minimal obligatoire entre requêtes ; ce script ponctuel n’implémente ni cache persistant ni planificateur de revalidation.
 
 Les métriques utilisent les quantités réellement fournies :
 - commodities : unit_price est déjà un prix unitaire ;
@@ -49,7 +64,7 @@ Ces quantités sont des annonces disponibles, pas des ventes. Le calcul d’un p
 ## Conditions avant intégration
 
 1. Confirmer la maison 111 avec des identifiants d’enchères indépendamment observés en jeu sur Europe Normal Alliance. Quelques prix proches ou le nom Alliance ne suffisent pas.
-2. Vérifier la fréquence réelle des snapshots et les règles de cache. Étendre ensuite la cartographie région/ruleset/faction séparément, sans déduire les 32 marchés AHledger de cette seule maison. EU, US, KR et TW restent distincts ; CN demande un accès régional spécifique.
+2. Mesurer la fréquence réelle des snapshots et les revalidations permises, en distinguant le rythme horaire rapporté par les exploitants de notre propre validation. Étendre ensuite la cartographie région/ruleset/faction séparément, sans déduire les 32 marchés AHledger de cette seule maison. EU, US, KR et TW restent distincts ; CN demande un accès régional spécifique.
 3. Clarifier conservation, publication, attribution et éventuelle monétisation avant une archive permanente. Les conditions API Blizzard contiennent une limite de 30 jours formulée pour les données ; aucune exception explicite vérifiée pour nos historiques anonymes ou agrégats n’est établie.
 4. Préparer un pilote distinct, avec cache, idempotence, contrôles de fraîcheur et limites mémoire adaptés au serveur. Le diagnostic Node qui lit les flux complets n’est pas un collecteur Cloudflare Worker prêt à déployer.
 5. Relire les pages FR/EN/ES concernées lors de tout changement effectif de source. La relecture de public/observatory-article.js, public/method.js, public/observatory.js et public/tensions.js confirme que leur présentation AHledger reste cohérente avec l’état actuel : aucune migration n’est annoncée.
