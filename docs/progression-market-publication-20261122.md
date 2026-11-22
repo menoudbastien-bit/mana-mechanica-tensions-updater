@@ -11,3 +11,10 @@ Les comparaisons originales utilisent des fenêtres de 72 h et les mêmes créne
 Les recensements originaux sont enrichis par /api/population/history, sans fusion de populations recouvrantes. Une distribution partielle reste partielle. Aucun recensement Blizzard n’est annoncé sans échantillon validé ; les prix de l’AH ne mesurent pas les niveaux. Les jours connus, dates source et dates de récupération sont distincts.
 
 Tests du dépôt Site : progression-market-live.mjs (empreintes, fusion, marchés, nulls et zéros, rupture de fournisseur, recensements), progression-market-research.mjs (méthode originale), progression-market-publication.mjs (D1, langues, sauvegardes, idempotence et brouillons), cms.mjs et codex-navigation.mjs. Le déploiement du lecteur n’altère ni le calendrier horaire ni les anciennes tables. Les passages ordinaires restent silencieux.
+
+
+## Correctif de visibilité des archives
+
+Une série Blizzard encore courte ne doit pas rendre invisible la comparaison importée. Le lecteur garde les variations courantes strictes et, lorsqu’elles sont absentes, présente un panneau historique séparé calculé seulement sur les fichiers repris de la refonte, à leur date propre. Pour EU Normal Alliance : référence 20 novembre 2026 14:16:44.980 UTC, 29 805 points pour 396 objets des paliers, 97 objets aux prix comparables et 73 aux débits estimés comparables. Les 6 objets hors paliers restent dans le catalogue. Les autres marchés et dates utilisent leurs propres archives, sans substitution.
+
+La fiche d’objet et sa courbe sont directement visibles, avec choix parmi les 406 références, dernier prix, stock, heure source, fournisseur et export. Le dernier relevé reste séparé de la comparaison historique ; aucune variation ou projection ne traverse les fournisseurs. Les trois langues décrivent cette distinction. Tests progression-market-live.mjs : cas de bascule Blizzard, résultats historiques préservés, absence de données futures ou de réattribution. Aucune modification du workflow, de la fréquence, des droits ou des notifications.
