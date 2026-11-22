@@ -21,3 +21,8 @@ La fiche d’objet et sa courbe sont directement visibles, avec choix parmi les 
 
 
 Les ressources locales du catalogue et du classeur sont des copies intégrales des originaux. La comparaison importée se charge indépendamment des lectures plus lentes de l’historique courant et des sources complémentaires. Un statut indique l’attente des observations récentes ; une erreur ultérieure ne retire pas les archives déjà affichées. Les réponses tardives d’un ancien marché ou filtre sont ignorées. Cette amélioration d’affichage n’ajoute aucune collecte ni notification.
+
+
+## Éventails et historique agrégé · demande du 22 novembre 2026
+
+L’article réutilise l’historique AHledger et les observations Blizzard pour un scénario de continuité autour de la médiane quotidienne récente. Une journée d’entraînement utilise un seul fournisseur et deux dates source distinctes au minimum. Chaque erreur rétrospective, son ajustement et sa cible restent dans un même fournisseur ; le changement de source n’est jamais traité comme un rendement. Six validations sont requises pour l’horizon et pour chaque étape. En début de série courante, le centre reste constant, avec les écarts historiques. Le modèle préfère la calibration propre de la source courante dès qu’elle suffit. Les légendes, tableaux et notes FR/EN/ES montrent les deux provenances, le point de départ et la période de calibration. Les archives brutes et les graphiques conservent leurs dates ; aucune collecte, fréquence, notification ou rétention n’est changée. Le scénario agrégé n’est pas une prévision Blizzard validée seule et ne suffit pas à qualifier un signal haussier étayé. Voir [le protocole des éventails agrégés](progression-market-combined-fans-20261122.md).
