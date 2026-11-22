@@ -66,3 +66,7 @@ Application OAuth and five EU candidate diagnostic routes returned HTTP 200 for 
 ### Candidate scope: neutral auction houses
 
 Neutral / Blackwater houses are included in Blizzard pilot validation separately from Alliance and Horde. The observed EU index lists house IDs 116, 117, 118, 121 and 125; their prices have not been tested. Validate region/ruleset/house mappings and duplicate feeds before import; five IDs do not establish five independent markets. Do not invent an AHledger market key. Production data and the hourly workflow remain unchanged. See the [Blizzard protocol](blizzard-forever-feasibility-20261122.md#extension-du-pilote-aux-hôtels-des-ventes-neutres).
+
+### Blizzard source cadence and cache clarification · 22 November 2026
+
+[Auction House TK](https://auctionhouse.tk.gg/data/) and the [GoldScout author](https://us.forums.blizzard.com/en/wow/t/i-made-a-free-addon-that-tells-you-what-your-character-should-farm-for-gold/2409046) report approximately hourly Forever snapshots. Our single diagnostic does not measure that cadence or establish an official guarantee. max-age=86400 concerns cached response reuse, not daily snapshot generation or an absolute 24-hour ban on revalidation. The pilot should use controlled conditional revalidation with cache, limits and Retry-After respected; 304 and unchanged 200 responses do not create independent scans. Production hourly AHledger collection remains unchanged. See the [corrected Blizzard protocol](blizzard-forever-feasibility-20261122.md#cadence-des-snapshots-et-interprétation-du-cache).
