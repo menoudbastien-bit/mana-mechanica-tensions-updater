@@ -49,3 +49,11 @@ Voir [le contrôle des anciens échecs](automation-cleanup-20261122.md) et [la c
 
 L'exclusion de sources tierces de la synthèse actuelle ne doit pas cacher leurs données historiques. Les sept onglets Population FR/EN/ES gardent un explorateur région/mode/source/jour ; il présente les enregistrements initiaux, embarqués, serveur et les rapports synthétiques. L'export conserve `{baseline,history}` complet, sans réduction aux derniers enregistrements.120 observations serveur étaient présentes au diagnostic ;48 consultations réutilisent le même scan WoWStats, elles ne deviennent pas des échantillons indépendants. Les rapports sans distributions restent des résumés : aucun histogramme n'est reconstruit. Garder séparées date source, consultation et collecte. Voir [le protocole de conservation](history-preservation-20261122.md).
 
+
+## Retrait de Forever Census · 23 novembre 2026
+
+Forever Census (Arqen, forevercensus.com) est retiré du catalogue du recensement et ne doit alimenter aucune collecte ni aucun calcul. Il ne faut pas le confondre avec la page de recensement WoW Forever de Classic Armory, qui reste conservée. La fiche initiale examinée peut rester dans la preuve documentaire immuable ; elle ne contenait aucun relevé numérique intégré. Aucun ancien relevé n’est supprimé ou réattribué.
+
+Les sources retenues restent Classic Armory (distributions et archives), WoWStats (métiers complémentaires et archives) et aotc (archives et références d’activité documentées, sans nouvelle collecte automatique). Les accès directs Blizzard ont été vérifiés le 23 novembre sur les modes, deux profils et une liste de membres de guilde ; cela ne valide pas encore un recensement agrégé. Aucun total direct Blizzard ni relevé des addons discutés n’est intégré à ce stade. Les articles Population, progression et bulletin précisent ces rôles en FR/EN/ES, sans rajeunir les données anciennes ni modifier les éditions closes.
+
+Aucun nouveau calendrier, workflow, secret ou accès n’est ajouté pour ce retrait.
