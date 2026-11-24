@@ -29,7 +29,7 @@ test('an item present in both source feeds is withheld rather than double counte
  const feeds=['auction','commodity'].map(kind=>({meta:{kind,at},metrics:{basket:[row]}}));
  const item=composeItems([7],feeds)[0];assert.equal(item.quantity,null);assert.deepEqual(item.warnings,['cross_feed_overlap']);
 });
-function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[]}={}){
+function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[],auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100}]}={}){
  let saved=null,external=0,failures=0,accessCalls=0;const requests=[];
  const fetchFn=async(url,options={})=>{
   requests.push([String(url),options]);const u=new URL(url);
@@ -42,7 +42,7 @@ function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionS
   }
   external++;if(status!==200)return reply(null,status);
   const kind=u.pathname.endsWith('/commodities')?'commodity':'auction';
-  return reply(document(kind,kind==='auction'?[{id:1,item:{id:7},quantity:1,buyout:100}]:[{id:2,item:{id:8},quantity:3,unit_price:201}]),200,{'battlenet-namespace':scope,'battlenet-schema':'auctions','last-modified':new Date(at).toUTCString(),'cache-control':'public, max-age=86400'});
+  return reply(document(kind,kind==='auction'?auctionRows:[{id:2,item:{id:8},quantity:3,unit_price:201}]),200,{'battlenet-namespace':scope,'battlenet-schema':'auctions','last-modified':new Date(at).toUTCString(),'cache-control':'public, max-age=86400'});
  };
  return {fetchFn,requests,get saved(){return saved;},get external(){return external;},get failures(){return failures;},get accessCalls(){return accessCalls;}};
 }
@@ -79,6 +79,17 @@ test('a changed basket invalidates conditional cache validators and recomputes a
  for(const [,options] of f.requests.filter(([url])=>url.includes('api.blizzard.com'))){assert.equal(options.headers['If-Modified-Since'],undefined);assert.equal(options.headers['If-None-Match'],undefined);}
 });
 
+test('conflicting listing identities identify the failed feed and prevent partial price writes',async()=>{
+ const auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100},{id:1,item:{id:7},quantity:1,buyout:200}];
+ const fixture=transport({auctionRows});
+ const {summary,results}=await runBlizzardCollection(opts(fixture));
+ assert.equal(summary.complete,false);
+ assert.equal(results[0].code,'conflicting_listing_identity');
+ assert.equal(results[0].feed,'auction');
+ assert.equal(fixture.saved,null);
+ assert.equal(fixture.failures,1);
+});
+
 const {nearDeadline}=await import('../scripts/blizzard/collector.mjs');
 {
  const now=Date.now(),h=3600000,m=60000,rows=[{id:'early'},{id:'near'},{id:'later'},{id:'blocked'}];
@@ -86,3 +97,67 @@ const {nearDeadline}=await import('../scripts/blizzard/collector.mjs');
  assert.equal(nearDeadline(rows,status,now),now+9*m);
  assert.equal(nearDeadline([rows[0],rows[3]],status,now),null);
 }
+
+const {collectWithRetries} = await import('../scripts/blizzard/retry-watchlist.mjs');
+const usAlliance = 'forever.pvp.alliance.us', usHorde = 'forever.pvp.horde.us';
+const euAlliance = 'forever.normal.alliance.eu';
+async function simulateRetries(passes, options = {}) {
+  const delays = [], scopes = [], events = [];
+  let clock = now;
+  const outcome = await collectWithRetries({...options, log: event => events.push(event)}, {
+    now: () => clock,
+    sleep: async ms => { delays.push(ms); clock += ms; },
+    collect: async ({retryMarkets, force}) => {
+      const pass = passes[scopes.length];
+      scopes.push({markets: retryMarkets ? [...retryMarkets].sort() : null, force});
+      if (pass instanceof Error) throw pass;
+      const {failed = [], passed = [], retryAt, nextCheckAt = null} = pass;
+      return {summary: {complete: failed.length === 0}, nextCheckAt, pendingMarkets: failed,
+        results: [...passed.map(market => ({market, verifiedReadback: true})),
+          ...failed.map(market => ({market, verifiedReadback: false, retryAt}))]};
+    }
+  });
+  return {outcome, scopes, delays, events};
+}
+test('a recovered house is retried after exactly 15 minutes and successful houses are left alone', async () => {
+  const {outcome, delays, scopes} = await simulateRetries([
+    {failed: [usAlliance], passed: [euAlliance], nextCheckAt: now + 60_000}, {passed: [usAlliance]}
+  ]);
+  assert.deepEqual(delays, [900_000]);
+  assert.deepEqual(scopes, [{markets: null, force: false}, {markets: [usAlliance], force: true}]);
+  assert.deepEqual(outcome, {alert: false, summary: {complete: true}, nextCheckAt: now + 60_000});
+});
+test('two factions of one server still finish quietly after two targeted retries', async () => {
+  const {outcome, delays} = await simulateRetries(Array(3).fill({failed: [usAlliance, usHorde]}));
+  assert.deepEqual(delays, [900_000, 900_000]);
+  assert.equal(outcome.alert, false);
+  assert.equal(outcome.summary.complete, false);
+});
+test('two distinct servers failing three times escalate only after the last retry', async () => {
+  const {outcome, delays, events} = await simulateRetries(Array(3).fill({failed: [usAlliance, euAlliance]}));
+  assert.deepEqual(delays, [900_000, 900_000]);
+  assert.equal(outcome.alert, true);
+  assert.equal(events.filter(event => event.alert).length, 1);
+});
+test('if one server recovers on the third pass the incident stays below the alert threshold', async () => {
+  const failBoth = {failed: [usAlliance, euAlliance]};
+  const {outcome} = await simulateRetries([failBoth, failBoth, {failed: [usAlliance], passed: [euAlliance]}]);
+  assert.equal(outcome.alert, false);
+});
+test('a global preflight failure must persist through three attempts and cover more than one server', async () => {
+  const down = Array(3).fill(new Error('global access unavailable'));
+  assert.equal((await simulateRetries(down)).outcome.alert, true);
+  assert.equal((await simulateRetries(down, {only: usAlliance})).outcome.alert, false);
+  assert.equal((await simulateRetries([down[0], {passed: [euAlliance]}])).outcome.alert, false);
+});
+test('a provider deadline beyond the next retry is respected and the incident remains visible', async () => {
+  const {outcome, delays} = await simulateRetries([{failed: [usAlliance], retryAt: now + 3600_000}]);
+  assert.equal(outcome.summary.complete, false);
+  assert.equal(outcome.alert, false);
+  assert.deepEqual(delays, []);
+});
+test('healthy collections keep the near-deadline follow-up and do not start a retry timer', async () => {
+  const {outcome, delays} = await simulateRetries([{passed: [euAlliance], nextCheckAt: now + 60_000}]);
+  assert.equal(outcome.nextCheckAt, now + 60_000);
+  assert.deepEqual(delays, []);
+});
