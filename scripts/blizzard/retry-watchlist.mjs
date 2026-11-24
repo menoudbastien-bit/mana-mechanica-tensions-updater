@@ -1,47 +1,65 @@
 import {setTimeout as wait} from 'node:timers/promises';
-import {CollectionError,runBlizzardCollection} from './collector.mjs';
+import {CollectionError, runBlizzardCollection} from './collector.mjs';
 import {marketById} from '../../lib/blizzard/markets.mjs';
 
-const RETRY_DELAY=15*60_000;
-const serverFor=market=>{
- const row=marketById(market);
- return row ? row.region+':'+row.ruleset : null;
-};
+const retryDelay = 15 * 60_000;
+const maxAttempts = 3;
 
-export async function collectWithRetries(options,{
- collect=runBlizzardCollection,sleep=wait,now=Date.now
-}={}){
- const {log=()=>{}}=options;
- const failures=new Map();
- const deferred=new Map();
- let retryMarkets;
- let globalFailures=0;
- for(let attempt=1;attempt<=3;attempt++){
-  log({attempt,maxAttempts:3});
-  try{
-   const {results,pendingMarkets}=await collect({
-    ...options,retryMarkets,force:options.force||retryMarkets!==undefined
-   });
-   globalFailures=0;
-   for(const result of results){
-    if(result.verifiedReadback)failures.delete(result.market);
-    else failures.set(result.market,(failures.get(result.market)??0)+1);
-    if(result.retryAt>now()+RETRY_DELAY)deferred.set(result.market,result.retryAt);
-   }
-   retryMarkets=new Set(pendingMarkets.filter(market=>!deferred.has(market)));
-   if(!retryMarkets.size)break;
-  }catch(error){
-   globalFailures++;
-   const code=error instanceof CollectionError?error.code:'unexpected';
-   log({attempt,complete:false,code,status:error instanceof CollectionError?error.status:null});
+function serversFor(markets) {
+  const servers = new Set();
+  for (const id of markets) {
+    const market = marketById(id);
+    if (market) servers.add(market.region + ':' + market.ruleset);
   }
-  if(attempt<3)await sleep(RETRY_DELAY);
- }
- const persistentServers=new Set([...failures]
-  .filter(([,count])=>count===3)
-  .map(([market])=>serverFor(market)).filter(Boolean));
- const alert=persistentServers.size>=2||(!options.only&&retryMarkets===undefined&&globalFailures===3);
- log({alert,persistentServers:persistentServers.size,globalFailures,
-  pendingMarkets:retryMarkets?.size??null,deferredMarkets:deferred.size});
- return {alert};
+  return servers;
+}
+
+export async function collectWithRetries(options, {
+  collect = runBlizzardCollection, sleep = wait, now = Date.now
+} = {}) {
+  const {log = () => {}} = options;
+  const deferred = new Set();
+  let pending;
+  let persistentServers;
+  let complete = false;
+  let nextCheckAt = null;
+  let allAttemptsBlocked = true;
+  let attempts = 0;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    attempts = attempt;
+    log({attempt, maxAttempts, retryMarkets: pending ? [...pending] : null});
+    let failedServers;
+    try {
+      const batch = await collect({...options, retryMarkets: pending, force: Boolean(options.force || pending)});
+      if (!pending) nextCheckAt = batch.nextCheckAt;
+      allAttemptsBlocked = false;
+      const failed = batch.results.filter(result => !result.verifiedReadback);
+      failedServers = serversFor(failed.map(result => result.market));
+      for (const result of failed) {
+        if (result.retryAt > now() + retryDelay) deferred.add(result.market);
+      }
+      pending = new Set(batch.pendingMarkets.filter(id => !deferred.has(id)));
+      complete = batch.summary.complete && deferred.size === 0;
+    } catch (error) {
+      // A failure before per-house results blocks exactly the requested scope.
+      if (pending || options.only) failedServers = serversFor(pending ?? [options.only]);
+      log({attempt, complete: false, code: error instanceof CollectionError ? error.code : 'unexpected',
+        status: error instanceof CollectionError ? error.status : null});
+    }
+    if (failedServers) {
+      persistentServers = persistentServers === undefined ? failedServers
+        : new Set([...persistentServers].filter(server => failedServers.has(server)));
+    }
+    if (pending?.size === 0 || attempt === maxAttempts) break;
+    log({retryAt: new Date(now() + retryDelay).toISOString(), delayMinutes: 15});
+    await sleep(retryDelay);
+  }
+
+  const persistent = [...(persistentServers ?? [])].sort();
+  const alert = attempts === maxAttempts &&
+    (persistent.length >= 2 || (allAttemptsBlocked && !options.only));
+  log({alert, attempts, complete, persistentServers: persistent,
+    pendingMarkets: pending ? [...pending] : null, deferredMarkets: [...deferred]});
+  return {alert, summary: {complete}, nextCheckAt};
 }

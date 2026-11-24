@@ -18,6 +18,12 @@ export function dueAt(row,now=Date.now()) {
  const retryGap=now-row.sourceAt>2*HOUR?15*60000:5*60000;
  return Math.max(row.sourceAt+HOUR+60000,(row.lastCheckedAt||0)+retryGap,retry);
 }
+// GitHub can deliver the next scheduled job after the provider has replaced a snapshot.
+export function nearDeadline(rows,status,now){
+ const deadlines=rows.map(row=>dueAt(status.get(row.id),now))
+  .filter(at=>at>now&&at<=now+12*60000);
+ return deadlines.length?Math.max(...deadlines):null;
+}
 export function apiUrl(market,kind){
  const r=REGION_CONFIG[market.region];
  if(!market.available||!r?.host||!Number.isSafeInteger(market.houseId))throw new CollectionError('unsupported_market');
@@ -110,9 +116,10 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
  if(retryMarkets)selected=selected.filter(row=>retryMarkets.has(row.id));
  if(new Set(selected.map(x=>x.physicalKey)).size!==selected.length)throw new CollectionError('duplicate_physical_house');
  const status=new Map((config.collectionStatus??[]).map(x=>[x.market,x]));
+ const nextCheckAt=nearDeadline(selected,status,now());
  const due=selected.filter(row=>force||now()>=dueAt(status.get(row.id),now()));
  const results=[];
- if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results,pendingMarkets:[]};}
+ if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results,nextCheckAt,pendingMarkets:[]};}
  let access=await siteJson('/api/blizzard/access',{...context,method:'POST',body:{purpose:'hourly_watchlist'}});
  if(typeof access.accessToken!=='string'||!access.accessToken)throw new CollectionError('missing_provider_access');
  let token=access.accessToken;access=null;
@@ -150,5 +157,5 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
  const summary={provider:'Blizzard',complete:results.length===due.length&&!failed.length,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:due.length,verifiedMarkets:verified.length,failedMarkets:failed.length,notAttempted:due.length-results.length,skippedMarkets:selected.length-due.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:verified.filter(x=>x.newSnapshot).length,pricedItems:verified.reduce((s,x)=>s+x.pricedItems,0)};
  const verifiedIds=new Set(verified.map(row=>row.market));
  const pendingMarkets=due.filter(row=>!verifiedIds.has(row.id)).map(row=>row.id);
- log(summary);return {summary,results,pendingMarkets};
+ log(summary);return {summary,results,nextCheckAt,pendingMarkets};
 }

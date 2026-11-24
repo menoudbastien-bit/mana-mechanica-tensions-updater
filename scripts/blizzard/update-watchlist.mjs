@@ -15,9 +15,13 @@ try{
  if(config.projectId!==PROJECT_ID||config.siteUrl!==SITE_URL)throw new CollectionError('wrong_site');
  const applicationToken=config.applicationToken??(typeof config.siteAccessToken==='string'?createHash('sha256').update('mana-mechanica:blizzard:v1:'+PROJECT_ID+':'+config.siteAccessToken).digest('hex'):null);
  const options={applicationToken,siteAccessToken:process.argv.includes('--with-sites-access')?config.siteAccessToken:undefined,only:process.argv.find(x=>x.startsWith('--only='))?.slice(7),force:process.argv.includes('--force'),log:row=>console.log(JSON.stringify(row))};
- if(process.argv.includes('--scheduled-retries')){
-  const {alert}=await collectWithRetries(options);
-  if(alert)process.exitCode=1;
- }else if(!(await runBlizzardCollection(options)).summary.complete)process.exitCode=1;
+ const scheduled=process.argv.includes('--scheduled-retries');
+ const collect=scheduled?collectWithRetries:runBlizzardCollection;
+ let result=await collect(options);
+ if(result.summary.complete&&result.nextCheckAt&&process.argv.includes('--follow-near-deadline')&&!options.force){
+  await new Promise(resolve=>setTimeout(resolve,Math.max(0,result.nextCheckAt-Date.now())));
+  result=await collect(options);
+ }
+ if(scheduled?result.alert:!result.summary.complete)process.exitCode=1;
 }catch(error){const e=error instanceof CollectionError?error:new CollectionError('unexpected');console.error(JSON.stringify({complete:false,code:e.code,status:e.status??null}));process.exitCode=1;}
 finally{config=null;}

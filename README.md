@@ -2,7 +2,7 @@
 
 ## Prix : API Blizzard directe
 
-Le workflow [.github/workflows/tensions.yml](.github/workflows/tensions.yml) utilise le panier publié (446 ID au 22 novembre 2026), les maisons physiques EU/US/KR/TW et Blackwater séparément. Le contrôleur vérifie les échéances toutes les cinq minutes ; chaque maison n’est interrogée qu’autour de son actualisation source horaire. GitHub peut retarder un passage. Les périmètres indisponibles restent explicites.
+Le workflow [.github/workflows/tensions.yml](.github/workflows/tensions.yml) utilise le panier publié (446 ID au 22 novembre 2026), les maisons physiques EU/US/KR/TW et Blackwater séparément. Le contrôleur vérifie les échéances toutes les cinq minutes ; chaque maison n’est interrogée qu’autour de son actualisation source horaire. Une exécution planifiée qui précède de douze minutes ou moins une autre échéance attend une fois puis revérifie les maisons dues. GitHub peut retarder un passage. Les périmètres indisponibles restent explicites.
 
 - Exécution : `node scripts/blizzard/update-watchlist.mjs --stdin`, accès par stdin protégé.
 - Vérifications : `node --test tests/blizzard-collector.mjs tests/blizzard-listing-metrics.mjs`.

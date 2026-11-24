@@ -89,3 +89,75 @@ test('conflicting listing identities identify the failed feed and prevent partia
  assert.equal(fixture.saved,null);
  assert.equal(fixture.failures,1);
 });
+
+const {nearDeadline}=await import('../scripts/blizzard/collector.mjs');
+{
+ const now=Date.now(),h=3600000,m=60000,rows=[{id:'early'},{id:'near'},{id:'later'},{id:'blocked'}];
+ const status=new Map([['early',{sourceAt:now-2*h}],['near',{sourceAt:now-h+3*m}],['later',{sourceAt:now-h+8*m}],['blocked',{sourceAt:now-h,retryNotBefore:now+30*m}]]);
+ assert.equal(nearDeadline(rows,status,now),now+9*m);
+ assert.equal(nearDeadline([rows[0],rows[3]],status,now),null);
+}
+
+const {collectWithRetries} = await import('../scripts/blizzard/retry-watchlist.mjs');
+const usAlliance = 'forever.pvp.alliance.us', usHorde = 'forever.pvp.horde.us';
+const euAlliance = 'forever.normal.alliance.eu';
+async function simulateRetries(passes, options = {}) {
+  const delays = [], scopes = [], events = [];
+  let clock = now;
+  const outcome = await collectWithRetries({...options, log: event => events.push(event)}, {
+    now: () => clock,
+    sleep: async ms => { delays.push(ms); clock += ms; },
+    collect: async ({retryMarkets, force}) => {
+      const pass = passes[scopes.length];
+      scopes.push({markets: retryMarkets ? [...retryMarkets].sort() : null, force});
+      if (pass instanceof Error) throw pass;
+      const {failed = [], passed = [], retryAt, nextCheckAt = null} = pass;
+      return {summary: {complete: failed.length === 0}, nextCheckAt, pendingMarkets: failed,
+        results: [...passed.map(market => ({market, verifiedReadback: true})),
+          ...failed.map(market => ({market, verifiedReadback: false, retryAt}))]};
+    }
+  });
+  return {outcome, scopes, delays, events};
+}
+test('a recovered house is retried after exactly 15 minutes and successful houses are left alone', async () => {
+  const {outcome, delays, scopes} = await simulateRetries([
+    {failed: [usAlliance], passed: [euAlliance], nextCheckAt: now + 60_000}, {passed: [usAlliance]}
+  ]);
+  assert.deepEqual(delays, [900_000]);
+  assert.deepEqual(scopes, [{markets: null, force: false}, {markets: [usAlliance], force: true}]);
+  assert.deepEqual(outcome, {alert: false, summary: {complete: true}, nextCheckAt: now + 60_000});
+});
+test('two factions of one server still finish quietly after two targeted retries', async () => {
+  const {outcome, delays} = await simulateRetries(Array(3).fill({failed: [usAlliance, usHorde]}));
+  assert.deepEqual(delays, [900_000, 900_000]);
+  assert.equal(outcome.alert, false);
+  assert.equal(outcome.summary.complete, false);
+});
+test('two distinct servers failing three times escalate only after the last retry', async () => {
+  const {outcome, delays, events} = await simulateRetries(Array(3).fill({failed: [usAlliance, euAlliance]}));
+  assert.deepEqual(delays, [900_000, 900_000]);
+  assert.equal(outcome.alert, true);
+  assert.equal(events.filter(event => event.alert).length, 1);
+});
+test('if one server recovers on the third pass the incident stays below the alert threshold', async () => {
+  const failBoth = {failed: [usAlliance, euAlliance]};
+  const {outcome} = await simulateRetries([failBoth, failBoth, {failed: [usAlliance], passed: [euAlliance]}]);
+  assert.equal(outcome.alert, false);
+});
+test('a global preflight failure must persist through three attempts and cover more than one server', async () => {
+  const down = Array(3).fill(new Error('global access unavailable'));
+  assert.equal((await simulateRetries(down)).outcome.alert, true);
+  assert.equal((await simulateRetries(down, {only: usAlliance})).outcome.alert, false);
+  assert.equal((await simulateRetries([down[0], {passed: [euAlliance]}])).outcome.alert, false);
+});
+test('a provider deadline beyond the next retry is respected and the incident remains visible', async () => {
+  const {outcome, delays} = await simulateRetries([{failed: [usAlliance], retryAt: now + 3600_000}]);
+  assert.equal(outcome.summary.complete, false);
+  assert.equal(outcome.alert, false);
+  assert.deepEqual(delays, []);
+});
+test('healthy collections keep the near-deadline follow-up and do not start a retry timer', async () => {
+  const {outcome, delays} = await simulateRetries([{passed: [euAlliance], nextCheckAt: now + 60_000}]);
+  assert.equal(outcome.nextCheckAt, now + 60_000);
+  assert.deepEqual(delays, []);
+});
