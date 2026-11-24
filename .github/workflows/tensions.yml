@@ -34,4 +34,4 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin
+          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin --follow-near-deadline

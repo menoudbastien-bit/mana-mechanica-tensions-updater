@@ -69,3 +69,9 @@ Les lecteurs publics utilisent désormais source=combined et ne proposent plus d
 ## Article public sur les paliers · 22 novembre 2026
 
 `forever-market-progression` utilise les 406 références déjà présentes dans le panier de 446 ID. Son lecteur public relit les collectes horaires Blizzard et préserve le classeur et les 32 archives de marchés. Les comparaisons ne traversent pas la rupture de fournisseur ; les recensements de niveaux restent distincts des prix de l’AH. Aucun nouveau writer, secret ou calendrier. Voir [le protocole de cet article](progression-market-publication-20261122.md).
+
+## Continuité des historiques de l’Observatoire · 24 novembre 2026
+
+Le contrôleur traite immédiatement les maisons échues. Si une autre maison doit publier dans les douze minutes suivantes, le même job attend une fois puis relit les échéances avant de collecter. Un retard plus long de GitHub peut encore laisser une heure sans relevé. Les limites du fournisseur et les horodatages source restent déterminants.
+
+L’Observatoire joint les scans AHledger du classeur aux observations archivées du site par marché, objet, fournisseur, type et date source. Une lecture partielle conserve les sources disponibles. En Europe JcE Alliance, un relevé horaire historique vérifié auprès d’AuctionHouse TK.GG peut compléter une heure absente. Ces relevés portent un crédit distinct, restent hors du cours courant et des variations Blizzard, et expirent après trente jours. Une observation Blizzard directe masque le complément de la même heure. Les cours absents restent inconnus.

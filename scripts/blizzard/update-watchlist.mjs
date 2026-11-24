@@ -13,7 +13,12 @@ finally{input.close();process.stdin.pause();if(process.stdin.isTTY)spawnSync('st
 try{
  if(config.projectId!==PROJECT_ID||config.siteUrl!==SITE_URL)throw new CollectionError('wrong_site');
  const applicationToken=config.applicationToken??(typeof config.siteAccessToken==='string'?createHash('sha256').update('mana-mechanica:blizzard:v1:'+PROJECT_ID+':'+config.siteAccessToken).digest('hex'):null);
- const result=await runBlizzardCollection({applicationToken,siteAccessToken:process.argv.includes('--with-sites-access')?config.siteAccessToken:undefined,only:process.argv.find(x=>x.startsWith('--only='))?.slice(7),force:process.argv.includes('--force'),log:row=>console.log(JSON.stringify(row))});
+ const options={applicationToken,siteAccessToken:process.argv.includes('--with-sites-access')?config.siteAccessToken:undefined,only:process.argv.find(x=>x.startsWith('--only='))?.slice(7),force:process.argv.includes('--force'),log:row=>console.log(JSON.stringify(row))};
+ let result=await runBlizzardCollection(options);
+ if(result.summary.complete&&result.nextCheckAt&&process.argv.includes('--follow-near-deadline')&&!options.force){
+  await new Promise(resolve=>setTimeout(resolve,Math.max(0,result.nextCheckAt-Date.now())));
+  result=await runBlizzardCollection(options);
+ }
  if(!result.summary.complete)process.exitCode=1;
 }catch(error){const e=error instanceof CollectionError?error:new CollectionError('unexpected');console.error(JSON.stringify({complete:false,code:e.code,status:e.status??null}));process.exitCode=1;}
 finally{config=null;}

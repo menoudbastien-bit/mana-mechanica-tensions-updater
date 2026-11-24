@@ -78,3 +78,11 @@ test('a changed basket invalidates conditional cache validators and recomputes a
  const f=transport({cache}),r=await runBlizzardCollection(opts(f));assert.equal(r.summary.complete,true);assert.equal(f.saved.items.length,2);
  for(const [,options] of f.requests.filter(([url])=>url.includes('api.blizzard.com'))){assert.equal(options.headers['If-Modified-Since'],undefined);assert.equal(options.headers['If-None-Match'],undefined);}
 });
+
+const {nearDeadline}=await import('../scripts/blizzard/collector.mjs');
+{
+ const now=Date.now(),h=3600000,m=60000,rows=[{id:'early'},{id:'near'},{id:'later'},{id:'blocked'}];
+ const status=new Map([['early',{sourceAt:now-2*h}],['near',{sourceAt:now-h+3*m}],['later',{sourceAt:now-h+8*m}],['blocked',{sourceAt:now-h,retryNotBefore:now+30*m}]]);
+ assert.equal(nearDeadline(rows,status,now),now+9*m);
+ assert.equal(nearDeadline([rows[0],rows[3]],status,now),null);
+}
