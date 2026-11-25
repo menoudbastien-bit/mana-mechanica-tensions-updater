@@ -119,7 +119,7 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
  const nextCheckAt=nearDeadline(selected,status,now());
  const due=selected.filter(row=>force||now()>=dueAt(status.get(row.id),now()));
  const results=[];
- if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results,nextCheckAt,pendingMarkets:[]};}
+ if(!due.length){const summary={provider:'Blizzard',complete:true,expectedItems:config.collectionBasket?.itemCount??ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:0,skippedMarkets:selected.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:0};log(summary);return {summary,results,nextCheckAt,pendingMarkets:[]};}
  let access=await siteJson('/api/blizzard/access',{...context,method:'POST',body:{purpose:'hourly_watchlist'}});
  if(typeof access.accessToken!=='string'||!access.accessToken)throw new CollectionError('missing_provider_access');
  let token=access.accessToken;access=null;
@@ -130,31 +130,43 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
   for(const candidate of due){
    if(stop)break;
    const market=marketById(candidate.id);
+   let activeVersion=config.basketVersion;
    try{
     const prior=await siteJson('/api/blizzard/config?market='+encodeURIComponent(market.id),context);
+    const scoped=prior.cookingPilot;
+    const marketIds=scoped?.itemIds??ids;
+    if(scoped){
+     if(typeof scoped.basketVersion!=='string'||!validIds(marketIds)||
+        !ids.every(id=>marketIds.includes(id)))throw new CollectionError('invalid_published_basket');
+     activeVersion=scoped.basketVersion;
+    }
+    if(config.collectionBasket && (!scoped || activeVersion!==config.collectionBasket.version ||
+       marketIds.length!==config.collectionBasket.itemCount))throw new CollectionError('invalid_published_basket');
     // A new basket must be recomputed from full source documents even when
     // the provider snapshot is unchanged; old per-item summaries are partial.
-    const cache=prior.cache?.basketVersion===config.basketVersion?prior.cache:null,feeds=[];
-    for(const kind of ['auction','commodity'])feeds.push(await downloadFeed(market,kind,{fetchFn,token,cache,ids,now,sleep}));
-    const items=composeItems(ids,feeds),retrievedAt=now();
-    const payload={schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:config.basketVersion,retrievedAt,feeds:feeds.map(x=>x.meta),items};
+    const cache=prior.cache?.basketVersion===activeVersion?prior.cache:null,feeds=[];
+    for(const kind of ['auction','commodity'])feeds.push(await downloadFeed(market,kind,{fetchFn,token,cache,ids:marketIds,now,sleep}));
+    const items=composeItems(marketIds,feeds),retrievedAt=now();
+    const payload={schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:activeVersion,retrievedAt,feeds:feeds.map(x=>x.meta),items};
     const saved=await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:payload});
-    const read=await siteJson('/api/tensions?market='+encodeURIComponent(market.id),context);
-    if(read.market!==market.id||String(read.provider).toLowerCase()!=='blizzard'||!Array.isArray(read.states)||read.states.length!==ids.length||new Set(read.states.map(x=>x.id)).size!==ids.length||ids.some(id=>!read.states.some(x=>x.id===id)))throw new CollectionError('persisted_basket_verification_failed');
+    const readUrl=scoped?'/api/blizzard/config?readback=1&market=':'/api/tensions?market=';
+    const read=await siteJson(readUrl+encodeURIComponent(market.id),context);
+    if(scoped&&read.basketVersion!==activeVersion)throw new CollectionError('persisted_basket_verification_failed');
+    if(read.market!==market.id||String(read.provider).toLowerCase()!=='blizzard'||!Array.isArray(read.states)||read.states.length!==marketIds.length||new Set(read.states.map(x=>x.id)).size!==marketIds.length||marketIds.some(id=>!read.states.some(x=>x.id===id)))throw new CollectionError('persisted_basket_verification_failed');
     const checked=read.collection?.lastCheckedAt??read.calculatedAt??read.retrievedAt;
-    if(Number.isFinite(checked)&&checked<retrievedAt-300000)throw new CollectionError('persisted_time_verification_failed');
-    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,expectedItems:ids.length,pricedItems:items.filter(x=>x.status==='OK').length,sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
+    if(!Number.isFinite(checked)||checked<retrievedAt-300000)throw new CollectionError('persisted_time_verification_failed');
+    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,basketVersion:activeVersion,expectedItems:marketIds.length,pricedItems:items.filter(x=>x.status==='OK').length,unpricedListings:items.filter(x=>x.status==='SANS_PRIX').length,notListed:items.filter(x=>x.warnings.includes('not_listed_in_snapshot')).length,crossFeedConflicts:items.filter(x=>x.warnings.includes('cross_feed_overlap')).length,sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
    }catch(error){
     const e=error instanceof CollectionError?error:new CollectionError('unexpected_collection_error');
     const r={market:market.id,physicalKey:market.physicalKey,verifiedReadback:false,code:e.code,status:e.status,feed:e.feed,retryAt:e.retryAt};results.push(r);log(r);
     if([401,403].includes(e.status))stop=true;
-    try{await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:{schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:config.basketVersion,retrievedAt:now(),error:{code:e.code,status:e.status,feed:e.feed,...Number.isSafeInteger(e.retryAt)&&e.retryAt>=now()?{retryAt:e.retryAt}:{}}}});}catch{}
+    try{await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:{schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:activeVersion,retrievedAt:now(),error:{code:e.code,status:e.status,feed:e.feed,...Number.isSafeInteger(e.retryAt)&&e.retryAt>=now()?{retryAt:e.retryAt}:{}}}});}catch{}
     if(e.status===429)stop=true;
    }
   }
  }finally{token=null;}
  const verified=results.filter(x=>x.verifiedReadback),failed=results.filter(x=>!x.verifiedReadback);
- const summary={provider:'Blizzard',complete:results.length===due.length&&!failed.length,expectedItems:ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:due.length,verifiedMarkets:verified.length,failedMarkets:failed.length,notAttempted:due.length-results.length,skippedMarkets:selected.length-due.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:verified.filter(x=>x.newSnapshot).length,pricedItems:verified.reduce((s,x)=>s+x.pricedItems,0)};
+ const summary={provider:'Blizzard',complete:results.length===due.length&&!failed.length,expectedItems:config.collectionBasket?.itemCount??ids.length,configuredMarkets:configured.length,collectibleMarkets:selected.length,dueMarkets:due.length,verifiedMarkets:verified.length,failedMarkets:failed.length,notAttempted:due.length-results.length,skippedMarkets:selected.length-due.length,unsupportedMarkets:configured.filter(x=>!x.available).length,newSnapshots:verified.filter(x=>x.newSnapshot).length,pricedItems:verified.reduce((s,x)=>s+x.pricedItems,0)};
  const verifiedIds=new Set(verified.map(row=>row.market));
  const pendingMarkets=due.filter(row=>!verifiedIds.has(row.id)).map(row=>row.id);
  log(summary);return {summary,results,nextCheckAt,pendingMarkets};

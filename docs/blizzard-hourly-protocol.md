@@ -40,7 +40,7 @@ Le calcul spécialisé Sombrelune de profondeur de carnet TK reste une couche ti
 
 ## Vérification et publication
 
-Après déploiement, lancer le writer par son accès prévu, puis relire chaque marché : fournisseur, région/maison, 446 ID distincts du panier courant, dates source/récupération, valeurs manquantes, répétitions et conservation des données précédentes. Les nouvelles lignes ne sont annoncées qu’après lecture persistée. Les totaux de disponibilité doivent être mesurés, jamais déduits de la taille du panier.
+Après déploiement, lancer le writer par son accès prévu, puis relire chaque marché : fournisseur, région/maison, tous les ID distincts attendus pour la version du panier de cette maison, dates source/récupération, valeurs manquantes, répétitions et conservation des données précédentes. Les nouvelles lignes ne sont annoncées qu’après lecture persistée. Les totaux de disponibilité doivent être mesurés, jamais déduits de la taille du panier.
 
 Les pages Observatoire, Rythmes, bloc courant du bulletin, Faveurs marchandes, ateliers couture et outils Sombrelune utilisent les lecteurs adaptés. Les copies courantes FR/EN/ES précisent la méthode et la rupture de source. Les éditions closes gardent leurs sources et conclusions datées. La mise à jour CMS conserve une sauvegarde de la ligne précédente, le statut public/privé et tout brouillon distinct, avec contrôle de révision concurrente.
 
@@ -79,3 +79,9 @@ Les lecteurs publics utilisent désormais source=combined et ne proposent plus d
 Le contrôleur traite immédiatement les maisons échues. Si une autre maison doit publier dans les douze minutes suivantes, le même job attend une fois puis relit les échéances avant de collecter. Un retard plus long de GitHub peut encore laisser une heure sans relevé. Les limites du fournisseur et les horodatages source restent déterminants.
 
 L’Observatoire joint les scans AHledger du classeur aux observations archivées du site par marché, objet, fournisseur, type et date source. Une lecture partielle conserve les sources disponibles. En Europe JcE Alliance, un relevé horaire historique vérifié auprès d’AuctionHouse TK.GG peut compléter une heure absente. Ces relevés portent un crédit distinct, restent hors du cours courant et des variations Blizzard, et expirent après trente jours. Une observation Blizzard directe masque le complément de la même heure. Les cours absents restent inconnus.
+
+## Collecte cuisine du 25 novembre 2026
+
+Chaque maison disponible dans le registre Blizzard utilise le même panier de collecte. Il réunit les 446 identifiants du panier public et les candidats échangeables de l’inventaire cuisine, soit 674 identifiants distincts à cette date. Le registre comprend 12 maisons en Europe, 12 dans les Amériques, 6 en Corée et 6 à Taïwan. Alliance, Horde et Blackwater conservent leurs prix, leurs stocks et leurs historiques propres. Les maisons indisponibles restent hors collecte.
+
+Le collecteur vérifie la version, les identifiants et leur nombre avant de lire les deux flux de la maison. Un changement de panier invalide le cache des flux. Après écriture, il relit les identifiants et la version enregistrés ainsi que l’heure du contrôle. Le bilan par maison distingue les objets avec prix, les annonces sans prix, les objets absents des deux flux et les conflits entre flux. Les reprises ciblées à quinze minutes et le seuil d’alerte après trois tentatives restent applicables. La configuration publique indique le nombre d’objets attendu et celui enregistré par marché. Le catalogue destiné aux articles conserve son périmètre.
