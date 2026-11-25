@@ -130,25 +130,36 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
   for(const candidate of due){
    if(stop)break;
    const market=marketById(candidate.id);
+   let activeVersion=config.basketVersion;
    try{
     const prior=await siteJson('/api/blizzard/config?market='+encodeURIComponent(market.id),context);
+    const scoped=prior.cookingPilot;
+    const marketIds=scoped?.itemIds??ids;
+    if(scoped){
+     if(!['forever.normal.alliance.eu','forever.normal.neutral.eu'].includes(market.id)||
+        typeof scoped.basketVersion!=='string'||!validIds(marketIds)||
+        !ids.every(id=>marketIds.includes(id)))throw new CollectionError('invalid_published_basket');
+     activeVersion=scoped.basketVersion;
+    }
     // A new basket must be recomputed from full source documents even when
     // the provider snapshot is unchanged; old per-item summaries are partial.
-    const cache=prior.cache?.basketVersion===config.basketVersion?prior.cache:null,feeds=[];
-    for(const kind of ['auction','commodity'])feeds.push(await downloadFeed(market,kind,{fetchFn,token,cache,ids,now,sleep}));
-    const items=composeItems(ids,feeds),retrievedAt=now();
-    const payload={schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:config.basketVersion,retrievedAt,feeds:feeds.map(x=>x.meta),items};
+    const cache=prior.cache?.basketVersion===activeVersion?prior.cache:null,feeds=[];
+    for(const kind of ['auction','commodity'])feeds.push(await downloadFeed(market,kind,{fetchFn,token,cache,ids:marketIds,now,sleep}));
+    const items=composeItems(marketIds,feeds),retrievedAt=now();
+    const payload={schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:activeVersion,retrievedAt,feeds:feeds.map(x=>x.meta),items};
     const saved=await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:payload});
-    const read=await siteJson('/api/tensions?market='+encodeURIComponent(market.id),context);
-    if(read.market!==market.id||String(read.provider).toLowerCase()!=='blizzard'||!Array.isArray(read.states)||read.states.length!==ids.length||new Set(read.states.map(x=>x.id)).size!==ids.length||ids.some(id=>!read.states.some(x=>x.id===id)))throw new CollectionError('persisted_basket_verification_failed');
+    const readUrl=scoped?'/api/blizzard/config?readback=1&market=':'/api/tensions?market=';
+    const read=await siteJson(readUrl+encodeURIComponent(market.id),context);
+    if(scoped&&read.basketVersion!==activeVersion)throw new CollectionError('persisted_basket_verification_failed');
+    if(read.market!==market.id||String(read.provider).toLowerCase()!=='blizzard'||!Array.isArray(read.states)||read.states.length!==marketIds.length||new Set(read.states.map(x=>x.id)).size!==marketIds.length||marketIds.some(id=>!read.states.some(x=>x.id===id)))throw new CollectionError('persisted_basket_verification_failed');
     const checked=read.collection?.lastCheckedAt??read.calculatedAt??read.retrievedAt;
     if(Number.isFinite(checked)&&checked<retrievedAt-300000)throw new CollectionError('persisted_time_verification_failed');
-    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,expectedItems:ids.length,pricedItems:items.filter(x=>x.status==='OK').length,sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
+    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,basketVersion:activeVersion,expectedItems:marketIds.length,pricedItems:items.filter(x=>x.status==='OK').length,sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
    }catch(error){
     const e=error instanceof CollectionError?error:new CollectionError('unexpected_collection_error');
     const r={market:market.id,physicalKey:market.physicalKey,verifiedReadback:false,code:e.code,status:e.status,feed:e.feed,retryAt:e.retryAt};results.push(r);log(r);
     if([401,403].includes(e.status))stop=true;
-    try{await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:{schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:config.basketVersion,retrievedAt:now(),error:{code:e.code,status:e.status,feed:e.feed,...Number.isSafeInteger(e.retryAt)&&e.retryAt>=now()?{retryAt:e.retryAt}:{}}}});}catch{}
+    try{await siteJson('/api/blizzard/ingest',{...context,method:'POST',body:{schemaVersion:1,market:market.id,houseId:market.houseId,region:market.region,namespace:market.namespace,basketVersion:activeVersion,retrievedAt:now(),error:{code:e.code,status:e.status,feed:e.feed,...Number.isSafeInteger(e.retryAt)&&e.retryAt>=now()?{retryAt:e.retryAt}:{}}}});}catch{}
     if(e.status===429)stop=true;
    }
   }

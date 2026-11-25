@@ -29,12 +29,13 @@ test('an item present in both source feeds is withheld rather than double counte
  const feeds=['auction','commodity'].map(kind=>({meta:{kind,at},metrics:{basket:[row]}}));
  const item=composeItems([7],feeds)[0];assert.equal(item.quantity,null);assert.deepEqual(item.warnings,['cross_feed_overlap']);
 });
-function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[],auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100}]}={}){
+function transport({status=200,scope='dynamic-forever-eu',cache=null,collectionStatus=[],cookingPilot=null,auctionRows=[{id:1,item:{id:7},quantity:1,buyout:100}]}={}){
  let saved=null,external=0,failures=0,accessCalls=0;const requests=[];
  const fetchFn=async(url,options={})=>{
   requests.push([String(url),options]);const u=new URL(url);
   if(u.origin==='https://mana-mechanica.com'){
-   if(u.pathname==='/api/blizzard/config')return reply(u.searchParams.has('market')?{cache}:{itemIds:[7,8],basketVersion:'test-basket',markets:[market],collectionStatus});
+   if(u.pathname==='/api/blizzard/config'&&u.searchParams.has('readback'))return reply({market:market.id,provider:'Blizzard',basketVersion:saved.basketVersion,retrievedAt:now,states:saved.items.map(x=>({id:x.id}))});
+   if(u.pathname==='/api/blizzard/config')return reply(u.searchParams.has('market')?{cache,cookingPilot}:{itemIds:[7,8],basketVersion:'test-basket',markets:[market],collectionStatus});
    if(u.pathname==='/api/blizzard/access'){accessCalls++;return reply({accessToken:'ephemeral-test-token'});}
    if(u.pathname==='/api/blizzard/ingest'){const body=JSON.parse(options.body);if(body.error){failures++;return reply({recordedFailure:true});}saved=body;return reply({unchanged:false,newScans:2});}
    if(u.pathname==='/api/tensions')return reply({market:market.id,provider:'Blizzard',calculatedAt:now,collection:{lastCheckedAt:now},states:saved.items.map(x=>({id:x.id}))});
@@ -160,4 +161,21 @@ test('healthy collections keep the near-deadline follow-up and do not start a re
   const {outcome, delays} = await simulateRetries([{passed: [euAlliance], nextCheckAt: now + 60_000}]);
   assert.equal(outcome.nextCheckAt, now + 60_000);
   assert.deepEqual(delays, []);
+});
+
+test('cooking extends the pilot in one source read and rejects duplicate or truncated baskets',async()=>{
+ const cookingPilot={basketVersion:'test-cooking',itemIds:[7,8,21099]};
+ const f=transport({cookingPilot}), result=await runBlizzardCollection(opts(f));
+ assert.equal(result.summary.complete,true);
+ assert.equal(f.external,2);
+ assert.equal(f.saved.basketVersion,'test-cooking');
+ assert.deepEqual(f.saved.items.map(i=>i.id),[7,8,21099]);
+ assert.equal(f.saved.items.at(-1).status,'INDISPONIBLE');
+ assert.equal(result.results[0].expectedItems,3);
+ for(const itemIds of [[7,7,8],[7,21099]]){
+  const bad=transport({cookingPilot:{...cookingPilot,itemIds}});
+  const failed=await runBlizzardCollection(opts(bad));
+  assert.equal(failed.summary.complete,false);
+  assert.equal(bad.external,0);
+ }
 });
