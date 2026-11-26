@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { summarizeListings } from '../lib/blizzard/listing-metrics.mjs';
+import { summarizeListings, summarizeWatchlistListings } from '../lib/blizzard/listing-metrics.mjs';
 
 const commodity = (id, quantity, unit_price, item = { id: 2589 }) => ({ id, item, quantity, unit_price });
 const summarize = rows => summarizeListings(rows, { kind: 'commodity', itemIds: [2589] });
@@ -110,4 +110,30 @@ test('variants remain counted while output basket order and source rows are pres
 test('invalid identities and duplicate basket IDs are rejected without echoing source data', () => {
   assert.throws(() => summarize([{ id: 1, item: { id: '2589' }, quantity: 1, unit_price: 10 }]), /^Error: Invalid listing identity$/);
   assert.throws(() => summarizeListings([], { kind: 'commodity', itemIds: [2589, 2589] }), /^Error: Invalid listing-metrics input$/);
+});
+
+
+const auctionOptions = { kind: 'auction', itemIds: [2589, 2592] };
+const offBasket = { id: 228440952, item: { id: 264053 }, quantity: 1, bid: 11 };
+const updatedBid = { ...offBasket, bid: 12 };
+const trackedAuction = { id: 2, item: { id: 2589 }, quantity: 1, buyout: 50 };
+
+test('off-basket bid conflict preserves exact watchlist results and rejects global totals', () => {
+  const clean = summarizeWatchlistListings([trackedAuction], auctionOptions);
+  const rows = [offBasket, trackedAuction, updatedBid, trackedAuction];
+  assert.throws(() => summarizeListings(rows, auctionOptions), { code: 'conflicting_listing_identity' });
+  assert.deepEqual(clean, { basket: summarizeListings([trackedAuction], auctionOptions).basket, ignoredUntrackedConflict: false });
+  assert.deepEqual(summarizeWatchlistListings(rows, auctionOptions), { basket: clean.basket, ignoredUntrackedConflict: true });
+});
+
+test('a conflict involving any tracked item fails in either order, even after an unrelated conflict', () => {
+  for (const changed of [{ ...trackedAuction, bid: 1 }, { ...trackedAuction, item: { id: 264053 } }]) {
+    for (const conflict of [[trackedAuction, changed], [changed, trackedAuction]]) {
+      assert.throws(() => summarizeWatchlistListings([offBasket, updatedBid, ...conflict], auctionOptions), { code: 'conflicting_listing_identity' });
+    }
+  }
+});
+
+test('invalid listing identities after an unrelated contradiction still reject the feed', () => {
+  assert.throws(() => summarizeWatchlistListings([offBasket, updatedBid, { id: 3 }], auctionOptions), { code: 'invalid_listing_identity' });
 });
