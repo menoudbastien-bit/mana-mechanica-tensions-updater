@@ -1,6 +1,6 @@
 import {createHash} from 'node:crypto';
 import {markets, marketById, REGION_CONFIG} from '../../lib/blizzard/markets.mjs';
-import {ListingMetricsError,summarizeListings} from '../../lib/blizzard/listing-metrics.mjs';
+import {ListingMetricsError,summarizeWatchlistListings} from '../../lib/blizzard/listing-metrics.mjs';
 
 export const PROJECT_ID='appgprj_6adf82cdbe1081919f3e44ce1525cd98';
 export const SITE_URL='https://mana-mechanica.com';
@@ -96,7 +96,7 @@ async function downloadFeed(market,kind,{fetchFn,token,cache,ids,now,sleep}){
  const sha256=createHash('sha256').update(text).digest('hex');text=null;
  const rows=validateFeedDocument(body,market,kind,url);
  let metrics;
- try{metrics=summarizeListings(rows,{kind,itemIds:ids});}
+ try{metrics=summarizeWatchlistListings(rows,{kind,itemIds:ids});}
  catch(error){
   const code=error instanceof ListingMetricsError?error.code:'listing_metrics_error';
   throw new CollectionError(code,response.status,kind);
@@ -176,7 +176,7 @@ export async function runBlizzardCollection({applicationToken,siteAccessToken,fe
     if(read.market!==market.id||String(read.provider).toLowerCase()!=='blizzard'||!Array.isArray(read.states)||read.states.length!==marketIds.length||new Set(read.states.map(x=>x.id)).size!==marketIds.length||marketIds.some(id=>!read.states.some(x=>x.id===id)))throw new CollectionError('persisted_basket_verification_failed');
     const checked=read.collection?.lastCheckedAt??read.calculatedAt??read.retrievedAt;
     if(!Number.isFinite(checked)||checked<retrievedAt-300000)throw new CollectionError('persisted_time_verification_failed');
-    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,basketVersion:activeVersion,expectedItems:marketIds.length,pricedItems:items.filter(x=>x.status==='OK').length,unpricedListings:items.filter(x=>x.status==='SANS_PRIX').length,notListed:items.filter(x=>x.warnings.includes('not_listed_in_snapshot')).length,crossFeedConflicts:items.filter(x=>x.warnings.includes('cross_feed_overlap')).length,sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
+    const r={market:market.id,physicalKey:market.physicalKey,provider:'Blizzard',mappingStatus:market.mappingStatus,evidenceStatus:market.evidenceStatus,verifiedReadback:true,basketVersion:activeVersion,expectedItems:marketIds.length,pricedItems:items.filter(x=>x.status==='OK').length,unpricedListings:items.filter(x=>x.status==='SANS_PRIX').length,notListed:items.filter(x=>x.warnings.includes('not_listed_in_snapshot')).length,crossFeedConflicts:items.filter(x=>x.warnings.includes('cross_feed_overlap')).length,untrackedConflictFeeds:feeds.filter(f=>f.metrics.ignoredUntrackedConflict).map(f=>f.meta.kind),sourceTimes:feeds.map(x=>({kind:x.meta.kind,at:x.meta.at,status:x.meta.status})),sameSourceTime:feeds[0].meta.at===feeds[1].meta.at,newSnapshot:saved.unchanged!==true,newScans:saved.newScans??null,unchanged:saved.unchanged===true};results.push(r);log(r);
    }catch(error){
     const e=error instanceof CollectionError?error:new CollectionError('unexpected_collection_error');
     const r={market:market.id,physicalKey:market.physicalKey,verifiedReadback:false,code:e.code,status:e.status,feed:e.feed,retryAt:e.retryAt};results.push(r);log(r);
