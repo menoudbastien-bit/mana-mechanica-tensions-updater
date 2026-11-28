@@ -14,11 +14,24 @@ Le runner Node scripts/blizzard/update-watchlist.mjs lit les accès par stdin ma
 
 Compatibilité d’hébergement : le broker Cloudflare utilise redirect=manual et rejette explicitement tous les statuts 3xx, sans suivre Location ni transmettre le Basic vers une autre destination. Workers ne prend pas en charge redirect=error ; le premier contrôle réel a exposé cette incompatibilité, corrigée avant activation du nouveau workflow. Les requêtes du runner Node peuvent conserver redirect=error. Référence : https://developers.cloudflare.com/workers/runtime-apis/request/.
 
-Les opérateurs Forever rapportent un snapshot environ chaque heure, sans garantie officielle de minute fixe. Le contrôleur vérifie les passages planifiés toutes les cinq minutes ; il n’interroge Blizzard que pour les maisons arrivées à échéance. L’échéance suit la dernière date source + une heure + une minute, avec au moins cinq minutes entre vérifications et quinze minutes lorsque la source est ancienne de plus de deux heures. Le premier passage sans donnée est immédiatement éligible. Le planificateur peut être retardé par GitHub ; ne pas annoncer une heure d’exécution garantie.
+Le workflow demande un démarrage à :17 UTC chaque heure. Les minutes ci-dessous sont des cibles fondées sur les heures source constatées. GitHub peut retarder un lancement. Un démarrage tardif traite immédiatement les lots dont l’heure est passée, après vérification de l’échéance de chaque maison.
 
-Si une collecte échoue, le même job réessaie les maisons en échec ou interrompues après 15 minutes, puis une dernière fois 15 minutes après le deuxième passage. Une maison déjà relue avec succès sort de la liste. Un délai fournisseur `Retry-After` plus long reporte la maison au planificateur. Les résultats partiels et les erreurs restent consultables dans les journaux et les relevés réussis restent disponibles.
+| Minute | Région | Maisons, dans l’ordre du registre |
+| --- | --- | --- |
+| :24 | Europe | Normal puis PvP, Alliance, Horde et neutre |
+| :28 | Europe | RP puis RP-PvP, Alliance, Horde et neutre |
+| :32 | Amériques | Normal puis PvP, Alliance, Horde et neutre |
+| :36 | Amériques | RP puis RP-PvP, Alliance, Horde et neutre |
+| :43 | Corée | Normal puis PvP, Alliance, Horde et neutre |
+| :48 | Taïwan | Normal puis PvP, Alliance, Horde et neutre |
 
-Le job de collecte déclenche une alerte GitHub uniquement si au moins deux serveurs distincts (couples région et mode de jeu) sont effectivement en échec à chacun des trois passages, ou si une panne globale empêche de démarrer les trois passages. Plusieurs factions d’un même serveur comptent pour un seul serveur. Un échec isolé ou résolu pendant les reprises ne provoque pas d’e-mail d’échec. Pour recevoir ces alertes uniquement par e-mail, le compte destinataire doit sélectionner « Email » et « Only notify for failed workflows » dans les préférences GitHub de notifications Actions, et laisser « On GitHub » désactivé. Ces préférences sont communes aux dépôts du compte. Le planificateur continue ensuite à suivre la cadence normale.
+Une maison conserve ses deux flux et le panier complet. Un seul lot accède au collecteur à la fois. Les lots attendant leur minute ou une relance libèrent la place. La date source + 61 minutes et le dernier contrôle déterminent l’éligibilité. Une maison encore en attente d’un scan de cette heure peut être revue plus tard dans l’heure. Un document inchangé et antérieur à l’heure visée donne droit à un contrôle supplémentaire si l’échéance le permet. Un démarrage tardif archive uniquement les documents disponibles. Les historiques gardent leurs dates source et de récupération.
+
+En cas d’échec, seules les maisons en échec ou interrompues du lot sont reprises après 15 minutes, au plus deux fois. Un Retry-After plus long est respecté. Un délai encore actif après un HTTP 429 concerne aussi les autres lots utilisant le même accès. Les journaux précisent la région, la minute prévue, l’heure du cycle et les résultats par maison.
+
+Un seul bilan GitHub agrège les incidents des six lots. Il déclenche l’alerte si au moins deux couples région et mode de jeu sont chacun en échec aux trois tentatives, même dans des lots différents, ou si une panne globale bloque les trois tentatives de tous les lots. Deux factions d’un même serveur comptent pour un seul serveur. Une erreur isolée ou résolue reste dans les journaux. Pour recevoir les alertes par e-mail uniquement, le compte destinataire utilise « Email » et « Only notify for failed workflows » dans les préférences Actions et désactive « On GitHub ». Ces préférences appartiennent au compte.
+
+Le bilan quotidien reste fondé sur les scans distincts des archives publiques, en heure source. Il rapproche les journaux, les récupérations tardives et les échecs de relecture. Le panier du 28 novembre 2026 comporte 674 objets par maison : 446 références initiales et 228 références de cuisine. Le registre et le panier actifs déterminent les dénominateurs de chaque fenêtre.
 
 Les vérifications conditionnelles utilisent ETag/If-None-Match si disponible, sinon Last-Modified/If-Modified-Since. Cache-Control et Retry-After restent enregistrés et respectés. max-age=86400 est une durée de cache, pas une interdiction de vérifier avant 24 heures ni la fréquence de génération. Une revalidation peut recevoir une réponse inchangée d’un intermédiaire. Aucun paramètre aléatoire n’est ajouté pour contourner un cache.
 

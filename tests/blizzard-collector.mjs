@@ -200,3 +200,76 @@ test('each available house uses the advertised basket before accepting a readbac
   assert.equal(fixture.external,0);
  }
 });
+
+const {hourlyBatches, runHourlyBatches} = await import('../scripts/blizzard/hourly-batches.mjs');
+
+test('hourly phases cover each available physical house once with normal Alliance EU first', () => {
+  const batches = hourlyBatches();
+  assert.deepEqual(batches.map(b => b.start), [24,28,32,36,43,48]);
+  assert.deepEqual(batches.map(b => b.ids.length), [6,6,6,6,6,6]);
+  assert.equal(batches[0].ids[0], 'forever.normal.alliance.eu');
+  assert.deepEqual(batches.flatMap(b => b.ids).sort(), collectibleMarkets.map(m => m.id).sort());
+});
+
+async function simulateHour(failing, {start = 17, blocked = false, unchanged = false} = {}) {
+  const minute = 60_000;
+  const hour = Date.UTC(2026, 10, 28, 12);
+  let clock = hour + start * minute;
+  const timers = [], calls = [], events = [];
+  const outcome = runHourlyBatches({log: row => events.push(row)}, {
+    now: () => clock,
+    sleep: delay => new Promise(resolve => timers.push({at: clock + delay, resolve})),
+    collect: async ({scope, retryMarkets}) => {
+      const ids = [...(retryMarkets ?? scope)];
+      calls.push({minute: (clock - hour) / minute, ids});
+      if (blocked) throw new Error('site unavailable');
+      const pendingMarkets = ids.filter(id => failing.includes(id));
+      return {results: ids.map(market => ({market, verifiedReadback: !failing.includes(market),
+        unchanged, sourceTimes: [{at: hour - 40 * minute}]})),
+        pendingMarkets, summary: {complete: !pendingMarkets.length}};
+    }
+  });
+  for (;;) {
+    await new Promise(resolve => setImmediate(resolve));
+    if (!timers.length) break;
+    timers.sort((a,b) => a.at - b.at);
+    const timer = timers.shift();
+    clock = timer.at;
+    timer.resolve();
+  }
+  return {calls, events, outcome: await outcome};
+}
+
+test('retries wait fifteen minutes without blocking later phases; final alert combines servers across batches', async () => {
+  const ids = ['forever.normal.alliance.eu','forever.pvp.horde.us'];
+  const {calls, events, outcome} = await simulateHour(ids);
+  assert.deepEqual(calls.filter(c => c.ids.includes(ids[0])).map(c => c.minute), [24,39,54]);
+  assert.deepEqual(calls.filter(c => c.ids.includes(ids[1])).map(c => c.minute), [32,47,62]);
+  assert.equal(calls.find(c => c.ids[0].endsWith('.tw')).minute, 48);
+  assert.equal(outcome.alert, true);
+  assert.equal(events.filter(e => e.alert === true).length, 1);
+});
+
+test('late starts drain overdue phases; isolated failures stay quiet and global outages alert', async () => {
+  const {calls, outcome} = await simulateHour(['forever.normal.alliance.eu','forever.normal.horde.eu'], {start:51});
+  assert.deepEqual(calls.slice(0,6).map(c => c.minute), Array(6).fill(51));
+  assert.equal(outcome.alert, false);
+  assert.equal((await simulateHour([], {blocked:true})).outcome.alert, true);
+});
+
+test('an unchanged older source has at most one extra check in its phase', async () => {
+  const {calls} = await simulateHour([], {unchanged:true});
+  assert.deepEqual(calls.filter(c => c.ids.includes('forever.normal.alliance.eu')).map(c => c.minute), [24,29]);
+});
+
+test('scoped catch-up honors source deadlines and never forces a provider hold', async () => {
+  const scope = new Set([market.id]), slotStart = Math.floor(now / 3600000) * 3600000;
+  const sourceAt = now - 58 * 60000;
+  const f = transport({collectionStatus:[{market:market.id,sourceAt}]});
+  const result = await runBlizzardCollection({...opts(f), force:false, scope, slotStart});
+  assert.deepEqual(result.upcoming, [{id:market.id,at:sourceAt + 61 * 60000}]);
+  const held = transport({collectionStatus:[{market:market.id,retryNotBefore:now+3600000}]});
+  const retry = await runBlizzardCollection({...opts(held),scope,retryMarkets:scope,slotStart});
+  assert.deepEqual(retry.deferredMarkets,[market.id]);
+  assert.equal(held.external,0);
+});

@@ -36,6 +36,7 @@ export async function collectWithRetries(options, {
       allAttemptsBlocked = false;
       const failed = batch.results.filter(result => !result.verifiedReadback);
       failedServers = serversFor(failed.map(result => result.market));
+      for (const id of batch.deferredMarkets ?? []) deferred.add(id);
       for (const result of failed) {
         if (result.retryAt > now() + retryDelay) deferred.add(result.market);
       }
@@ -61,5 +62,7 @@ export async function collectWithRetries(options, {
     (persistent.length >= 2 || (allAttemptsBlocked && !options.only));
   log({alert, attempts, complete, persistentServers: persistent,
     pendingMarkets: pending ? [...pending] : null, deferredMarkets: [...deferred]});
-  return {alert, summary: {complete}, nextCheckAt};
+  return {alert, summary: {complete}, nextCheckAt,
+    ...(options.scope ? {blocked: allAttemptsBlocked && attempts === maxAttempts,
+      persistent: attempts === maxAttempts ? persistent : []} : {})};
 }
