@@ -6,6 +6,7 @@ on:
       - 'lib/blizzard/**'
       - 'tests/blizzard-*.mjs'
       - '.github/workflows/check-collector.yml'
+      - '.github/workflows/tensions.yml'
 permissions:
   contents: read
 jobs:

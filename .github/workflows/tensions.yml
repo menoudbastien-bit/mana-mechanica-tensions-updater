@@ -1,4 +1,4 @@
-# Poll scheduler every five minutes; each physical house follows its source's hourly phase.
+# Wake ahead of the first phase; the runner handles all six batches and targeted retries.
 name: Collect Mana Mechanica Blizzard watchlist
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ on:
       - 'tests/blizzard-collector.mjs'
       - 'tests/blizzard-listing-metrics.mjs'
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '17 * * * *'
 permissions:
   contents: read
 concurrency:
@@ -35,4 +35,4 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin --scheduled-retries --follow-near-deadline
+          node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin --hourly-batches
