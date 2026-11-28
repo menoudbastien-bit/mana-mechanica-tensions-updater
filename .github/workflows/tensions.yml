@@ -43,3 +43,29 @@ jobs:
     if: ${{ !cancelled() && github.event_name != 'push' }}
     permissions: {}
     uses: ./.github/workflows/darkmoon-depth.yml
+
+  analyze-pilot:
+    needs: [update, darkmoon]
+    if: ${{ !cancelled() && github.event_name != 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Analyze the saved Europe PvE Alliance snapshot
+        env:
+          MM_TENSIONS_APPLICATION_TOKEN: ${{ secrets.MM_TENSIONS_APPLICATION_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sleep 600
+          node --input-type=module <<'NODE'
+          const response = await fetch('https://mana-mechanica.com/api/blizzard/analyze', {
+            method: 'POST',
+            headers: {Authorization: 'Bearer ' + process.env.MM_TENSIONS_APPLICATION_TOKEN},
+            signal: AbortSignal.timeout(120000),
+          });
+          if (!response.ok) {
+            console.log('::warning::Pilot analysis could not complete (HTTP ' + response.status + ').');
+            process.exit(0);
+          }
+          console.log(JSON.stringify(await response.json()));
+          NODE
