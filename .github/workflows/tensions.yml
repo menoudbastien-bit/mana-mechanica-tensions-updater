@@ -1,11 +1,12 @@
 # Wake ahead of the first phase; the runner handles all six batches and targeted retries.
-name: Collect Mana Mechanica Blizzard watchlist
+name: Collect Mana Mechanica auction data
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - '.github/workflows/tensions.yml'
+      - '.github/workflows/darkmoon-depth.yml'
       - 'scripts/blizzard/**'
       - 'lib/blizzard/**'
       - 'tests/blizzard-collector.mjs'
@@ -36,3 +37,9 @@ jobs:
         run: |
           set -euo pipefail
           node --input-type=module -e 'process.stdout.write(JSON.stringify({projectId:"appgprj_6adf82cdbe1081919f3e44ce1525cd98",siteUrl:"https://mana-mechanica.com",applicationToken:process.env.MM_TENSIONS_APPLICATION_TOKEN})+"\n")' | node scripts/blizzard/update-watchlist.mjs --stdin --hourly-batches
+
+  darkmoon:
+    needs: update
+    if: ${{ !cancelled() && github.event_name != 'push' }}
+    permissions: {}
+    uses: ./.github/workflows/darkmoon-depth.yml

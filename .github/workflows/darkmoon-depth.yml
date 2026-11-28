@@ -1,15 +1,9 @@
 name: Archive Darkmoon Faire listings
 
 on:
-  schedule:
-    - cron: '32 * * * *'
-  workflow_dispatch:
+  workflow_call:
 
 permissions: {}
-
-concurrency:
-  group: darkmoon-faire-listings
-  cancel-in-progress: false
 
 jobs:
   archive:
